@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OBSIDIAN GALLERY | ADMIN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "primary-container": "#d4d4d4",
+                        "surface-container-low": "#1c1b1b",
+                        "on-tertiary-fixed": "#ffffff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary": "#1a1c1c",
+                        "surface-container": "#201f1f",
+                        "tertiary-fixed-dim": "#464747",
+                        "surface-variant": "#353534",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-fixed-variant": "#e2e2e2",
+                        "error": "#ffb4ab",
+                        "surface": "#131313",
+                        "secondary-fixed-dim": "#ababab",
+                        "secondary": "#c6c6c6",
+                        "secondary-fixed": "#c6c6c6",
+                        "on-secondary": "#1a1c1c",
+                        "primary-fixed-dim": "#454747",
+                        "on-tertiary-fixed-variant": "#e3e2e2",
+                        "primary-fixed": "#5d5f5f",
+                        "on-primary-fixed": "#ffffff",
+                        "background": "#131313",
+                        "surface-tint": "#c6c6c7",
+                        "inverse-on-surface": "#313030",
+                        "primary": "#ffffff",
+                        "on-secondary-container": "#e2e2e2",
+                        "outline-variant": "#474747",
+                        "on-tertiary": "#1b1c1c",
+                        "on-error": "#690005",
+                        "outline": "#919191",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-fixed": "#5e5e5e",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#c6c6c6",
+                        "on-tertiary-container": "#000000",
+                        "secondary-container": "#454747",
+                        "on-primary-container": "#000000",
+                        "surface-bright": "#393939",
+                        "inverse-primary": "#5d5f5f",
+                        "tertiary": "#e3e2e2",
+                        "tertiary-container": "#919191",
+                        "on-secondary-fixed-variant": "#3a3c3c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#353534",
+                        "on-secondary-fixed": "#1a1c1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #131313; color: #e5e2e1; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SIDE NAVBAR -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-neutral-900 flex flex-col p-6 z-50">
+<div class="mb-12">
+<h1 class="font-serif text-lg tracking-widest text-white">GALLERY ADMIN</h1>
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mt-1">Management Suite</p>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<!-- Navigation Items Mapping from JSON -->
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-400 hover:bg-neutral-800 transition-all font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-white text-neutral-950 font-bold font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">diamond</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Orders</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Customers</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all font-sans tracking-tight text-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-neutral-800/50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-container-highest"></div>
+<div>
+<p class="text-xs font-bold">Curator Admin</p>
+<p class="text-[10px] text-neutral-500">Log out</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-64 flex-grow p-12 overflow-x-hidden">
+<!-- HEADER SECTION -->
+<header class="mb-16 flex justify-between items-end">
+<div>
+<h2 class="font-serif text-4xl tracking-tight text-white mb-2">Vault Inventory</h2>
+<p class="text-on-surface-variant max-w-lg font-light leading-relaxed">Refine and manage the exclusive archive of Obsidian's handcrafted jewelry. Every piece is a testament to precision.</p>
+</div>
+<button class="bg-primary text-on-primary px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase hover:bg-primary-container transition-colors">
+                Add New Masterpiece
+            </button>
+</header>
+<!-- STATS / QUICK VIEW BENTO -->
+<div class="grid grid-cols-12 gap-6 mb-16">
+<div class="col-span-12 md:col-span-4 bg-surface-container-low p-8">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-4">Total Assets</p>
+<p class="font-serif text-3xl text-white tracking-widest">1,248</p>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-low p-8">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-4">Market Value</p>
+<p class="font-serif text-3xl text-white tracking-widest">$4.2M</p>
+</div>
+<div class="col-span-12 md:col-span-4 bg-surface-container-low p-8 border-l border-white/5">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-4">Vault Status</p>
+<p class="font-serif text-3xl text-white tracking-widest">SECURED</p>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-12">
+<!-- INVENTORY LIST (Main Content Area) -->
+<section class="col-span-12 lg:col-span-8">
+<div class="flex justify-between items-center mb-8 pb-4 border-b border-outline-variant/20">
+<h3 class="font-serif text-xl text-white">Active Collection</h3>
+<div class="flex gap-4 text-xs font-medium text-neutral-400">
+<span class="text-white border-b border-white pb-1">All Items</span>
+<span class="hover:text-white cursor-pointer transition-colors">High Jewelry</span>
+<span class="hover:text-white cursor-pointer transition-colors">The Archive</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Item Row 1 -->
+<div class="bg-surface-container-lowest p-6 flex items-center gap-8 group hover:bg-surface-container transition-colors">
+<div class="w-20 h-24 bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="Close-up of a diamond necklace on a black velvet mannequin with moody theatrical lighting and sharp reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChnwMctJUgEETVsmLxymi9qXbL09RtVJMfcTcsKMHqKHQdLmJr1HTp1bwjbhGDbK_LWCJK-EsaCJTZ8rhoqQ3hKhWl9wtOBYb3zsiwY7KOG4E2xCvH-HmOHdAh56EZnBfDNRl4Xu0oX87MinK1CenwBYnOr8wJbcmPQAt5PD4JXRG-4IUEzPNp65xJv5azDKMkf2O31qKhgkiUFZ_RmVGllgJiAvSzD2NsfEpyxXtcITckFWQl_x_cFPw-ygIPihnd6l0GJdcYmfHW"/>
+</div>
+<div class="flex-grow">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-1">SKU: OBS-2024-001</p>
+<h4 class="font-serif text-lg text-white mb-1">Ethereal Prism Necklace</h4>
+<p class="text-xs text-neutral-400">18k White Gold, 4.5ct Emerald Cut Diamonds</p>
+</div>
+<div class="text-right">
+<p class="font-serif text-white mb-1">$52,000</p>
+<div class="flex gap-4 justify-end text-[10px] tracking-widest text-neutral-500 uppercase">
+<button class="hover:text-white">Edit</button>
+<button class="hover:text-error">Delete</button>
+</div>
+</div>
+</div>
+<!-- Item Row 2 -->
+<div class="bg-surface-container-lowest p-6 flex items-center gap-8 group hover:bg-surface-container transition-colors">
+<div class="w-20 h-24 bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="Detailed macro shot of a platinum wedding ring with intricate engraving under a cool silver light on dark slate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8P41n9sajwSfHBEwuGwaNePoljYHnvydbaxvO7RCWv7XcfTWreEmuNKrhfGEPgytjQNJAG2OclcVgtTVkJHeKh3b5ZQkg2brssYjDRJADPmU2B6eZbz26sBWUZyS6YNsoF-tQcAUZGU_xITw8obHZVcwp6Dt7WgJcqwgnmSn1V6oRKzztQTyjP0bCvXIAAzfDgYA3y_kwxrS7epeP-ggdmCdR5HJDxazr98aP2Nwg9vRoXqFrasXRKBj5Te5S1IRAGfy_vxPA0-lY"/>
+</div>
+<div class="flex-grow">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-1">SKU: OBS-2024-042</p>
+<h4 class="font-serif text-lg text-white mb-1">Nocturnal Band</h4>
+<p class="text-xs text-neutral-400">Brushed Platinum, Baguette Sapphire Inlay</p>
+</div>
+<div class="text-right">
+<p class="font-serif text-white mb-1">$12,800</p>
+<div class="flex gap-4 justify-end text-[10px] tracking-widest text-neutral-500 uppercase">
+<button class="hover:text-white">Edit</button>
+<button class="hover:text-error">Delete</button>
+</div>
+</div>
+</div>
+<!-- Item Row 3 -->
+<div class="bg-surface-container-lowest p-6 flex items-center gap-8 group hover:bg-surface-container transition-colors">
+<div class="w-20 h-24 bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="Exquisite diamond drop earrings captured against a deep shadow background with high contrast highlighting the facets" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm7t5Al4t62XhQXnWVgyL-NLCbdS82fvDt1U9_z2t4yTN0WSIQKTXD6KQU4gnK7O2rF9DdHiXuDrVTJACq6_rM1oxAwuJ6_FfJ0aWXAQ38t1OCkUvFxfHz8SsKXsUBlgcX9_rcJxoO4jSOw01k3zJp1bElpCm4-Vy0cSbmtagqyeXCFRS-Fc66epesJxzI8cRBbfJXUg9g42l26ndTijFZS0HouQVshkrjcZ1FQKfOIVGEVigfPImq_WKv_9NEXOrBjuo7MP0YauAE"/>
+</div>
+<div class="flex-grow">
+<p class="text-[10px] tracking-widest text-neutral-500 uppercase mb-1">SKU: OBS-2023-912</p>
+<h4 class="font-serif text-lg text-white mb-1">Solstice Drops</h4>
+<p class="text-xs text-neutral-400">14k Yellow Gold, Pear-shaped Citrine</p>
+</div>
+<div class="text-right">
+<p class="font-serif text-white mb-1">$8,400</p>
+<div class="flex gap-4 justify-end text-[10px] tracking-widest text-neutral-500 uppercase">
+<button class="hover:text-white">Edit</button>
+<button class="hover:text-error">Delete</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SIDEBAR ACTIONS & MANAGEMENT -->
+<aside class="col-span-12 lg:col-span-4 space-y-12">
+<!-- Category Management Section -->
+<section class="bg-surface-container-low p-8">
+<h3 class="font-serif text-lg text-white mb-6">Collections</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-sm font-medium">High Jewelry</span>
+<span class="text-[10px] text-neutral-500">124 Items</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-sm font-medium">The Archive</span>
+<span class="text-[10px] text-neutral-500">42 Items</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-sm font-medium">Bespoke</span>
+<span class="text-[10px] text-neutral-500">18 Items</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-sm font-medium">Bridal</span>
+<span class="text-[10px] text-neutral-500">256 Items</span>
+</div>
+</div>
+<button class="mt-8 text-[10px] tracking-widest text-white uppercase border-b border-white pb-1 font-bold">
+                        Manage Categories
+                    </button>
+</section>
+<!-- Configuration/Settings Section -->
+<section class="bg-surface-container-low p-8">
+<h3 class="font-serif text-lg text-white mb-6">Store Configuration</h3>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] tracking-widest text-neutral-500 uppercase mb-2">Base Currency</label>
+<select class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-sm focus:ring-0 focus:border-white px-0 py-2">
+<option class="bg-neutral-900">USD ($)</option>
+<option class="bg-neutral-900">EUR (€)</option>
+<option class="bg-neutral-900">GBP (£)</option>
+</select>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-white">Live Status</span>
+<div class="w-10 h-5 bg-primary relative cursor-pointer">
+<div class="absolute right-0 top-0 w-5 h-5 bg-on-primary"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-white">Public Archive Access</span>
+<div class="w-10 h-5 bg-neutral-800 relative cursor-pointer">
+<div class="absolute left-0 top-0 w-5 h-5 bg-neutral-600"></div>
+</div>
+</div>
+</div>
+</section>
+</aside>
+</div>
+<!-- ADD NEW ITEM FORM (Visualized in an editorial card style) -->
+<section class="mt-20 border-t border-outline-variant/20 pt-20 max-w-4xl">
+<h3 class="font-serif text-2xl text-white mb-12">Registry: Add New Masterpiece</h3>
+<form class="grid grid-cols-2 gap-12">
+<div class="col-span-2 md:col-span-1 space-y-8">
+<div>
+<label class="block text-[10px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Item Nomenclature</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-lg font-serif placeholder:text-neutral-700 focus:ring-0 focus:border-white px-0 py-4" placeholder="e.g. Celestial Orbit Ring" type="text"/>
+</div>
+<div>
+<label class="block text-[10px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Archive Category</label>
+<select class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-sm focus:ring-0 focus:border-white px-0 py-4">
+<option class="bg-neutral-900">Select Collection</option>
+<option class="bg-neutral-900">High Jewelry</option>
+<option class="bg-neutral-900">The Archive</option>
+</select>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1 space-y-8">
+<div>
+<label class="block text-[10px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Appraisal Value (USD)</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-lg font-serif placeholder:text-neutral-700 focus:ring-0 focus:border-white px-0 py-4" placeholder="0.00" type="number"/>
+</div>
+<div class="flex gap-4">
+<div class="flex-grow">
+<label class="block text-[10px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Materials</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-sm focus:ring-0 focus:border-white px-0 py-4" placeholder="Platina, Diamonds..." type="text"/>
+</div>
+<div class="w-16 h-16 border border-dashed border-outline-variant flex items-center justify-center text-neutral-600 hover:border-white hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined">add</span>
+</div>
+</div>
+</div>
+<div class="col-span-2">
+<label class="block text-[10px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Curation Description</label>
+<textarea class="w-full bg-transparent border-0 border-b border-outline-variant text-white text-sm font-light placeholder:text-neutral-700 focus:ring-0 focus:border-white px-0 py-4 resize-none" placeholder="Detail the craftsmanship, history, and inspiration behind this piece..." rows="4"></textarea>
+</div>
+<div class="col-span-2 flex justify-end pt-8">
+<button class="bg-white text-on-primary px-12 py-5 text-xs font-bold tracking-[0.3em] uppercase hover:bg-neutral-200 transition-colors" type="submit">
+                        Commit to Vault
+                    </button>
+</div>
+</form>
+</section>
+</main>
+<!-- FOOTER (Simplified for Admin Dashboard) -->
+<footer class="ml-64 w-full border-t border-neutral-800/30 bg-neutral-950 flex flex-col items-center py-12 px-8 gap-8 absolute bottom-0 left-0 hidden">
+<p class="text-white font-serif tracking-widest">OBSIDIAN</p>
+<div class="flex gap-8">
+<span class="text-neutral-500 font-sans text-[10px] tracking-[0.1em] uppercase hover:text-white cursor-pointer transition-colors">System Health</span>
+<span class="text-neutral-500 font-sans text-[10px] tracking-[0.1em] uppercase hover:text-white cursor-pointer transition-colors">Support</span>
+<span class="text-neutral-500 font-sans text-[10px] tracking-[0.1em] uppercase hover:text-white cursor-pointer transition-colors">Logs</span>
+</div>
+<p class="font-sans text-[10px] tracking-[0.1em] uppercase text-neutral-400">© 2024 OBSIDIAN GALLERY. ALL RIGHTS RESERVED.</p>
+</footer>
+</body></html>
