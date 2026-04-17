@@ -2,113 +2,231 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { MOCK_PRODUCTS, MOCK_CATEGORIES, formatPrice } from '@/lib/data'
+import { getProducts, getCategories, getHeroes, getReviews, getBentoItems } from '@/lib/data'
+import HeroSlider from '@/components/HeroSlider'
+import ProductGrid from '@/components/ProductGrid'
+import ReviewsCarousel from '@/components/ReviewsCarousel'
+import { BentoItem } from '@/lib/types'
 
 export const metadata: Metadata = {
   title: 'ADONIS GALLERY | Alta Joyería',
-  description: 'Exposición Otoño 2024 - Precisión Etérea',
+  description: 'Exposición Otoño 2024 — Precisión Etérea',
 }
 
-export default function HomePage() {
-  const rootCategories = MOCK_CATEGORIES.filter(c => !c.parentId)
+export const revalidate = 60
+
+const MARQUEE_ITEMS = [
+  'Alta Joyería', 'Colección 2025', 'Piezas Únicas', 'Oro & Diamantes',
+  'Artesanía', 'Exclusivo', 'Alta Joyería', 'Colección 2025',
+]
+
+export default async function HomePage() {
+  const [products, categories, heroes, reviews, bentoItems] = await Promise.all([
+    getProducts(), getCategories(), getHeroes(), getReviews(), getBentoItems(),
+  ])
+
+  const heroesWithFallback = heroes.length > 0 ? heroes : [{
+    id: 'fallback',
+    title: 'Precisión Etérea',
+    subtitle: 'Exposición Otoño 2024',
+    image_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX4fcGpro-61J08xXiI120AJgqENago4dghMd43ASTL3OyoAJMDTLCe5diosL5RKo4tOJFvrq5H1ieGlYfpQT-_qCNSHvMNazRmycKcqh3yZ7WDwFZnNi-_gP0VPLMTbzrTBqHOLzZRpdrLouJv51yr19ZPdsFT1YmW2LzGwTN41UuzMU4MFgCKVu_qF6vOLSF7gBgkBCkM1ZO92sMaDegzGnlid0vgtQ__sj8v9K-TbK4Mep63MNVqdyvzt5OerKjMNvKmBVXCPKx',
+    cta_text: 'Explorar Colección',
+    cta_url: '/products',
+  }]
+
+  const rootCategories = categories.filter(c => !c.parent_id && !c.parentId)
+  const featuredProducts = products.slice(0, 10)
 
   return (
     <>
       <Navbar />
       <main className="bg-background text-on-background font-body">
-        {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img 
-              alt="Collar de diamantes de lujo" 
-              className="w-full h-full object-cover opacity-60" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX4fcGpro-61J08xXiI120AJgqENago4dghMd43ASTL3OyoAJMDTLCe5diosL5RKo4tOJFvrq5H1ieGlYfpQT-_qCNSHvMNazRmycKcqh3yZ7WDwFZnNi-_gP0VPLMTbzrTBqHOLzZRpdrLouJv51yr19ZPdsFT1YmW2LzGwTN41UuzMU4MFgCKVu_qF6vOLSF7gBgkBCkM1ZO92sMaDegzGnlid0vgtQ__sj8v9K-TbK4Mep63MNVqdyvzt5OerKjMNvKmBVXCPKx"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
-          </div>
-          <div className="relative z-10 text-center px-6 max-w-5xl">
-            <span className="font-label uppercase tracking-[0.4em] text-xs text-secondary mb-6 block">Exposición Otoño 2024</span>
-            <h1 className="font-headline text-5xl md:text-8xl lg:text-9xl mb-8 leading-tight tracking-tight uppercase">Precisión <br/> Etérea</h1>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-12">
-              <button className="px-12 py-4 bg-primary text-on-primary font-label uppercase text-sm tracking-widest hover:bg-neutral-200 transition-all font-bold">
-                Explorar Colección
-              </button>
-            </div>
-          </div>
-        </section>
 
-        {/* Dynamic Category Sections */}
+        {/* ── Hero Slider ─────────────────────────────────────── */}
+        <HeroSlider heroes={heroesWithFallback} />
+
+        {/* ── Marquee strip (animated) ─────────────────────────── */}
+        <div className="border-y border-outline-variant/10 py-3 overflow-hidden bg-surface-container-lowest/50" aria-hidden="true">
+          <div className="marquee-track">
+            {/* Two identical copies — animation moves -50% for seamless loop */}
+            {[0, 1].map(copy =>
+              MARQUEE_ITEMS.map((text, i) => (
+                <span key={`${copy}-${i}`} className="marquee-item text-[9px] uppercase tracking-[0.4em] text-neutral-600 font-bold">
+                  <span className="px-8">{text}</span>
+                  <span className="w-1 h-1 bg-neutral-700 inline-block" />
+                </span>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* ── Featured Products ─────────────────────────────────── */}
+        {featuredProducts.length > 0 && (
+          <section className="py-24 px-6 md:px-12">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-end justify-between mb-14">
+                <div>
+                  <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Selección Destacada</p>
+                  <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">
+                    Nuevas Adquisiciones
+                  </h2>
+                </div>
+                <Link
+                  href="/products"
+                  className="hidden md:flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-neutral-500 hover:text-white transition-colors font-bold group"
+                >
+                  Ver todo
+                  <span className="material-symbols-outlined text-sm group-hover:translate-x-0.5 transition-transform" aria-hidden="true">
+                    arrow_forward
+                  </span>
+                </Link>
+              </div>
+
+              <ProductGrid products={featuredProducts} />
+
+              <div className="mt-12 flex justify-center md:hidden">
+                <Link
+                  href="/products"
+                  className="text-[10px] uppercase tracking-widest text-neutral-400 hover:text-white font-bold border-b border-neutral-700 hover:border-white pb-1 transition-all"
+                >
+                  Ver toda la colección
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Dynamic Category Sections ─────────────────────────── */}
         {rootCategories.map((category) => {
-          const categoryProducts = MOCK_PRODUCTS.filter(p => 
-             p.categoryId === category.id || 
-             MOCK_CATEGORIES.some(child => child.parentId === category.id && p.categoryId === child.id)
-          ).slice(0, 4)
+          const categoryProducts = products.filter(p => {
+            const pid = (p as any).category_id ?? p.categoryId
+            if (pid === category.id) return true
+            return categories.some(
+              child => (child.parent_id ?? child.parentId) === category.id && pid === child.id
+            )
+          }).slice(0, 4)
 
           if (categoryProducts.length === 0) return null
 
           return (
-            <section key={category.id} className="py-24 px-6 md:px-12 border-b border-outline-variant/10">
-              <div className="flex justify-between items-end mb-12">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.4em] text-secondary font-bold mb-2">Categoría</p>
-                  <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">{category.name}</h2>
-                </div>
-                <Link 
-                  href={`/products?category=${category.slug}`} 
-                  className="text-[10px] uppercase tracking-widest text-white border-b border-white pb-1 font-bold hover:text-secondary hover:border-secondary transition-all"
-                >
-                  Ver Todo
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {categoryProducts.map((product) => (
-                  <Link key={product.id} href={`/products/${product.slug}`} className="group flex flex-col">
-                    <div className="bg-surface aspect-[3/4] flex items-center justify-center mb-6 relative overflow-hidden transition-colors group-hover:bg-surface-container">
-                      <div className="w-full h-full bg-neutral-800 opacity-20 absolute inset-0 group-hover:opacity-10 transition-opacity" />
-                      <div className="w-full h-full flex items-center justify-center text-[10px] tracking-widest text-neutral-600 font-bold uppercase p-8 text-center leading-relaxed">
-                        Registro de Artefacto <br/> [ {product.id} ]
-                      </div>
-                      <button className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-on-primary p-2">
-                        <span className="material-symbols-outlined text-sm">add</span>
-                      </button>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-medium">{product.material}</p>
-                      <h4 className="font-headline text-base text-white group-hover:text-primary transition-colors uppercase tracking-tight">{product.name}</h4>
-                      <p className="font-sans text-sm text-primary-container font-light">{formatPrice(product.price)}</p>
-                    </div>
+            <section
+              key={category.id}
+              className="py-20 px-6 md:px-12 border-t border-outline-variant/10"
+            >
+              <div className="max-w-7xl mx-auto">
+                <div className="flex items-end justify-between mb-12">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Categoría</p>
+                    <h2 className="font-headline text-2xl md:text-3xl text-white uppercase tracking-tight">{category.name}</h2>
+                  </div>
+                  <Link
+                    href={`/products?category=${category.slug}`}
+                    className="hidden md:flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-neutral-500 hover:text-white transition-colors font-bold group"
+                  >
+                    Ver Todo
+                    <span className="material-symbols-outlined text-sm group-hover:translate-x-0.5 transition-transform" aria-hidden="true">
+                      arrow_forward
+                    </span>
                   </Link>
-                ))}
+                </div>
+
+                <ProductGrid products={categoryProducts} />
               </div>
             </section>
           )
         })}
 
-        {/* Bespoke Section */}
-        <section className="relative h-[500px] flex items-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img 
-              alt="Estudio de joyero" 
-              className="w-full h-full object-cover" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuArZu1ZsnUwt0OuWi9Ywfq5R2ZrNgt_sliMMs_fNJNTGs-FCLWqEKNtDvJZhRe2YA8bA49Wrd7jjzceyFfbY3k5_LoCDP4R7epj11dWZSGbPAZFBrgXDfe_ukEd9BHor0sCPj_TNFjECNyy-fYO9zesa9-HvaexCKkeql_N3esBW_nLYR0HL3vp9icONmQU4mLDuJOslmYjYYMqIdgom3RJjksBOYGPE1mKzC7P5Py-z-b8fd_JvYb-duHIK_tMxjxwVjogvCdCY3po"
-            />
-            <div className="absolute inset-0 bg-neutral-950/70"></div>
-          </div>
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex justify-end">
-            <div className="bg-surface-bright/40 backdrop-blur-2xl p-12 md:p-16 max-w-lg border border-white/10">
-              <h2 className="font-headline text-3xl mb-6 text-white uppercase tracking-tight">Comisionar un Legado</h2>
-              <p className="font-body text-neutral-300 leading-relaxed mb-8 text-sm">
-                Nuestros artesanos trabajan con usted para transformar historias personales en artefactos eternos. Desde la selección de gemas raras hasta el pulido manual final.
-              </p>
-              <button className="font-label uppercase tracking-widest text-[10px] border-b border-primary pb-2 hover:text-white transition-colors font-bold">
-                Iniciar el Viaje
-              </button>
-            </div>
+        {/* ── Reviews ───────────────────────────────────────────── */}
+        <ReviewsCarousel reviews={reviews} />
+
+        {/* ── Values Strip ──────────────────────────────────────── */}
+        <section className="border-t border-outline-variant/10 py-16 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
+            {([
+              { icon: 'verified', label: 'Certificación', desc: 'Cada pieza con certificado de autenticidad GIA' },
+              { icon: 'handshake', label: 'Artesanía', desc: 'Elaboración manual por maestros orífices' },
+              { icon: 'local_shipping', label: 'Envío Seguro', desc: 'Transporte blindado con seguro incluido' },
+              { icon: 'autorenew', label: 'Garantía', desc: 'Revisión y limpieza gratuita por 2 años' },
+            ]).map(item => (
+              <div key={item.label} className="flex flex-col gap-3">
+                <span className="material-symbols-outlined text-neutral-600 text-2xl" aria-hidden="true">{item.icon}</span>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-white font-bold mb-1.5">{item.label}</p>
+                  <p className="text-xs text-neutral-500 leading-relaxed font-light">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
+
+
+        {/* ── Bento Grid — Explorar Categorías (from admin) ─────── */}
+        {bentoItems.length > 0 && (
+          <BentoGrid items={bentoItems} />
+        )}
+
       </main>
       <Footer />
     </>
+  )
+}
+
+/* ── Bento Grid — server component ─────────────────────────────── */
+function BentoGrid({ items }: { items: BentoItem[] }) {
+  return (
+    <section className="border-t border-outline-variant/10 py-16 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-10">
+          <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Explorar</p>
+          <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">Categorías</h2>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
+          {items.map((item, i) => {
+            const isLarge = i === 0
+            return (
+              <Link
+                key={item.id}
+                href={item.link_url ?? '/products'}
+                className={`group relative overflow-hidden border border-neutral-800 hover:border-neutral-500 transition-all duration-500 ${
+                  isLarge ? 'md:col-span-2 md:row-span-2' : ''
+                }`}
+              >
+                {item.image_url ? (
+                  <img
+                    src={item.image_url}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950 group-hover:from-neutral-800 transition-all duration-500" />
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
+                  <div className="flex items-end justify-between">
+                    <div>
+                      {item.subtitle && (
+                        <p className="text-[8px] uppercase tracking-[0.4em] text-neutral-400 font-bold mb-2">{item.subtitle}</p>
+                      )}
+                      <h3 className={`font-headline uppercase tracking-tight text-white leading-tight ${isLarge ? 'text-2xl md:text-3xl' : 'text-sm md:text-base'}`}>
+                        {item.title}
+                      </h3>
+                    </div>
+                    <span className="material-symbols-outlined text-white/60 group-hover:text-white group-hover:translate-x-0.5 transition-all text-lg" aria-hidden="true">
+                      arrow_forward
+                    </span>
+                  </div>
+                </div>
+
+                <div className="absolute top-4 right-4 w-1.5 h-1.5 bg-neutral-600 group-hover:bg-white transition-colors duration-300" aria-hidden="true" />
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }

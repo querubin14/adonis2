@@ -1,65 +1,100 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { MOCK_PRODUCTS, formatPrice } from '@/lib/data'
-import Link from 'next/link'
+import { getProducts, getCategories } from '@/lib/data'
+import { Category } from '@/lib/types'
+import ProductCard from '@/components/ProductCard'
 
 export default function ProductsPage() {
-  const [category, setCategory] = useState<'All' | 'Anillos' | 'Collares' | 'Aretes' | 'Pulseras'>('All')
+  const [products, setProducts]   = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading]     = useState(true)
+  const [activeCat, setActiveCat] = useState<string>('all')
 
-  const filteredProducts = category === 'All' 
-    ? MOCK_PRODUCTS 
-    : MOCK_PRODUCTS.filter(p => p.category === category)
+  useEffect(() => {
+    Promise.all([getProducts(), getCategories()])
+      .then(([prods, cats]) => { setProducts(prods); setCategories(cats) })
+      .finally(() => setLoading(false))
+  }, [])
 
-  const categories = [
-    { label: 'Todos', value: 'All' },
-    { label: 'Anillos', value: 'Anillos' },
-    { label: 'Collares', value: 'Collares' },
-    { label: 'Aretes', value: 'Aretes' },
-    { label: 'Pulseras', value: 'Pulseras' },
-  ]
+  const rootCats = useMemo(
+    () => categories.filter(c => !c.parent_id && !c.parentId),
+    [categories]
+  )
+
+  const filtered = useMemo(() => {
+    if (activeCat === 'all') return products
+    const all: string[] = [activeCat]
+    function descend(nodes: Category[]) {
+      nodes.forEach(n => {
+        if (n.parent_id === activeCat || all.includes(n.parent_id ?? '')) {
+          all.push(n.id)
+          descend(n.children ?? [])
+        }
+      })
+    }
+    descend(categories)
+    return products.filter(p => {
+      const catId = (p as any).category_id ?? p.categoryId
+      return catId && all.includes(catId)
+    })
+  }, [products, categories, activeCat])
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background text-on-background pt-32 pb-20 px-6 md:px-12">
-        <header className="mb-20 border-b border-outline-variant/20 pb-12">
-          <h1 className="font-headline text-5xl md:text-7xl mb-6 text-white uppercase tracking-tight">La Colección</h1>
-          <div className="flex flex-wrap gap-8 text-[10px] font-label uppercase tracking-[0.3em] text-neutral-500">
-            {categories.map(cat => (
-              <button 
-                key={cat.value}
-                onClick={() => setCategory(cat.value as any)}
-                className={`transition-colors hover:text-white font-bold ${category === cat.value ? 'text-white border-b border-white pb-1' : ''}`}
+      <main className="min-h-screen bg-background text-on-background pt-32 pb-20 px-4 md:px-12">
+
+        {/* Header */}
+        <header className="mb-10 border-b border-outline-variant/20 pb-10">
+          <h1 className="font-headline text-4xl md:text-6xl mb-6 text-white uppercase tracking-tight">La Colección</h1>
+
+          {/* Category filter chips */}
+          <div className="flex flex-wrap gap-2 text-[10px] font-label uppercase tracking-[0.3em]">
+            <button
+              onClick={() => setActiveCat('all')}
+              className={`px-4 py-1.5 font-bold transition-all ${
+                activeCat === 'all'
+                  ? 'bg-white text-black'
+                  : 'border border-neutral-700 text-neutral-400 hover:text-white hover:border-white'
+              }`}
+            >
+              Todos ({products.length})
+            </button>
+            {rootCats.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCat(cat.id)}
+                className={`px-4 py-1.5 font-bold transition-all ${
+                  activeCat === cat.id
+                    ? 'bg-white text-black'
+                    : 'border border-neutral-700 text-neutral-400 hover:text-white hover:border-white'
+                }`}
               >
-                {cat.label}
+                {cat.name}
               </button>
             ))}
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {filteredProducts.map(product => (
-            <Link key={product.id} href={`/products/${product.slug}`} className="group flex flex-col">
-              <div className="bg-surface p-12 aspect-[4/5] flex items-center justify-center mb-8 relative overflow-hidden transition-colors group-hover:bg-surface-container">
-                <div className="w-full h-full bg-neutral-800 opacity-20 absolute inset-0 group-hover:opacity-10 transition-opacity" />
-                <div className="w-full h-full flex items-center justify-center text-[10px] tracking-widest text-neutral-600 font-bold uppercase p-8 text-center">
-                  Archivo Adonis <br/> [ {product.id} ]
-                </div>
-                <button className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-on-primary p-3">
-                  <span className="material-symbols-outlined text-sm">add</span>
-                </button>
-              </div>
-              <div className="space-y-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-label font-bold">{product.material}</p>
-                <h4 className="font-headline text-lg text-white group-hover:text-primary transition-colors uppercase tracking-tight">{product.name}</h4>
-                <p className="font-sans text-base text-primary-container font-light">{formatPrice(product.price)}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-32">
+            <div className="w-8 h-8 border-2 border-neutral-700 border-t-white rounded-full animate-spin" />
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center py-32 gap-4">
+            <span className="material-symbols-outlined text-5xl text-neutral-800" aria-hidden="true">diamond</span>
+            <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold">Sin piezas en esta categoría</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
+            {filtered.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </main>
       <Footer />
     </>

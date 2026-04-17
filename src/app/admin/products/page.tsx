@@ -11,7 +11,6 @@ import { CldUploadWidget } from 'next-cloudinary'
 import AdminSidebar from '@/components/AdminSidebar'
 import CategoryPicker from '@/components/CategoryPicker'
 
-// ── Types ──────────────────────────────────────────────────────────
 type View = 'inventory' | 'form'
 interface Toast { message: string; type: 'success' | 'error' }
 
@@ -20,7 +19,6 @@ const EMPTY_FORM = {
   description: '', stock: '', slug: '', original_price: '',
 }
 
-// ── Helpers ────────────────────────────────────────────────────────
 function getRootCategoryId(catId: string, categories: Category[]): string | null {
   let cur = categories.find(c => c.id === catId)
   while (cur) {
@@ -33,20 +31,18 @@ function getRootCategoryId(catId: string, categories: Category[]): string | null
 
 function getCategoryName(catId: string | undefined, categories: Category[]): string {
   if (!catId) return '—'
-  const cat = categories.find(c => c.id === catId)
-  return cat?.name ?? '—'
+  return categories.find(c => c.id === catId)?.name ?? '—'
 }
 
 function StockBadge({ stock }: { stock: number }) {
   if (stock === 0)
-    return <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-error/20 text-error text-[9px] font-bold uppercase tracking-wider">Sin Stock</span>
+    return <span className="inline-flex px-2 py-0.5 bg-error/20 text-error text-[9px] font-bold uppercase tracking-wider">Sin Stock</span>
   if (stock <= 3)
-    return <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-900/30 text-yellow-400 text-[9px] font-bold uppercase tracking-wider">Bajo ({stock})</span>
-  return <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-900/30 text-emerald-400 text-[9px] font-bold uppercase tracking-wider">Stock ({stock})</span>
+    return <span className="inline-flex px-2 py-0.5 bg-yellow-900/30 text-yellow-400 text-[9px] font-bold uppercase tracking-wider">Bajo ({stock})</span>
+  return <span className="inline-flex px-2 py-0.5 bg-emerald-900/30 text-emerald-400 text-[9px] font-bold uppercase tracking-wider">En Stock ({stock})</span>
 }
 
-// ── Main Page ──────────────────────────────────────────────────────
-export default function AdminPage() {
+export default function ProductsAdminPage() {
   const [products, setProducts]       = useState<Product[]>([])
   const [categories, setCategories]   = useState<Category[]>([])
   const [loading, setLoading]         = useState(true)
@@ -58,9 +54,9 @@ export default function AdminPage() {
   const [images, setImages]           = useState<string[]>([])
   const [urlInput, setUrlInput]       = useState('')
   const [formData, setFormData]       = useState(EMPTY_FORM)
-  const [activeGroup, setActiveGroup] = useState<string>('all')
   const [openGroups, setOpenGroups]   = useState<Set<string>>(new Set())
   const [search, setSearch]           = useState('')
+  const [activeGroup, setActiveGroup] = useState<string>('all')
 
 
   // ── Products grouped by root category ─────────────────────────
@@ -80,7 +76,15 @@ export default function AdminPage() {
     return [...map.values()].filter(g => g.products.length > 0)
   }, [products, categories])
 
-  // ── Stats ──────────────────────────────────────────────────────
+  const displayGroups = useMemo(() => {
+    const base = activeGroup === 'all' ? groups : groups.filter(g => g.id === activeGroup)
+    if (!search.trim()) return base
+    const q = search.toLowerCase()
+    return base
+      .map(g => ({ ...g, products: g.products.filter(p => p.name.toLowerCase().includes(q)) }))
+      .filter(g => g.products.length > 0)
+  }, [groups, activeGroup, search])
+
   const stats = useMemo(() => ({
     total:    products.length,
     inStock:  products.filter(p => (p.stock ?? 0) > 0).length,
@@ -88,17 +92,6 @@ export default function AdminPage() {
     noStock:  products.filter(p => (p.stock ?? 0) === 0).length,
   }), [products])
 
-  // ── Filtered display ───────────────────────────────────────────
-  const displayGroups = useMemo(() => {
-    const filtered = activeGroup === 'all' ? groups : groups.filter(g => g.id === activeGroup)
-    if (!search.trim()) return filtered
-    const q = search.toLowerCase()
-    return filtered
-      .map(g => ({ ...g, products: g.products.filter(p => p.name.toLowerCase().includes(q)) }))
-      .filter(g => g.products.length > 0)
-  }, [groups, activeGroup, search])
-
-  // ── Data load ──────────────────────────────────────────────────
   const load = useCallback(async () => {
     try {
       const [cats, prods] = await Promise.all([getCategories(), getProducts()])
@@ -114,8 +107,6 @@ export default function AdminPage() {
     const t = setTimeout(() => setToast(null), 4000)
     return () => clearTimeout(t)
   }, [toast])
-
-  // Init open groups
   useEffect(() => {
     if (groups.length) setOpenGroups(new Set(groups.map(g => g.id)))
   }, [groups.length])
@@ -128,6 +119,7 @@ export default function AdminPage() {
     setImages([])
     setUrlInput('')
     setView('form')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   function openEdit(p: Product) {
@@ -145,6 +137,7 @@ export default function AdminPage() {
     setImages(p.images ?? [])
     setUrlInput('')
     setView('form')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   function cancelForm() {
@@ -219,7 +212,6 @@ export default function AdminPage() {
     })
   }
 
-  // ── RENDER ─────────────────────────────────────────────────────
   return (
     <div className="flex min-h-screen bg-background text-on-background font-body">
       <AdminSidebar />
@@ -246,7 +238,7 @@ export default function AdminPage() {
             <p className="text-neutral-400 text-sm mb-8">Esta acción es permanente e irreversible.</p>
             <div className="flex gap-3">
               <button onClick={handleDelete}
-                className="flex-1 bg-error text-on-error py-3 text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+                className="flex-1 bg-error text-on-error py-3 text-[10px] font-bold uppercase tracking-widest hover:opacity-90">
                 Eliminar
               </button>
               <button onClick={() => setDeleteId(null)}
@@ -258,17 +250,19 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Main */}
       <main className="ml-56 flex-grow flex flex-col min-h-screen">
 
         {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-outline-variant/10 px-8 py-4 flex items-center justify-between gap-4">
           <div>
             <h2 className="font-headline text-base text-white uppercase tracking-[0.2em]">
-              {view === 'form' ? (editing ? 'Editar Producto' : 'Nuevo Producto') : 'Panel de Inventario'}
+              {view === 'form' ? (editing ? 'Editar Producto' : 'Nuevo Producto') : 'Productos'}
             </h2>
             <p className="text-[9px] text-neutral-500 uppercase tracking-widest mt-0.5">
-              {editing ? `Editando: ${editing.name}` : `${products.length} piezas · ${groups.length} categorías`}
+              {view === 'form'
+                ? (editing ? `Editando: ${editing.name}` : 'Completar información de la nueva pieza')
+                : `${products.length} piezas · ${groups.length} categorías`
+              }
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -301,25 +295,25 @@ export default function AdminPage() {
 
         <div className="p-8 flex-grow">
 
-          {/* Stats */}
+          {/* Stats strip */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
             {[
-              { label: 'Total Piezas', value: stats.total,    icon: 'diamond',       color: false },
-              { label: 'En Stock',     value: stats.inStock,  icon: 'check_circle',  color: false },
-              { label: 'Stock Bajo',   value: stats.lowStock, icon: 'warning',       color: stats.lowStock > 0 },
-              { label: 'Sin Stock',    value: stats.noStock,  icon: 'cancel',        color: stats.noStock > 0 },
+              { label: 'Total Piezas', value: stats.total,    icon: 'diamond',      warn: false },
+              { label: 'En Stock',     value: stats.inStock,  icon: 'check_circle', warn: false },
+              { label: 'Stock Bajo',   value: stats.lowStock, icon: 'warning',      warn: stats.lowStock > 0 },
+              { label: 'Sin Stock',    value: stats.noStock,  icon: 'cancel',       warn: stats.noStock > 0 },
             ].map(s => (
               <div key={s.label} className="bg-surface-container-low border border-outline-variant/10 p-4 flex flex-col gap-3">
                 <div className="flex items-start justify-between">
                   <span className="text-[8px] uppercase tracking-[0.35em] text-neutral-500 font-bold leading-tight">{s.label}</span>
-                  <span className={`material-symbols-outlined text-sm ${s.color ? 'text-yellow-500' : 'text-neutral-700'}`} aria-hidden="true">{s.icon}</span>
+                  <span className={`material-symbols-outlined text-sm ${s.warn ? 'text-yellow-500' : 'text-neutral-700'}`} aria-hidden="true">{s.icon}</span>
                 </div>
-                <p className={`font-headline text-3xl leading-none ${s.color ? 'text-yellow-400' : 'text-white'}`}>{s.value}</p>
+                <p className={`font-headline text-3xl leading-none ${s.warn ? 'text-yellow-400' : 'text-white'}`}>{s.value}</p>
               </div>
             ))}
           </div>
 
-          {/* ── INVENTORY ──────────────────────────────────────── */}
+          {/* ── INVENTORY VIEW ────────────────────────────────── */}
           {view === 'inventory' && (
             <div>
               {/* Category filter chips */}
@@ -350,7 +344,8 @@ export default function AdminPage() {
                 <div className="py-24 flex flex-col items-center gap-4 bg-surface-container-low border border-outline-variant/10">
                   <span className="material-symbols-outlined text-5xl text-neutral-800" aria-hidden="true">inventory_2</span>
                   <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">Sin productos</p>
-                  <button onClick={() => openNew()} className="mt-2 text-[10px] text-white underline underline-offset-4 font-bold uppercase tracking-widest">
+                  <button onClick={() => openNew()}
+                    className="mt-2 text-[10px] text-white underline underline-offset-4 font-bold uppercase tracking-widest">
                     Agregar primer producto
                   </button>
                 </div>
@@ -364,7 +359,8 @@ export default function AdminPage() {
                           onClick={() => toggleGroup(group.id)}
                           className="flex items-center gap-3 flex-1 text-left"
                         >
-                          <span className="material-symbols-outlined text-sm text-neutral-500 transition-transform"
+                          <span
+                            className="material-symbols-outlined text-sm text-neutral-500 transition-transform duration-200"
                             style={{ transform: openGroups.has(group.id) ? 'rotate(90deg)' : 'rotate(0deg)' }}
                             aria-hidden="true">
                             chevron_right
@@ -404,7 +400,7 @@ export default function AdminPage() {
                                   <tr key={p.id}
                                     className={`border-b border-outline-variant/5 hover:bg-surface-container transition-colors ${idx % 2 !== 0 ? 'bg-surface-container-lowest/20' : ''}`}>
                                     <td className="px-5 py-3 w-12">
-                                      <div className="w-9 h-11 bg-neutral-900 border border-neutral-800 overflow-hidden flex items-center justify-center flex-shrink-0">
+                                      <div className="w-9 h-11 bg-neutral-900 border border-neutral-800 overflow-hidden flex items-center justify-center">
                                         {p.images?.[0]
                                           ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                                           : <span className="material-symbols-outlined text-neutral-700 text-xs" aria-hidden="true">diamond</span>
@@ -563,7 +559,6 @@ export default function AdminPage() {
                     Imágenes
                   </h3>
 
-                  {/* Cloudinary upload */}
                   <CldUploadWidget
                     uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                     onSuccess={(r: any) => { if (r.info?.secure_url) setImages(p => [...p, r.info.secure_url]) }}
@@ -578,7 +573,6 @@ export default function AdminPage() {
                     )}
                   </CldUploadWidget>
 
-                  {/* URL input */}
                   <div className="mb-5">
                     <label className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Agregar por URL</label>
                     <div className="flex gap-2">
@@ -591,7 +585,6 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  {/* Previews */}
                   {images.length > 0 && (
                     <div className="mb-5">
                       <p className="text-[9px] text-neutral-500 uppercase tracking-widest font-bold mb-3">
@@ -616,7 +609,6 @@ export default function AdminPage() {
                     </div>
                   )}
 
-                  {/* Submit */}
                   <div className="pt-5 border-t border-outline-variant/10 flex gap-3">
                     {editing && (
                       <button type="button" onClick={cancelForm}
@@ -632,6 +624,7 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
+
             </form>
           )}
         </div>
