@@ -73,6 +73,21 @@ export async function getProducts(): Promise<Product[]> {
   return data as Product[]
 }
 
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('slug', slug)
+    .single()
+
+  if (error) {
+    if (error.code === 'PGRST116') return null // Not found
+    console.error('[getProductBySlug]', error.message, error.code)
+    return MOCK_PRODUCTS.find(p => p.slug === slug) || null
+  }
+  return data as Product
+}
+
 export async function insertProduct(product: Partial<Product>) {
   const { data, error } = await supabase
     .from('products')

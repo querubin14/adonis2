@@ -1,12 +1,50 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { useState } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-
-export const metadata: Metadata = {
-  title: 'Compromiso | ADONIS GALLERY',
-}
+import { useCart } from '@/context/CartContext'
+import { formatPrice } from '@/lib/data'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function CheckoutPage() {
+  const { items, total, clear } = useCart()
+  const [submitting, setSubmitting] = useState(false)
+  const router = useRouter()
+
+  async function handleConfirm() {
+    if (items.length === 0) return
+    setSubmitting(true)
+    
+    // Simulate order processing
+    setTimeout(() => {
+      setSubmitting(false)
+      clear()
+      toast.success('Pedido confirmado con éxito. Nos contactaremos pronto.', {
+        position: 'top-center',
+        theme: 'dark'
+      })
+      router.push('/')
+    }, 2000)
+  }
+
+  if (items.length === 0 && !submitting) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-background text-on-background pt-32 pb-20 px-6 md:px-12 flex flex-col items-center justify-center gap-6">
+          <h1 className="font-headline text-3xl text-white uppercase tracking-tight">Su colección está vacía</h1>
+          <Link href="/products" className="px-8 py-3 bg-white text-black text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all">
+            Volver a la Galería
+          </Link>
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
   return (
     <>
       <Navbar />
@@ -48,24 +86,31 @@ export default function CheckoutPage() {
             </div>
 
             <aside className="space-y-12">
-              <div className="bg-surface-container-low p-12">
+              <div className="bg-surface-container-low p-12 border border-outline-variant/10">
                 <h2 className="font-headline text-2xl text-white mb-8 uppercase tracking-tight">Resumen de Activos</h2>
                 <div className="space-y-6 mb-8">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-neutral-400 font-body font-light">Subtotal</span>
-                    <span className="text-white font-sans font-bold">Gs. 705.000</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
+                  {items.map(({ product: item, quantity }) => (
+                    <div key={item.id} className="flex justify-between items-center text-sm">
+                      <span className="text-neutral-400 font-body font-light">{item.name} (x{quantity})</span>
+                      <span className="text-white font-sans font-bold">{formatPrice(item.price * quantity)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center text-sm border-t border-outline-variant/10 pt-4">
                     <span className="text-neutral-400 font-body font-light">Seguro y Envío Especial</span>
-                    <span className="text-white font-sans font-bold">Gs. 25.000</span>
+                    <span className="text-white font-sans font-bold">Gs. 0</span>
                   </div>
                   <div className="pt-6 border-t border-outline-variant/20 flex justify-between items-baseline">
                     <span className="font-headline text-lg text-secondary uppercase tracking-widest">Compromiso Total</span>
-                    <span className="font-headline text-3xl text-white">Gs. 730.000</span>
+                    <span className="font-headline text-3xl text-white">{formatPrice(total)}</span>
                   </div>
                 </div>
-                <button className="w-full bg-primary text-on-primary py-6 font-label uppercase tracking-widest text-xs hover:bg-neutral-200 transition-all font-bold">
-                  Confirmar Transacción
+                <button
+                  onClick={handleConfirm}
+                  disabled={submitting}
+                  className="w-full bg-primary text-on-primary py-6 font-label uppercase tracking-widest text-xs hover:bg-neutral-200 transition-all font-bold disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {submitting && <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />}
+                  {submitting ? 'Confirmando...' : 'Confirmar Transacción'}
                 </button>
               </div>
             </aside>

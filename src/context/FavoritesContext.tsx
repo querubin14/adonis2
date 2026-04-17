@@ -20,7 +20,10 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const s = localStorage.getItem(KEY)
-      if (s) setIds(JSON.parse(s))
+      if (s) {
+        const parsed = JSON.parse(s)
+        if (Array.isArray(parsed)) setIds(parsed)
+      }
     } catch {}
     setReady(true)
   }, [])
@@ -28,7 +31,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const toggle = useCallback((id: string) => {
     setIds(prev => {
       const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-      localStorage.setItem(KEY, JSON.stringify(next))
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(KEY, JSON.stringify(next))
+      }
       return next
     })
   }, [])
