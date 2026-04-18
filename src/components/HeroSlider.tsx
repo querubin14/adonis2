@@ -61,8 +61,11 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
               {hero.subtitle}
             </span>
           )}
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight uppercase">
-            {hero.title}
+          <h1 className="font-antonio text-6xl md:text-8xl lg:text-[10rem] mb-12 leading-[0.8] tracking-tighter uppercase flex flex-col items-start translate-y-4">
+            <span className="block">{hero.title.split(' ')[0]}</span>
+            <span className="text-outline block -mt-4 md:-mt-8 lg:-mt-12">
+              {hero.title.split(' ').slice(1).join(' ')}
+            </span>
           </h1>
           {hero.cta_text && hero.cta_url && (
             <div className="flex items-center gap-6">

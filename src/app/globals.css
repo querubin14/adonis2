@@ -52,10 +52,20 @@
   --font-headline: var(--font-montserrat);
   --font-body: var(--font-montserrat);
   --font-label: var(--font-montserrat);
+  --font-antonio: var(--font-antonio);
 
   --radius-default: 0px;
   --radius-lg: 0px;
   --radius-xl: 0px;
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
+  color: transparent;
+}
+
+.font-antonio {
+  font-family: var(--font-antonio), sans-serif;
 }
 
 :root {

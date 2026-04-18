@@ -484,7 +484,16 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-4">
                             <span className="font-label uppercase tracking-[0.45em] text-[7px] text-secondary mb-1 block font-bold">{heroForm.subtitle || 'Subtítulo'}</span>
-                            <h2 className="font-headline text-lg text-white uppercase leading-tight tracking-tight mb-2">{heroForm.title || 'Título del Hero'}</h2>
+                            <h2 className="font-antonio text-3xl text-white uppercase leading-none tracking-tight mb-2">
+                              {heroForm.title ? (
+                                <>
+                                  {heroForm.title.split(' ')[0]} 
+                                  <span className="text-outline ml-1">
+                                    {heroForm.title.split(' ').slice(1).join(' ')}
+                                  </span>
+                                </>
+                              ) : 'Título del Hero'}
+                            </h2>
                             {heroForm.cta_text && <span className="px-4 py-1.5 bg-white text-black text-[7px] font-bold uppercase tracking-wider inline-block">{heroForm.cta_text}</span>}
                           </div>
                           {!heroForm.is_active && <div className="absolute top-3 right-3 bg-neutral-800/80 px-2 py-0.5"><span className="text-[7px] uppercase tracking-widest text-neutral-400 font-bold">Inactivo</span></div>}
