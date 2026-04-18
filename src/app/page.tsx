@@ -20,6 +20,13 @@ const MARQUEE_ITEMS = [
   'Artesanía', 'Exclusivo', 'Alta Joyería', 'Colección 2025',
 ]
 
+const VALUES_ITEMS = [
+  { icon: 'local_shipping', label: 'Envíos a todo el país', desc: 'Cobertura nacional garantizada.' },
+  { icon: 'credit_card', label: 'Pago contra entrega', desc: 'Pagá recién cuando recibas tu pedido (Zona Central).' },
+  { icon: 'verified_user', label: 'Garantía de cambio', desc: 'Cambios sin vueltas hasta 72 horas después de la compra.' },
+  { icon: 'star', label: 'Compra 100% protegida', desc: 'Soporte personalizado vía WhatsApp.' },
+]
+
 export default async function HomePage() {
   const [products, categories, heroes, reviews, bentoItems] = await Promise.all([
     getProducts(), getCategories(), getHeroes(), getReviews(), getBentoItems(),
@@ -44,6 +51,27 @@ export default async function HomePage() {
 
         {/* ── Hero Slider ─────────────────────────────────────── */}
         <HeroSlider heroes={heroesWithFallback} />
+
+        {/* ── Animated Values Marquee ─────────────────────────── */}
+        <div className="border-b border-outline-variant/10 py-5 overflow-hidden bg-surface-container-lowest/50" aria-hidden="true">
+          <div className="marquee-track flex" style={{ animationDuration: '40s' }}>
+            {[0, 1].map(copy => (
+              <div key={copy} className="flex gap-16 md:gap-24 px-8 items-center flex-shrink-0">
+                {VALUES_ITEMS.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-4 min-w-[280px]">
+                    <div className="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center flex-shrink-0">
+                      <span className="material-symbols-outlined text-[18px] text-neutral-400">{item.icon}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-[9px] uppercase tracking-[0.2em] text-white font-bold">{item.label}</p>
+                      <p className="text-[10px] text-neutral-500 font-light">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* ── Featured Products ─────────────────────────────────── */}
         {featuredProducts.length > 0 && (
@@ -124,25 +152,7 @@ export default async function HomePage() {
         {/* ── Reviews ───────────────────────────────────────────── */}
         <ReviewsCarousel reviews={reviews} />
 
-        {/* ── Values Strip ──────────────────────────────────────── */}
-        <section className="border-t border-outline-variant/10 py-16 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
-            {([
-              { icon: 'verified', label: 'Certificación', desc: 'Cada pieza con certificado de autenticidad GIA' },
-              { icon: 'handshake', label: 'Artesanía', desc: 'Elaboración manual por maestros orífices' },
-              { icon: 'local_shipping', label: 'Envío Seguro', desc: 'Transporte blindado con seguro incluido' },
-              { icon: 'autorenew', label: 'Garantía', desc: 'Revisión y limpieza gratuita por 2 años' },
-            ]).map(item => (
-              <div key={item.label} className="flex flex-col gap-3">
-                <span className="material-symbols-outlined text-neutral-600 text-2xl" aria-hidden="true">{item.icon}</span>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-white font-bold mb-1.5">{item.label}</p>
-                  <p className="text-xs text-neutral-500 leading-relaxed font-light">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+
 
 
         {/* ── Bento Grid — Explorar Categorías (from admin) ─────── */}
