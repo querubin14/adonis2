@@ -55,51 +55,30 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center h-full text-center">
-        <div className="flex flex-col items-center py-20">
-          {hero.subtitle && (
-            <span className="font-label uppercase tracking-[0.5em] text-[10px] text-white/50 mb-10 block font-bold transition-all duration-700 animate-in fade-in slide-in-from-bottom-4">
-              {hero.subtitle}
-            </span>
-          )}
-          <h1 className="font-antonio text-[100px] md:text-[140px] lg:text-[180px] font-bold leading-[0.8] tracking-[-0.05em] uppercase flex flex-col items-center select-none transition-all duration-1000 animate-in fade-in zoom-in-95">
-            <span className="block text-white drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
-            <span className="text-outline block opacity-80 -mt-2 drop-shadow-2xl">
+        <div className="flex flex-col items-center py-20 w-full">
+          <h1 className="font-antonio text-[70px] md:text-[100px] lg:text-[140px] font-bold leading-none tracking-normal uppercase flex flex-row flex-wrap justify-center items-center gap-x-3 md:gap-x-5 select-none transition-all duration-1000 animate-in fade-in zoom-in-95 mb-4">
+            <span className="text-white drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
+            <span className="text-outline opacity-90 drop-shadow-2xl">
               {hero.title.split(' ').slice(1).join(' ')}
             </span>
           </h1>
+
+          {hero.subtitle && (
+            <span className="font-label uppercase tracking-[0.4em] text-[10px] md:text-[11px] text-white/70 mb-10 block transition-all duration-700 animate-in fade-in slide-in-from-bottom-4">
+              {hero.subtitle}
+            </span>
+          )}
           
           {hero.cta_text && hero.cta_url && (
-            <div className="mt-16 transition-all duration-1000 delay-300 animate-in fade-in slide-in-from-bottom-8">
+            <div className="transition-all duration-1000 delay-300 animate-in fade-in slide-in-from-bottom-8">
               <Link
                 href={hero.cta_url}
-                className="px-12 py-4 bg-white text-black font-label uppercase text-[11px] tracking-[0.4em] font-bold hover:bg-neutral-200 transition-all inline-block shadow-2xl"
+                className="px-10 py-4 bg-white text-black font-label uppercase text-[10px] md:text-[11px] tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all inline-block shadow-2xl"
               >
                 {hero.cta_text}
               </Link>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Aesthetic Bottom Bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-black/20 backdrop-blur-sm py-4 overflow-hidden">
-        <div className="marquee-track flex gap-12 items-center text-[8px] font-bold uppercase tracking-[0.5em] text-white/30 whitespace-nowrap">
-          <span>Alta Joyería</span>
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Colección 2025</span>
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Piezas Únicas</span>
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Oro & Diamantes</span>
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Artesanía</span>
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Exclusivo</span>
-          {/* Duplicate for seamless loop */}
-          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
-          <span>Alta Joyería</span>
-          <span>Colección 2025</span>
-          <span>Piezas Únicas</span>
         </div>
       </div>
 
