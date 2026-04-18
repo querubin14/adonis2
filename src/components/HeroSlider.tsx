@@ -27,7 +27,7 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
 
   return (
     <section
-      className="relative h-[80vh] md:h-screen flex items-center justify-center overflow-hidden"
+      className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -55,8 +55,8 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center h-full text-center">
-        <div className="flex flex-col items-center py-20 w-full">
-          <h1 className="font-antonio text-[70px] md:text-[100px] lg:text-[140px] font-bold leading-none tracking-normal uppercase flex flex-row flex-wrap justify-center items-center gap-x-3 md:gap-x-5 select-none transition-all duration-1000 animate-in fade-in zoom-in-95 mb-4">
+        <div className="flex flex-col items-center py-10 w-full">
+          <h1 className="font-antonio text-[60px] md:text-[90px] lg:text-[120px] font-bold leading-none tracking-normal uppercase flex flex-row flex-wrap justify-center items-center gap-x-3 md:gap-x-4 select-none transition-all duration-1000 animate-in fade-in zoom-in-95 mb-4">
             <span className="text-white drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
             <span className="text-outline opacity-90 drop-shadow-2xl">
               {hero.title.split(' ').slice(1).join(' ')}
