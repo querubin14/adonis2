@@ -54,29 +54,52 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
       ))}
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-10 md:pb-14">
-        <div className="max-w-2xl">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-24">
+        <div className="max-w-4xl">
           {hero.subtitle && (
-            <span className="font-label uppercase tracking-[0.45em] text-[9px] text-secondary mb-5 block font-bold">
+            <span className="font-label uppercase tracking-[0.5em] text-[10px] text-white/60 mb-4 block font-bold">
               {hero.subtitle}
             </span>
           )}
-          <h1 className="font-antonio text-6xl md:text-8xl lg:text-[10rem] mb-12 leading-[0.8] tracking-tighter uppercase flex flex-col items-start translate-y-4">
-            <span className="block">{hero.title.split(' ')[0]}</span>
-            <span className="text-outline block -mt-4 md:-mt-8 lg:-mt-12">
+          <h1 className="font-antonio text-[120px] md:text-[180px] lg:text-[240px] font-bold leading-[0.75] tracking-[-0.05em] uppercase flex flex-col items-start select-none">
+            <span className="block text-white">{hero.title.split(' ')[0]}</span>
+            <span className="text-outline block -mt-2 md:-mt-4 lg:-mt-6 opacity-90">
               {hero.title.split(' ').slice(1).join(' ')}
             </span>
           </h1>
+          
           {hero.cta_text && hero.cta_url && (
-            <div className="flex items-center gap-6">
+            <div className="mt-12">
               <Link
                 href={hero.cta_url}
-                className="px-10 py-4 bg-white text-black font-label uppercase text-[10px] tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all"
+                className="px-10 py-4 bg-white text-black font-label uppercase text-[10px] tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all inline-block"
               >
                 {hero.cta_text}
               </Link>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Aesthetic Bottom Bar */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-black/20 backdrop-blur-sm py-4 overflow-hidden">
+        <div className="marquee-track flex gap-12 items-center text-[8px] font-bold uppercase tracking-[0.5em] text-white/30 whitespace-nowrap">
+          <span>Alta Joyería</span>
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Colección 2025</span>
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Piezas Únicas</span>
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Oro & Diamantes</span>
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Artesanía</span>
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Exclusivo</span>
+          {/* Duplicate for seamless loop */}
+          <span className="w-1.5 h-1.5 bg-white/10 rounded-full" />
+          <span>Alta Joyería</span>
+          <span>Colección 2025</span>
+          <span>Piezas Únicas</span>
         </div>
       </div>
 
