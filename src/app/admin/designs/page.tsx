@@ -50,8 +50,13 @@ export default function DesignsPage() {
 
   function msg(message: string, type: 'success' | 'error') {
     setToast({ message, type })
-    setTimeout(() => setToast(null), 4000)
   }
+
+  useEffect(() => {
+    if (!toast) return
+    const t = setTimeout(() => setToast(null), 5000)
+    return () => clearTimeout(t)
+  }, [toast])
 
   /* ────────── Load ────────── */
   const loadHeroes = useCallback(async () => {
@@ -98,14 +103,35 @@ export default function DesignsPage() {
   async function heroSubmit(e: React.FormEvent) {
     e.preventDefault()
     setHeroSaving(true)
+    console.log('[heroSubmit] starting with form:', heroForm)
     try {
-      const payload = { title: heroForm.title.trim(), subtitle: heroForm.subtitle?.trim() || null, image_url: heroForm.image_url?.trim() || null, cta_text: heroForm.cta_text?.trim() || null, cta_url: heroForm.cta_url?.trim() || null, is_active: heroForm.is_active, sort_order: Number(heroForm.sort_order) || 0 }
-      if (heroEditing) { await saveHero(heroEditing.id, payload); msg('Hero actualizado.', 'success') }
-      else { await insertHero(payload); msg('Hero creado.', 'success') }
-      heroCloseForm(); await loadHeroes()
+      const payload = { 
+        title: heroForm.title.trim(), 
+        subtitle: heroForm.subtitle?.trim() || null, 
+        image_url: heroForm.image_url?.trim() || null, 
+        cta_text: heroForm.cta_text?.trim() || null, 
+        cta_url: heroForm.cta_url?.trim() || null, 
+        is_active: heroForm.is_active, 
+        sort_order: Number(heroForm.sort_order) || 0 
+      }
+      console.log('[heroSubmit] payload prepared:', payload)
+      
+      if (heroEditing) { 
+        console.log('[heroSubmit] updating hero ID:', heroEditing.id)
+        await saveHero(heroEditing.id, payload)
+        msg('Hero actualizado.', 'success') 
+      } else { 
+        console.log('[heroSubmit] inserting new hero')
+        await insertHero(payload)
+        msg('Hero creado.', 'success') 
+      }
+      heroCloseForm()
+      console.log('[heroSubmit] loading heroes after submission')
+      await loadHeroes()
     } catch (err: unknown) { 
-      const error = err as Error
-      msg('Error: ' + (error.message ?? ''), 'error') 
+      const error = err as any
+      console.error('[heroSubmit] fatal error:', error)
+      msg('Error: ' + (error.message || JSON.stringify(error) || 'Error desconocido'), 'error') 
     }
     setHeroSaving(false)
   }

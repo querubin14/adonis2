@@ -226,8 +226,11 @@ export async function insertHero(payload: Partial<Omit<HeroSettings, 'id'>>) {
     .insert([{ is_active: true, sort_order: 0, ...payload }])
     .select()
 
-  if (error) throw error
-  return data[0] as HeroSettings
+  if (error) {
+    console.error('[insertHero] error:', error)
+    throw error
+  }
+  return (data && data[0]) as HeroSettings
 }
 
 export async function saveHero(id: string, updates: Partial<Omit<HeroSettings, 'id'>>) {
@@ -237,8 +240,11 @@ export async function saveHero(id: string, updates: Partial<Omit<HeroSettings, '
     .eq('id', id)
     .select()
 
-  if (error) throw error
-  return data[0] as HeroSettings
+  if (error) {
+    console.error('[saveHero] error:', error)
+    throw error
+  }
+  return (data && data[0]) as HeroSettings
 }
 
 export async function deleteHero(id: string) {
@@ -272,14 +278,20 @@ export async function getAllBentoItems(): Promise<BentoItem[]> {
 
 export async function insertBentoItem(payload: Omit<BentoItem, 'id' | 'created_at'>) {
   const { data, error } = await supabase.from('bento_items').insert([payload]).select()
-  if (error) throw error
-  return data[0] as BentoItem
+  if (error) {
+    console.error('[insertBentoItem] error:', error)
+    throw error
+  }
+  return (data && data[0]) as BentoItem
 }
 
 export async function updateBentoItem(id: string, updates: Partial<Omit<BentoItem, 'id' | 'created_at'>>) {
   const { data, error } = await supabase.from('bento_items').update(updates).eq('id', id).select()
-  if (error) throw error
-  return data[0] as BentoItem
+  if (error) {
+    console.error('[updateBentoItem] error:', error)
+    throw error
+  }
+  return (data && data[0]) as BentoItem
 }
 
 export async function deleteBentoItem(id: string) {
