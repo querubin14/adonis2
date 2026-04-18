@@ -47,6 +47,12 @@ export default function DesignsPage() {
 
   /* ── Shared ── */
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true)
+  }, [])
 
   function msg(message: string, type: 'success' | 'error') {
     setToast({ message, type })
@@ -129,9 +135,13 @@ export default function DesignsPage() {
       console.log('[heroSubmit] loading heroes after submission')
       await loadHeroes()
     } catch (err: unknown) { 
-      const error = err as any
+      const error = err as Record<string, unknown>
       console.error('[heroSubmit] fatal error:', error)
-      msg('Error: ' + (error.message || JSON.stringify(error) || 'Error desconocido'), 'error') 
+      let errorMsg = 'Error desconocido'
+      try {
+        errorMsg = (error.message as string) || (typeof error === 'string' ? error : JSON.stringify(error))
+      } catch (f) { errorMsg = 'Error de conexión o de datos' }
+      msg('Error: ' + errorMsg, 'error') 
     }
     setHeroSaving(false)
   }
@@ -204,49 +214,52 @@ export default function DesignsPage() {
     try {
       await updateBentoItem(b.id, { is_active: !b.is_active })
       setBentoItems(prev => prev.map(x => x.id === b.id ? { ...x, is_active: !x.is_active } : x))
-    } catch {}
+    } catch (e) {
+      console.error('Error toggling bento:', e)
+    }
   }
 
   /* ────────── Render ────────── */
   return (
     <div className="flex min-h-screen bg-background text-on-background font-body">
-
-      {/* Toast */}
-      {toast && (
-        <div role="alert" className={`fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest shadow-xl ${toast.type === 'success' ? 'bg-white text-black' : 'bg-red-900 text-white'}`}>
-          <span className="material-symbols-outlined text-sm">{toast.type === 'success' ? 'check_circle' : 'error'}</span>
-          {toast.message}
-        </div>
-      )}
-
-      {/* Delete modals */}
-      {heroDeleteTarget && (
-        <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
-          <div className="bg-surface-container border border-outline-variant/20 p-10 max-w-sm w-full">
-            <h3 className="font-headline text-white text-base uppercase tracking-widest mb-2">Eliminar Hero</h3>
-            <p className="text-neutral-300 text-sm mb-6">&ldquo;{heroDeleteTarget.title}&rdquo;</p>
-            <div className="flex gap-3">
-              <button onClick={heroDeleteConfirm} className="flex-1 bg-red-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-800">Eliminar</button>
-              <button onClick={() => setHeroDeleteTarget(null)} className="flex-1 border border-neutral-700 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">Cancelar</button>
+      {!isMounted ? null : (
+        <>
+          {/* Toast */}
+          {toast && (
+            <div role="alert" className={`fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest shadow-xl ${toast.type === 'success' ? 'bg-white text-black' : 'bg-red-900 text-white'}`}>
+              <span className="material-symbols-outlined text-sm">{toast.type === 'success' ? 'check_circle' : 'error'}</span>
+              {toast.message}
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      {bentoDeleteTarget && (
-        <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
-          <div className="bg-surface-container border border-outline-variant/20 p-10 max-w-sm w-full">
-            <h3 className="font-headline text-white text-base uppercase tracking-widest mb-2">Eliminar Tile</h3>
-            <p className="text-neutral-300 text-sm mb-6">&ldquo;{bentoDeleteTarget.title}&rdquo;</p>
-            <div className="flex gap-3">
-              <button onClick={bentoDeleteConfirm} className="flex-1 bg-red-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-800">Eliminar</button>
-              <button onClick={() => setBentoDeleteTarget(null)} className="flex-1 border border-neutral-700 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">Cancelar</button>
+          {/* Delete modals */}
+          {heroDeleteTarget && (
+            <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
+              <div className="bg-surface-container border border-outline-variant/20 p-10 max-w-sm w-full">
+                <h3 className="font-headline text-white text-base uppercase tracking-widest mb-2">Eliminar Hero</h3>
+                <p className="text-neutral-300 text-sm mb-6">&ldquo;{heroDeleteTarget.title}&rdquo;</p>
+                <div className="flex gap-3">
+                  <button onClick={heroDeleteConfirm} className="flex-1 bg-red-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-800">Eliminar</button>
+                  <button onClick={() => setHeroDeleteTarget(null)} className="flex-1 border border-neutral-700 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">Cancelar</button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      <AdminSidebar />
+          {bentoDeleteTarget && (
+            <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4">
+              <div className="bg-surface-container border border-outline-variant/20 p-10 max-w-sm w-full">
+                <h3 className="font-headline text-white text-base uppercase tracking-widest mb-2">Eliminar Tile</h3>
+                <p className="text-neutral-300 text-sm mb-6">&ldquo;{bentoDeleteTarget.title}&rdquo;</p>
+                <div className="flex gap-3">
+                  <button onClick={bentoDeleteConfirm} className="flex-1 bg-red-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-800">Eliminar</button>
+                  <button onClick={() => setBentoDeleteTarget(null)} className="flex-1 border border-neutral-700 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <AdminSidebar />
 
       <main className="ml-56 flex-grow flex flex-col min-h-screen">
         {/* Header */}
@@ -663,6 +676,8 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
 
         </div>
       </main>
+        </>
+      )}
     </div>
   )
 }
