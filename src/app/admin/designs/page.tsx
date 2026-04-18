@@ -419,27 +419,39 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                         </div>
 
                         {/* Image upload */}
-                        <div>
-                          <p className="text-[9px] tracking-[0.25em] text-neutral-500 uppercase mb-3 font-bold">Imagen de fondo</p>
-                          <CldUploadWidget
-                            uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                            onSuccess={(r) => { 
-                              const info = r.info as { secure_url?: string }
-                              if (info?.secure_url) setHeroForm(p => ({ ...p, image_url: info.secure_url })) 
-                            }}
-                          >
-                            {({ open }) => (
-                              <button type="button" onClick={() => open()}
-                                className="w-full border-2 border-dashed border-neutral-700 hover:border-white py-5 flex flex-col items-center gap-2 group transition-all mb-3">
-                                <span className="material-symbols-outlined text-2xl text-neutral-600 group-hover:text-white transition-colors">cloud_upload</span>
-                                <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">Subir desde PC</p>
-                              </button>
-                            )}
-                          </CldUploadWidget>
+                        <div className="space-y-4">
+                          <p className="text-[9px] tracking-[0.25em] text-neutral-500 uppercase font-bold">Imagen de fondo</p>
+                          
+                          {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
+                            <CldUploadWidget
+                              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default'}
+                              onSuccess={(r) => { 
+                                const info = r.info as { secure_url?: string }
+                                if (info?.secure_url) {
+                                  setHeroForm(p => ({ ...p, image_url: info.secure_url! }))
+                                  setHeroUrlInput(info.secure_url!)
+                                }
+                              }}
+                            >
+                              {({ open }) => (
+                                <button type="button" onClick={() => open()}
+                                  className="w-full border-2 border-dashed border-neutral-700 hover:border-white py-6 flex flex-col items-center gap-2 group transition-all">
+                                  <span className="material-symbols-outlined text-2xl text-neutral-600 group-hover:text-white transition-colors">cloud_upload</span>
+                                  <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">Subir desde PC</p>
+                                </button>
+                              )}
+                            </CldUploadWidget>
+                          ) : (
+                            <div className="w-full py-4 border border-red-900/40 bg-red-900/5 px-4">
+                              <p className="text-[8px] text-red-400 uppercase font-bold tracking-widest mb-1">Carga local desactivada</p>
+                              <p className="text-[7px] text-neutral-500">Falta CLOUD_NAME en Vercel. Usa URL abajo.</p>
+                            </div>
+                          )}
+
                           <div className="flex gap-2">
                             <input type="url" value={heroUrlInput} onChange={e => setHeroUrlInput(e.target.value)}
                               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (heroUrlInput.trim()) { setHeroForm(p => ({ ...p, image_url: heroUrlInput.trim() })); setHeroUrlInput('') } } }}
-                              placeholder="O pega una URL..."
+                              placeholder="O selecciona una URL..."
                               className="flex-1 bg-transparent border-b border-neutral-800 text-white text-xs py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
                             <button type="button" onClick={() => { if (heroUrlInput.trim()) { setHeroForm(p => ({ ...p, image_url: heroUrlInput.trim() })); setHeroUrlInput('') } }}
                               className="px-3 py-1.5 bg-white text-black text-[9px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all flex-shrink-0">
@@ -607,21 +619,28 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                               </button>
                             </div>
                           ) : (
-                            <CldUploadWidget
-                              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                              onSuccess={(r) => { 
-                              const info = r.info as { secure_url?: string }
-                              if (info?.secure_url) setBentoForm(p => ({ ...p, image_url: info.secure_url })) 
-                            }}
-                            >
-                              {({ open }) => (
-                                <button type="button" onClick={() => open()}
-                                  className="w-full border-2 border-dashed border-neutral-700 hover:border-white py-5 flex flex-col items-center gap-2 group transition-all">
-                                  <span className="material-symbols-outlined text-2xl text-neutral-600 group-hover:text-white transition-colors">cloud_upload</span>
-                                  <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">Subir desde PC</p>
-                                </button>
-                              )}
-                            </CldUploadWidget>
+                            process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
+                              <CldUploadWidget
+                                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default'}
+                                onSuccess={(r) => { 
+                                  const info = r.info as { secure_url?: string }
+                                  if (info?.secure_url) setBentoForm(p => ({ ...p, image_url: info.secure_url! })) 
+                                }}
+                              >
+                                {({ open }) => (
+                                  <button type="button" onClick={() => open()}
+                                    className="w-full border-2 border-dashed border-neutral-700 hover:border-white py-5 flex flex-col items-center gap-2 group transition-all">
+                                    <span className="material-symbols-outlined text-2xl text-neutral-600 group-hover:text-white transition-colors">cloud_upload</span>
+                                    <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">Subir desde PC</p>
+                                  </button>
+                                )}
+                              </CldUploadWidget>
+                            ) : (
+                              <div className="w-full py-4 border border-red-900/40 bg-red-900/5 px-4">
+                                <p className="text-[8px] text-red-400 uppercase font-bold tracking-widest mb-1">Carga local desactivada</p>
+                                <p className="text-[7px] text-neutral-500">Falta CLOUD_NAME en Vercel. Usa URL arriba.</p>
+                              </div>
+                            )
                           )}
 
                           {bentoForm.image_url && (
