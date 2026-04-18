@@ -27,7 +27,7 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
 
   return (
     <section
-      className="relative h-[58vh] md:h-[65vh] flex items-end overflow-hidden"
+      className="relative h-[80vh] md:h-screen flex items-center justify-center overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -54,25 +54,25 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
       ))}
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-24">
-        <div className="max-w-4xl">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center h-full text-center">
+        <div className="flex flex-col items-center py-20">
           {hero.subtitle && (
-            <span className="font-label uppercase tracking-[0.5em] text-[10px] text-white/60 mb-4 block font-bold">
+            <span className="font-label uppercase tracking-[0.5em] text-[10px] text-white/50 mb-10 block font-bold transition-all duration-700 animate-in fade-in slide-in-from-bottom-4">
               {hero.subtitle}
             </span>
           )}
-          <h1 className="font-antonio text-[120px] md:text-[180px] lg:text-[240px] font-bold leading-[0.75] tracking-[-0.05em] uppercase flex flex-col items-start select-none">
-            <span className="block text-white">{hero.title.split(' ')[0]}</span>
-            <span className="text-outline block -mt-2 md:-mt-4 lg:-mt-6 opacity-90">
+          <h1 className="font-antonio text-[100px] md:text-[140px] lg:text-[180px] font-bold leading-[0.8] tracking-[-0.05em] uppercase flex flex-col items-center select-none transition-all duration-1000 animate-in fade-in zoom-in-95">
+            <span className="block text-white drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
+            <span className="text-outline block opacity-80 -mt-2 drop-shadow-2xl">
               {hero.title.split(' ').slice(1).join(' ')}
             </span>
           </h1>
           
           {hero.cta_text && hero.cta_url && (
-            <div className="mt-12">
+            <div className="mt-16 transition-all duration-1000 delay-300 animate-in fade-in slide-in-from-bottom-8">
               <Link
                 href={hero.cta_url}
-                className="px-10 py-4 bg-white text-black font-label uppercase text-[10px] tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all inline-block"
+                className="px-12 py-4 bg-white text-black font-label uppercase text-[11px] tracking-[0.4em] font-bold hover:bg-neutral-200 transition-all inline-block shadow-2xl"
               >
                 {hero.cta_text}
               </Link>

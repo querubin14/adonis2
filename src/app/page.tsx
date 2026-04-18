@@ -45,21 +45,6 @@ export default async function HomePage() {
         {/* ── Hero Slider ─────────────────────────────────────── */}
         <HeroSlider heroes={heroesWithFallback} />
 
-        {/* ── Marquee strip (animated) ─────────────────────────── */}
-        <div className="border-y border-outline-variant/10 py-3 overflow-hidden bg-surface-container-lowest/50" aria-hidden="true">
-          <div className="marquee-track">
-            {/* Two identical copies — animation moves -50% for seamless loop */}
-            {[0, 1].map(copy =>
-              MARQUEE_ITEMS.map((text, i) => (
-                <span key={`${copy}-${i}`} className="marquee-item text-[9px] uppercase tracking-[0.4em] text-neutral-600 font-bold">
-                  <span className="px-8">{text}</span>
-                  <span className="w-1 h-1 bg-neutral-700 inline-block" />
-                </span>
-              ))
-            )}
-          </div>
-        </div>
-
         {/* ── Featured Products ─────────────────────────────────── */}
         {featuredProducts.length > 0 && (
           <section className="py-24 px-6 md:px-12">
