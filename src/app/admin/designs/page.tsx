@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Component, ReactNode } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
 import { CldUploadWidget } from 'next-cloudinary'
 import {
@@ -10,6 +10,36 @@ import {
 import { HeroSettings, BentoItem } from '@/lib/types'
 
 type Tab = 'hero' | 'bento'
+
+// ── Error Boundary ──────────────────────────────────────────────────
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
+  }
+  componentDidCatch(error: Error, info: any) {
+    console.error('[ErrorBoundary] caught:', error, info)
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-black text-white p-10 flex flex-col items-center justify-center font-mono">
+          <h1 className="text-xl text-red-500 mb-4">Error Detectado en el Panel</h1>
+          <pre className="bg-neutral-900 p-6 border border-neutral-800 text-xs overflow-auto max-w-full whitespace-pre-wrap">
+            {this.state.error?.message || 'Error desconocido'}
+          </pre>
+          <button onClick={() => window.location.reload()} className="mt-6 px-6 py-2 bg-white text-black text-xs font-bold uppercase tracking-widest">
+            Recargar Página
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 /* ─── Hero helpers ─────────────────────────────────────────────── */
 const HERO_EMPTY: Omit<HeroSettings, 'id' | 'updated_at'> = {
@@ -22,6 +52,14 @@ const BENTO_EMPTY: Omit<BentoItem, 'id' | 'created_at'> = {
 }
 
 export default function DesignsPage() {
+  return (
+    <ErrorBoundary>
+      <DesignsPageContent />
+    </ErrorBoundary>
+  )
+}
+
+function DesignsPageContent() {
   const [tab, setTab] = useState<Tab>('hero')
 
   /* ── Hero state ── */
