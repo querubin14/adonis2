@@ -166,31 +166,27 @@ export default async function HomePage() {
   )
 }
 
-/* ── Bento Grid — server component ─────────────────────────────── */
+/* ── Categories Grid (Formerly Bento) ───────────────────────── */
 function BentoGrid({ items }: { items: BentoItem[] }) {
   return (
-    <section className="border-t border-outline-variant/10 py-16 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-10">
-          <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Explorar</p>
-          <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">Categorías</h2>
+    <section className="py-16 pt-8 px-6 md:px-12 bg-neutral-950">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="mb-6">
+          <h2 className="font-headline text-2xl md:text-3xl text-white tracking-wide font-bold uppercase">Categorías</h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
-          {items.map((item, i) => {
-            const isLarge = i === 0
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+          {items.map((item) => {
             return (
               <Link
                 key={item.id}
                 href={item.link_url ?? '/products'}
-                className={`group relative overflow-hidden border border-neutral-800 hover:border-neutral-500 transition-all duration-500 ${
-                  isLarge ? 'md:col-span-2 md:row-span-2' : ''
-                }`}
+                className="group relative overflow-hidden rounded-md border border-neutral-800/80 hover:border-neutral-500 transition-all duration-500"
               >
                 {item.image_url ? (
                   <img
                     src={item.image_url}
-                    alt=""
+                    alt={item.title}
                     aria-hidden="true"
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
@@ -198,25 +194,18 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
                   <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950 group-hover:from-neutral-800 transition-all duration-500" />
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-                  <div className="flex items-end justify-between">
-                    <div>
-                      {item.subtitle && (
-                        <p className="text-[8px] uppercase tracking-[0.4em] text-neutral-400 font-bold mb-2">{item.subtitle}</p>
-                      )}
-                      <h3 className={`font-headline uppercase tracking-tight text-white leading-tight ${isLarge ? 'text-2xl md:text-3xl' : 'text-sm md:text-base'}`}>
-                        {item.title}
-                      </h3>
-                    </div>
-                    <span className="material-symbols-outlined text-white/60 group-hover:text-white group-hover:translate-x-0.5 transition-all text-lg" aria-hidden="true">
-                      arrow_forward
-                    </span>
+                <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6 pb-6">
+                  <div className="flex flex-col gap-1.5">
+                    <h3 className="font-headline uppercase tracking-tight text-white leading-tight text-xl md:text-2xl font-bold">
+                      {item.title}
+                    </h3>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-white font-bold group-hover:text-neutral-300 transition-colors">
+                      {item.subtitle || 'VER COLECCIÓN'}
+                    </p>
                   </div>
                 </div>
-
-                <div className="absolute top-4 right-4 w-1.5 h-1.5 bg-neutral-600 group-hover:bg-white transition-colors duration-300" aria-hidden="true" />
               </Link>
             )
           })}

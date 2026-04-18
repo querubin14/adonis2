@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, Component, ReactNode } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
+import { useRouter } from 'next/navigation'
 import { CldUploadWidget } from 'next-cloudinary'
 import {
   getAllHeroes, insertHero, saveHero, deleteHero,
@@ -60,6 +61,7 @@ export default function DesignsPage() {
 }
 
 function DesignsPageContent() {
+  const router = useRouter()
   const [tab, setTab] = useState<Tab>('hero')
 
   /* ── Hero state ── */
@@ -172,6 +174,7 @@ function DesignsPageContent() {
       heroCloseForm()
       console.log('[heroSubmit] loading heroes after submission')
       await loadHeroes()
+      router.refresh()
     } catch (err: unknown) { 
       const error = err as Record<string, unknown>
       console.error('[heroSubmit] fatal error:', error)
@@ -191,6 +194,7 @@ function DesignsPageContent() {
       msg('Hero eliminado.', 'success')
       setHeroDeleteTarget(null)
       await loadHeroes() 
+      router.refresh()
     } catch (err: unknown) { 
       const error = err as Error
       msg('Error: ' + (error.message ?? ''), 'error') 
@@ -227,7 +231,9 @@ function DesignsPageContent() {
       const payload = { title: bentoForm.title.trim(), subtitle: bentoForm.subtitle?.trim() || null, image_url: bentoForm.image_url?.trim() || null, link_url: bentoForm.link_url?.trim() || '/products', sort_order: Number(bentoForm.sort_order) || 0, is_active: bentoForm.is_active }
       if (bentoEditing) { await updateBentoItem(bentoEditing.id, payload); msg('Tile actualizado.', 'success') }
       else { await insertBentoItem(payload); msg('Tile creado.', 'success') }
-      bentoCloseForm(); await loadBento()
+      bentoCloseForm(); 
+      await loadBento();
+      router.refresh();
     } catch (err: unknown) { 
       const error = err as Error
       msg('Error: ' + (error.message ?? ''), 'error') 
@@ -242,6 +248,7 @@ function DesignsPageContent() {
       msg('Tile eliminado.', 'success')
       setBentoDeleteTarget(null)
       await loadBento()
+      router.refresh()
     } catch (err: unknown) {
       const error = err as Error
       msg('Error: ' + (error.message ?? ''), 'error')
@@ -252,6 +259,7 @@ function DesignsPageContent() {
     try {
       await updateBentoItem(b.id, { is_active: !b.is_active })
       setBentoItems(prev => prev.map(x => x.id === b.id ? { ...x, is_active: !x.is_active } : x))
+      router.refresh()
     } catch (e) {
       console.error('Error toggling bento:', e)
     }
