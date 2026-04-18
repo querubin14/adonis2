@@ -16,8 +16,11 @@ const antonio = Antonio({
 })
 
 export const metadata: Metadata = {
-  title: 'Adonis Jewelry',
+  title: 'ADONIS STORE',
   description: 'Exquisite jewelry for the modern era',
+  icons: {
+    icon: '/logo.png'
+  }
 }
 
 export default function RootLayout({
