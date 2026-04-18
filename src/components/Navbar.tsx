@@ -88,7 +88,7 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-6">
         <Link href="/" className="flex items-center justify-center">
-          <img src="/logo.png" alt="ADONIS STORE" className="h-10 md:h-12 object-contain" />
+          <img src="/logo.png" alt="ADONIS STORE" className="h-16 md:h-20 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
         </Link>
 
         {/* Desktop Nav */}
@@ -195,7 +195,7 @@ export default function Navbar() {
           {/* Drawer */}
           <div className="fixed left-0 top-0 h-full w-72 z-50 bg-[#0d0d0d] border-r border-neutral-800 flex flex-col md:hidden">
             <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-800">
-              <img src="/logo.png" alt="ADONIS STORE" className="h-8 object-contain" />
+              <img src="/logo.png" alt="ADONIS STORE" className="h-12 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
               <button
                 onClick={() => setMobileOpen(false)}
                 aria-label="Cerrar menú"
