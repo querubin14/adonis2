@@ -27,7 +27,7 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
 
   return (
     <section
-      className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden"
+      className="relative h-[45vh] md:h-[55vh] flex items-center justify-center overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >

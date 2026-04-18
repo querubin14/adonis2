@@ -518,11 +518,25 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                         <div className={`absolute top-2 right-2 px-2 py-0.5 ${h.is_active ? 'bg-emerald-900/70' : 'bg-neutral-800/70'}`}><span className={`text-[7px] uppercase tracking-widest font-bold ${h.is_active ? 'text-emerald-400' : 'text-neutral-500'}`}>{h.is_active ? 'Activo' : 'Inactivo'}</span></div>
                         <div className="absolute bottom-0 left-0 right-0 p-3"><p className="font-headline text-sm text-white uppercase tracking-wide leading-tight line-clamp-1">{h.title}</p></div>
                       </div>
-                      <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800">
                         <span className="text-[8px] text-neutral-500 font-bold uppercase tracking-wider">Orden: {h.sort_order ?? 0}</span>
                         <div className="flex gap-1">
                           <button onClick={() => heroOpenEdit(h)} className="p-2 text-neutral-500 hover:text-white hover:bg-neutral-800 transition-all"><span className="material-symbols-outlined text-sm">edit</span></button>
                           <button onClick={() => setHeroDeleteTarget(h)} className="p-2 text-neutral-500 hover:text-red-400 hover:bg-red-900/20 transition-all"><span className="material-symbols-outlined text-sm">delete</span></button>
+                        </div>
+                      </div>
+                      <div className="px-4 py-3 bg-neutral-900/30">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <span className="text-[7px] text-neutral-600 font-bold uppercase tracking-widest block mb-1">Texto Botón</span>
+                            <span className="text-[9px] text-white truncate block">{h.cta_text || '-'}</span>
+                          </div>
+                          <div>
+                            <span className="text-[7px] text-neutral-600 font-bold uppercase tracking-widest block mb-1">URL Botón</span>
+                            <span className="text-[9px] text-neutral-400 truncate block hover:text-white transition-colors">
+                              {h.cta_url ? <a href={h.cta_url} target="_blank" rel="noreferrer">{h.cta_url}</a> : '-'}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
