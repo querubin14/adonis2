@@ -198,7 +198,7 @@ export async function getHeroes(): Promise<HeroSettings[]> {
     console.error('[getHeroes]', error.message, error.code)
     return []
   }
-  return (data as HeroSettings[]).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  return (data as HeroSettings[] || []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
 }
 
 /** Returns all heroes (including inactive) for the admin */
@@ -211,7 +211,7 @@ export async function getAllHeroes(): Promise<HeroSettings[]> {
     console.error('[getAllHeroes]', error.message, error.code)
     return []
   }
-  return (data as HeroSettings[]).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  return (data as HeroSettings[] || []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
 }
 
 /** Kept for backwards compat — returns the first active hero */

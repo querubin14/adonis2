@@ -66,7 +66,12 @@ export default function DesignsPage() {
     setBentoLoading(false)
   }, [])
 
-  useEffect(() => { loadHeroes(); loadBento() }, [loadHeroes, loadBento])
+  useEffect(() => {
+    void (async () => {
+      await loadHeroes()
+      await loadBento()
+    })()
+  }, [loadHeroes, loadBento])
 
   /* ────────── Hero actions ────────── */
   function heroOpenNew() {
@@ -98,14 +103,24 @@ export default function DesignsPage() {
       if (heroEditing) { await saveHero(heroEditing.id, payload); msg('Hero actualizado.', 'success') }
       else { await insertHero(payload); msg('Hero creado.', 'success') }
       heroCloseForm(); await loadHeroes()
-    } catch (err: any) { msg('Error: ' + (err.message ?? ''), 'error') }
+    } catch (err: unknown) { 
+      const error = err as Error
+      msg('Error: ' + (error.message ?? ''), 'error') 
+    }
     setHeroSaving(false)
   }
 
   async function heroDeleteConfirm() {
     if (!heroDeleteTarget) return
-    try { await deleteHero(heroDeleteTarget.id); msg('Hero eliminado.', 'success'); setHeroDeleteTarget(null); await loadHeroes() }
-    catch (err: any) { msg('Error: ' + (err.message ?? ''), 'error') }
+    try { 
+      await deleteHero(heroDeleteTarget.id)
+      msg('Hero eliminado.', 'success')
+      setHeroDeleteTarget(null)
+      await loadHeroes() 
+    } catch (err: unknown) { 
+      const error = err as Error
+      msg('Error: ' + (error.message ?? ''), 'error') 
+    }
   }
 
   /* ────────── Bento actions ────────── */
@@ -139,14 +154,24 @@ export default function DesignsPage() {
       if (bentoEditing) { await updateBentoItem(bentoEditing.id, payload); msg('Tile actualizado.', 'success') }
       else { await insertBentoItem(payload); msg('Tile creado.', 'success') }
       bentoCloseForm(); await loadBento()
-    } catch (err: any) { msg('Error: ' + (err.message ?? ''), 'error') }
+    } catch (err: unknown) { 
+      const error = err as Error
+      msg('Error: ' + (error.message ?? ''), 'error') 
+    }
     setBentoSaving(false)
   }
 
   async function bentoDeleteConfirm() {
     if (!bentoDeleteTarget) return
-    try { await deleteBentoItem(bentoDeleteTarget.id); msg('Tile eliminado.', 'success'); setBentoDeleteTarget(null); await loadBento() }
-    catch (err: any) { msg('Error: ' + (err.message ?? ''), 'error') }
+    try {
+      await deleteBentoItem(bentoDeleteTarget.id)
+      msg('Tile eliminado.', 'success')
+      setBentoDeleteTarget(null)
+      await loadBento()
+    } catch (err: unknown) {
+      const error = err as Error
+      msg('Error: ' + (error.message ?? ''), 'error')
+    }
   }
 
   async function bentoToggleActive(b: BentoItem) {
@@ -321,7 +346,10 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                           <p className="text-[9px] tracking-[0.25em] text-neutral-500 uppercase mb-3 font-bold">Imagen de fondo</p>
                           <CldUploadWidget
                             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                            onSuccess={(r: any) => { if (r.info?.secure_url) setHeroForm(p => ({ ...p, image_url: r.info.secure_url })) }}
+                            onSuccess={(r) => { 
+                              const info = r.info as { secure_url?: string }
+                              if (info?.secure_url) setHeroForm(p => ({ ...p, image_url: info.secure_url })) 
+                            }}
                           >
                             {({ open }) => (
                               <button type="button" onClick={() => open()}
@@ -411,9 +439,9 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
             <>
               <div className="flex items-start gap-3 bg-surface-container-low border border-outline-variant/10 p-4">
                 <span className="material-symbols-outlined text-sm text-neutral-500 flex-shrink-0 mt-0.5">info</span>
-                <p className="text-[9px] text-neutral-400 leading-relaxed">
-                  Los tiles activos aparecen en la sección "Explorar Categorías" del home. El primero (orden 0) ocupa doble espacio. Cada tile puede tener imagen, título y un enlace.
-                </p>
+                  <p className="text-[9px] text-neutral-400 leading-relaxed">
+                    Los tiles activos aparecen en la sección &ldquo;Explorar Categorías&rdquo; del home. El primero (orden 0) ocupa doble espacio. Cada tile puede tener imagen, título y un enlace.
+                  </p>
               </div>
 
               {/* SQL hint */}
@@ -504,7 +532,10 @@ CREATE POLICY "hero_delete" ON hero_settings FOR DELETE USING (true);`}</pre>
                           ) : (
                             <CldUploadWidget
                               uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                              onSuccess={(r: any) => { if (r.info?.secure_url) setBentoForm(p => ({ ...p, image_url: r.info.secure_url })) }}
+                              onSuccess={(r) => { 
+                              const info = r.info as { secure_url?: string }
+                              if (info?.secure_url) setBentoForm(p => ({ ...p, image_url: info.secure_url })) 
+                            }}
                             >
                               {({ open }) => (
                                 <button type="button" onClick={() => open()}
