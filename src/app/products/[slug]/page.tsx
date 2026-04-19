@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import { getProductBySlug, getProducts, formatPrice } from '@/lib/data'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import ProductClientActions from './ProductClientActions'
 import ProductGallery from './ProductGallery'
 
