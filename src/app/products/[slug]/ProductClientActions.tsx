@@ -38,18 +38,18 @@ export default function ProductClientActions({ product }: { product: Product }) 
     <div className="flex flex-col gap-5">
       {/* Quantity Selector */}
       <div className="space-y-2">
-        <p className="text-[11px] text-gray-500 font-medium">Cantidad</p>
-        <div className="flex items-center border border-gray-400 w-fit h-11">
+        <p className="text-[11px] text-neutral-500 font-medium">Cantidad</p>
+        <div className="flex items-center border border-white/20 w-fit h-11">
           <button 
             onClick={() => setQty(Math.max(1, qty - 1))}
-            className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black transition-colors"
+            className="w-12 h-full flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">remove</span>
           </button>
-          <span className="w-8 text-center text-sm font-medium text-black">{qty}</span>
+          <span className="w-8 text-center text-sm font-medium text-white">{qty}</span>
           <button 
             onClick={() => setQty(qty + 1)}
-            className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black transition-colors"
+            className="w-12 h-full flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">add</span>
           </button>
@@ -60,14 +60,14 @@ export default function ProductClientActions({ product }: { product: Product }) 
         {/* Buttons matching screenshot style */}
         <button 
           onClick={handleAdd}
-          className="w-full border border-black text-black py-3.5 text-[13px] hover:bg-gray-50 transition-colors tracking-wide"
+          className="w-full border border-white text-white py-3.5 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-white hover:text-black transition-all"
         >
           Agregar al carrito
         </button>
         
         <button 
           onClick={handleBuyNow}
-          className="w-full bg-[#111] text-white py-3.5 text-[13px] hover:bg-black transition-colors tracking-wide"
+          className="w-full bg-white text-black py-3.5 text-[11px] uppercase tracking-[0.2em] font-extrabold hover:bg-neutral-200 transition-all font-bold"
         >
           Comprar ahora
         </button>
