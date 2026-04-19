@@ -26,7 +26,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
   const prev = () => setCurrent((prev) => (prev - 1 + images.length) % images.length)
 
   return (
-    <div className="space-y-4 md:sticky md:top-24">
+    <div className="space-y-4">
       {/* Main Image */}
       <div className="group bg-neutral-900 aspect-[3/4] flex items-center justify-center relative overflow-hidden border border-neutral-800/50 rounded-sm">
         <Image 
@@ -42,14 +42,14 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
           <>
             <button 
               onClick={(e) => { e.preventDefault(); prev() }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/40"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-opacity hover:bg-black/60"
               aria-label="Anterior"
             >
               <span className="material-symbols-outlined">chevron_left</span>
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); next() }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/40"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-opacity hover:bg-black/60"
               aria-label="Siguiente"
             >
               <span className="material-symbols-outlined">chevron_right</span>

@@ -49,12 +49,14 @@ export default async function ProductDetailPage({ params }: Props) {
             <span className="text-neutral-400 font-medium">{product.name}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-20 items-start">
             {/* Gallery (Client Component) */}
-            <ProductGallery images={product.images || []} name={product.name} />
+            <div className="lg:col-span-5 max-w-[450px] mx-auto lg:mx-0 w-full">
+              <ProductGallery images={product.images || []} name={product.name} />
+            </div>
 
             {/* Details */}
-            <div className="flex flex-col gap-8">
+            <div className="lg:col-span-7 flex flex-col gap-8">
               <div className="border-b border-white/5 pb-8">
                 <p className="font-label text-[9px] uppercase tracking-[0.4em] text-neutral-500 font-bold mb-3">
                   ADONIS SELECTION
