@@ -39,18 +39,18 @@ export default async function ProductDetailPage({ params }: Props) {
       <main className="min-h-screen bg-background text-on-background pt-32 pb-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumbs */}
-          <nav className="mb-12 flex items-center gap-2 text-[10px] uppercase tracking-widest text-neutral-500 font-bold">
+          <nav className="mb-8 flex items-center gap-2 text-[9px] uppercase tracking-widest text-neutral-500 font-bold">
             <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
-            <span className="material-symbols-outlined text-xs">chevron_right</span>
+            <span className="material-symbols-outlined text-[10px]">chevron_right</span>
             <Link href="/products" className="hover:text-white transition-colors">Colección</Link>
-            <span className="material-symbols-outlined text-xs">chevron_right</span>
-            <span className="text-neutral-400">{product.name}</span>
+            <span className="material-symbols-outlined text-[10px]">chevron_right</span>
+            <span className="text-neutral-400 font-medium">{product.name}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
             {/* Gallery */}
-            <div className="space-y-4 md:sticky md:top-32">
-              <div className="bg-surface-container-low aspect-[3/4] flex items-center justify-center relative overflow-hidden border border-outline-variant/10">
+            <div className="space-y-4 md:sticky md:top-24">
+              <div className="bg-surface-container-low aspect-[3/4] flex items-center justify-center relative overflow-hidden border border-neutral-800/50 rounded-sm">
                 {product.images?.[0] ? (
                   <div className="relative w-full h-full">
                     <Image 
@@ -88,19 +88,19 @@ export default async function ProductDetailPage({ params }: Props) {
 
             {/* Details */}
             <div className="flex flex-col gap-10">
-              <div className="border-b border-outline-variant/10 pb-10">
-                <p className="font-label text-xs uppercase tracking-[0.4em] text-secondary font-bold mb-4">
+              <div className="border-b border-outline-variant/10 pb-8">
+                <p className="font-label text-[10px] uppercase tracking-[0.4em] text-secondary font-bold mb-3">
                   {product.material || 'Alta Joyería'}
                 </p>
-                <h1 className="font-headline text-5xl md:text-6xl text-white uppercase tracking-tight leading-none mb-6">
+                <h1 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight leading-tight mb-4 font-bold">
                   {product.name}
                 </h1>
                 <div className="flex items-baseline gap-4">
-                  <p className="font-sans text-3xl text-primary-container font-light">
+                  <p className="font-sans text-2xl text-white font-light">
                     {formatPrice(product.price)}
                   </p>
                   {product.originalPrice && (
-                    <p className="text-lg text-neutral-600 line-through font-light">
+                    <p className="text-sm text-neutral-600 line-through font-light">
                       {formatPrice(product.originalPrice)}
                     </p>
                   )}
@@ -108,31 +108,31 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
 
               <div className="space-y-8">
-                <div className="space-y-4 uppercase">
-                   <p className="text-[10px] tracking-[0.3em] text-neutral-500 font-bold">Exploración Artística</p>
-                   <p className="font-body text-neutral-300 leading-relaxed text-lg font-light lowercase first-letter:uppercase">
+                <div className="space-y-3 uppercase">
+                   <p className="text-[9px] tracking-[0.3em] text-neutral-500 font-bold">Exploración Artística</p>
+                   <p className="font-body text-neutral-300 leading-relaxed text-sm font-light lowercase first-letter:uppercase max-w-lg">
                     {product.description || 'Una pieza exquisita que equilibra la tradición artesanal con el minimalismo contemporáneo. Forjada con los materiales más nobles para perdurar como un legado.'}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12 py-10 border-t border-b border-outline-variant/10">
-                  <div className="space-y-3">
-                    <p className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Identificador</p>
-                    <p className="text-white font-headline text-sm uppercase tracking-wider">AD-26-{product.id.slice(0, 4)}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 py-8 border-t border-b border-outline-variant/10">
+                  <div className="space-y-2">
+                    <p className="text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Identificador</p>
+                    <p className="text-white font-headline text-xs uppercase tracking-wider">AD-26-{product.id.slice(0, 4)}</p>
                   </div>
-                  <div className="space-y-3">
-                    <p className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Artesanía</p>
-                    <p className="text-white font-headline text-sm uppercase tracking-wider">{product.material || 'Oro 18K'}</p>
+                  <div className="space-y-2">
+                    <p className="text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Artesanía</p>
+                    <p className="text-white font-headline text-xs uppercase tracking-wider">{product.material || 'Oro 18K'}</p>
                   </div>
-                  <div className="space-y-3">
-                    <p className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Disponibilidad</p>
-                    <p className={`font-headline text-sm uppercase tracking-wider ${(product.stock ?? 0) > 0 ? 'text-emerald-400' : 'text-error'}`}>
+                  <div className="space-y-2">
+                    <p className="text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Disponibilidad</p>
+                    <p className={`font-headline text-xs uppercase tracking-wider ${(product.stock ?? 0) > 0 ? 'text-emerald-400' : 'text-error'}`}>
                       {(product.stock ?? 0) > 0 ? 'Pieza Disponible' : 'Bajo Pedido'}
                     </p>
                   </div>
-                  <div className="space-y-3">
-                    <p className="text-[9px] uppercase tracking-widest text-neutral-500 font-bold">Colección</p>
-                    <p className="text-white font-headline text-sm uppercase tracking-wider">Adonis Legacy</p>
+                  <div className="space-y-2">
+                    <p className="text-[8px] uppercase tracking-widest text-neutral-500 font-bold">Colección</p>
+                    <p className="text-white font-headline text-xs uppercase tracking-wider">Adonis Legacy</p>
                   </div>
                 </div>
               </div>

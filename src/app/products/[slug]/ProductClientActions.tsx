@@ -34,17 +34,17 @@ export default function ProductClientActions({ product }: { product: Product }) 
       <div className="flex gap-3">
         <button 
           onClick={handleAdd}
-          className="flex-grow bg-white text-black py-5 font-label uppercase tracking-widest text-[10px] font-bold hover:bg-neutral-200 transition-all flex items-center justify-center gap-3"
+          className="flex-grow bg-white text-black py-3.5 font-label uppercase tracking-widest text-[9px] font-bold hover:bg-neutral-200 transition-all flex items-center justify-center gap-2.5"
         >
-          <span className="material-symbols-outlined text-base">shopping_bag</span>
+          <span className="material-symbols-outlined text-sm">shopping_bag</span>
           Añadir a la Selección
         </button>
         <button 
           onClick={handleFavorite}
           aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-          className={`px-6 border border-outline-variant/30 flex items-center justify-center hover:border-white transition-all ${isFavorite ? 'text-red-500 border-red-500/30' : 'text-neutral-500'}`}
+          className={`px-5 border border-outline-variant/30 flex items-center justify-center hover:border-white transition-all ${isFavorite ? 'text-red-500 border-red-500/30' : 'text-neutral-500'}`}
         >
-          <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: isFavorite ? "'FILL' 1" : "''" }}>
+          <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: isFavorite ? "'FILL' 1" : "''" }}>
             favorite
           </span>
         </button>
@@ -54,9 +54,9 @@ export default function ProductClientActions({ product }: { product: Product }) 
         href={`https://wa.me/595981000000?text=Hola, estoy interesado en la pieza: ${product.name} (Ref: ${product.id.slice(0,4)})`}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full border border-neutral-800 text-neutral-400 py-5 font-label uppercase tracking-widest text-[10px] hover:border-white hover:text-white transition-all font-bold text-center flex items-center justify-center gap-3"
+        className="w-full border border-neutral-800 text-neutral-400 py-3.5 font-label uppercase tracking-widest text-[9px] hover:border-white hover:text-white transition-all font-bold text-center flex items-center justify-center gap-2.5"
       >
-        <span className="material-symbols-outlined text-base">contact_support</span>
+        <span className="material-symbols-outlined text-sm">contact_support</span>
         Consultar con un Asesor
       </a>
     </div>
