@@ -13,10 +13,10 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="bg-surface-container-low aspect-[3/4] flex items-center justify-center relative overflow-hidden border border-neutral-800/50 rounded-sm">
+      <div className="bg-gray-100 aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-gray-200">
         <div className="text-center p-12">
-          <span className="material-symbols-outlined text-6xl text-neutral-800 mb-4 block">diamond</span>
-          <p className="font-headline text-neutral-600 font-bold uppercase tracking-widest text-[10px]">Archivo de Obra Maestra</p>
+          <span className="material-symbols-outlined text-6xl text-gray-300 mb-4 block">image</span>
+          <p className="font-sans text-gray-500 text-xs">Sin imagen</p>
         </div>
       </div>
     )
@@ -28,7 +28,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="group bg-neutral-900 aspect-[3/4] flex items-center justify-center relative overflow-hidden border border-neutral-800/50 rounded-sm">
+      <div className="group bg-[#f9f9f9] aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-gray-100">
         <Image 
           src={images[current]} 
           alt={name} 
@@ -42,17 +42,17 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
           <>
             <button 
               onClick={(e) => { e.preventDefault(); prev() }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-opacity hover:bg-black/60"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 border border-gray-200 flex items-center justify-center text-black transition-opacity hover:bg-white shadow-sm opacity-0 group-hover:opacity-100"
               aria-label="Anterior"
             >
-              <span className="material-symbols-outlined">chevron_left</span>
+              <span className="material-symbols-outlined text-[20px]">chevron_left</span>
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); next() }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-opacity hover:bg-black/60"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 border border-gray-200 flex items-center justify-center text-black transition-opacity hover:bg-white shadow-sm opacity-0 group-hover:opacity-100"
               aria-label="Siguiente"
             >
-              <span className="material-symbols-outlined">chevron_right</span>
+              <span className="material-symbols-outlined text-[20px]">chevron_right</span>
             </button>
           </>
         )}
@@ -65,16 +65,18 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
             <button 
               key={i} 
               onClick={() => setCurrent(i)}
-              className={`flex-shrink-0 w-20 aspect-square border overflow-hidden relative transition-all ${
-                current === i ? 'border-white' : 'border-neutral-800 opacity-60 hover:opacity-100'
+              className={`flex-shrink-0 w-24 aspect-square overflow-hidden relative transition-all ${
+                current === i ? 'border-[1.5px] border-black p-0.5' : 'border border-gray-200 opacity-70 hover:opacity-100'
               }`}
             >
-              <Image 
-                src={img} 
-                alt={`${name} detail ${i}`} 
-                fill
-                className="object-cover" 
-              />
+              <div className="w-full h-full relative">
+                <Image 
+                  src={img} 
+                  alt={`${name} detail ${i}`} 
+                  fill
+                  className="object-cover bg-[#f9f9f9]" 
+                />
+              </div>
             </button>
           ))}
         </div>
@@ -82,3 +84,4 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
     </div>
   )
 }
+
