@@ -86,9 +86,9 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-6">
+      <nav className="fixed top-0 w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3">
         <Link href="/" className="flex items-center justify-center w-16 md:w-20 h-10 md:h-12">
-          <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2] md:scale-[2.4] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+          <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2.2] md:scale-[2.6] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] pointer-events-none" />
         </Link>
 
         {/* Desktop Nav */}
