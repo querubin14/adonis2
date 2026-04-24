@@ -17,7 +17,7 @@ interface Toast { message: string; type: 'success' | 'error' }
 
 const EMPTY_FORM = {
   name: '', price: '', category_id: '', material: '',
-  description: '', stock: '', slug: '', original_price: '',
+  description: '', stock: '', slug: '', original_price: '', featured: false,
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -61,23 +61,46 @@ export default function AdminPage() {
   const [activeGroup, setActiveGroup] = useState<string>('all')
   const [openGroups, setOpenGroups]   = useState<Set<string>>(new Set())
   const [search, setSearch]           = useState('')
+  const [draggedId, setDraggedId]     = useState<string | null>(null)
+  const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false)
+  const [savingOrder, setSavingOrder] = useState(false)
 
 
   // ── Products grouped by root category ─────────────────────────
   const groups = useMemo(() => {
     const rootCats = categories.filter(c => !c.parent_id && !c.parentId)
-    const map = new Map<string, { id: string; name: string; products: Product[] }>()
-    map.set('__none__', { id: '__none__', name: 'Sin Categoría', products: [] })
+    const map = new Map<string, { id: string; name: string; products: Product[]; icon?: string; color?: string; borderColor?: string }>()
+    
+    map.set('__featured__', { id: '__featured__', name: 'DESTACADOS', products: [], icon: 'star', color: 'text-orange-500', borderColor: 'border-orange-500/50' })
     rootCats.forEach(cat => map.set(cat.id, { id: cat.id, name: cat.name, products: [] }))
+    map.set('__none__', { id: '__none__', name: 'Sin Categoría', products: [] })
 
-    products.forEach(p => {
-      const catId = (p as any).category_id ?? p.categoryId
-      const rootId = catId ? (getRootCategoryId(catId, categories) ?? '__none__') : '__none__'
-      const group = map.get(rootId) ?? map.get('__none__')!
-      group.products.push(p)
+    const sortedProducts = [...products].sort((a, b) => ((a as any).sort_order || 0) - ((b as any).sort_order || 0))
+
+    sortedProducts.forEach(p => {
+      if (p.featured) {
+        map.get('__featured__')!.products.push(p)
+      } else {
+        const catId = (p as any).category_id ?? p.categoryId
+        const rootId = catId ? (getRootCategoryId(catId, categories) ?? '__none__') : '__none__'
+        const group = map.get(rootId) ?? map.get('__none__')!
+        group.products.push(p)
+      }
     })
 
-    return [...map.values()].filter(g => g.products.length > 0)
+    const DESIRED_ORDER = ['pulseras', 'cadenas', 'billeteras']
+    return [...map.values()]
+      .filter(g => g.products.length > 0)
+      .sort((a, b) => {
+        if (a.id === '__featured__') return -1
+        if (b.id === '__featured__') return 1
+        const aIdx = DESIRED_ORDER.indexOf(a.name.toLowerCase())
+        const bIdx = DESIRED_ORDER.indexOf(b.name.toLowerCase())
+        if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx
+        if (aIdx !== -1) return -1
+        if (bIdx !== -1) return 1
+        return a.name.localeCompare(b.name)
+      })
   }, [products, categories])
 
   // ── Stats ──────────────────────────────────────────────────────
@@ -141,6 +164,7 @@ export default function AdminPage() {
       stock: String(p.stock ?? ''),
       slug: p.slug,
       original_price: p.originalPrice ? String(p.originalPrice) : '',
+      featured: p.featured ?? false,
     })
     setImages(p.images ?? [])
     setUrlInput('')
@@ -155,9 +179,10 @@ export default function AdminPage() {
   }
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
     setFormData(prev => {
-      const next = { ...prev, [name]: value }
+      const next = { ...prev, [name]: type === 'checkbox' ? checked : value }
       if (name === 'name' && !editing)
         next.slug = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
           .replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
@@ -184,6 +209,7 @@ export default function AdminPage() {
         material: formData.material || null,
         description: formData.description || null,
         stock: parseInt(formData.stock),
+        featured: formData.featured,
         images,
         ...(formData.original_price ? { original_price: parseInt(formData.original_price) } : {}),
       }
@@ -217,6 +243,57 @@ export default function AdminPage() {
       next.has(id) ? next.delete(id) : next.add(id)
       return next
     })
+  }
+
+  // ── Drag & Drop ────────────────────────────────────────────────
+  function handleDragStart(e: React.DragEvent, id: string) {
+    setDraggedId(id)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', id)
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  function handleDrop(e: React.DragEvent, targetId: string) {
+    e.preventDefault()
+    if (!draggedId || draggedId === targetId) return
+    
+    const dragIndex = products.findIndex(p => p.id === draggedId)
+    const dropIndex = products.findIndex(p => p.id === targetId)
+    if (dragIndex === -1 || dropIndex === -1) return
+
+    setProducts(prev => {
+      const next = [...prev]
+      const [draggedItem] = next.splice(dragIndex, 1)
+      const newDropIndex = next.findIndex(p => p.id === targetId)
+      next.splice(newDropIndex, 0, draggedItem)
+      // Actualizar sort_order localmente
+      return next.map((p, i) => ({ ...p, sort_order: i } as Product))
+    })
+    setDraggedId(null)
+    setHasUnsavedOrder(true)
+  }
+
+  async function saveOrder() {
+    setSavingOrder(true)
+    try {
+      // Guardar de a uno por ahora (en producción sería mejor un endpoint bulk)
+      await Promise.all(products.map(async (p, i) => {
+        if ((p as any).sort_order !== i) {
+          await updateProduct(p.id, { sort_order: i } as any)
+        }
+      }))
+      setHasUnsavedOrder(false)
+      msg('Orden guardado correctamente.', 'success')
+      await load()
+    } catch (e: any) {
+      msg('Error al guardar el orden: ' + (e.message ?? 'Inténtelo de nuevo.'), 'error')
+    } finally {
+      setSavingOrder(false)
+    }
   }
 
   // ── RENDER ─────────────────────────────────────────────────────
@@ -282,6 +359,13 @@ export default function AdminPage() {
                     className="bg-surface-container-low border border-outline-variant/10 text-white text-xs pl-9 pr-4 py-2 outline-none focus:border-white transition-colors w-48 placeholder:text-neutral-600"
                   />
                 </div>
+                {hasUnsavedOrder && (
+                  <button onClick={saveOrder} disabled={savingOrder}
+                    className="flex items-center gap-2 bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600/40 transition-all whitespace-nowrap">
+                    <span className="material-symbols-outlined text-sm" aria-hidden="true">save</span>
+                    {savingOrder ? 'Guardando...' : 'Guardar Orden'}
+                  </button>
+                )}
                 <button onClick={() => openNew()}
                   className="flex items-center gap-2 bg-white text-black px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all whitespace-nowrap">
                   <span className="material-symbols-outlined text-sm" aria-hidden="true">add</span>
@@ -357,93 +441,90 @@ export default function AdminPage() {
               ) : (
                 <div className="space-y-3">
                   {displayGroups.map(group => (
-                    <div key={group.id} className="bg-surface-container-low border border-outline-variant/10 overflow-hidden">
+                    <div key={group.id} className={`bg-neutral-900 border rounded-xl overflow-hidden mb-4 ${group.borderColor || 'border-neutral-800'}`}>
                       {/* Group header */}
-                      <div className="flex items-center justify-between px-6 py-3.5 hover:bg-surface-container transition-colors">
-                        <button
-                          onClick={() => toggleGroup(group.id)}
-                          className="flex items-center gap-3 flex-1 text-left"
-                        >
-                          <span className="material-symbols-outlined text-sm text-neutral-500 transition-transform"
-                            style={{ transform: openGroups.has(group.id) ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                      <div className="flex items-center justify-between px-6 py-4 hover:bg-neutral-800 transition-colors cursor-pointer" onClick={() => toggleGroup(group.id)}>
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-neutral-400 transition-transform text-lg"
+                            style={{ transform: openGroups.has(group.id) ? 'rotate(180deg)' : 'rotate(0deg)' }}
                             aria-hidden="true">
-                            chevron_right
+                            expand_more
                           </span>
-                          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">{group.name}</span>
-                          <span className="text-[8px] text-neutral-600 font-bold bg-neutral-800 px-2 py-0.5">
-                            {group.products.length} pieza{group.products.length !== 1 ? 's' : ''}
+                          {group.icon && (
+                            <span className={`material-symbols-outlined text-xl ${group.color || 'text-white'}`} aria-hidden="true">{group.icon}</span>
+                          )}
+                          <span className={`text-sm font-bold uppercase tracking-[0.1em] ${group.color || 'text-white'}`}>{group.name}</span>
+                          <span className="text-[10px] text-neutral-400 font-bold bg-neutral-800 border border-neutral-700 rounded-full px-3 py-1">
+                            {group.products.length} items
                           </span>
-                        </button>
-                        <button
-                          onClick={() => openNew(group.id === '__none__' ? '' : group.id)}
-                          className="flex items-center gap-1 text-[9px] text-neutral-500 hover:text-white font-bold uppercase tracking-wider transition-colors px-2 py-1"
-                        >
-                          <span className="material-symbols-outlined text-xs" aria-hidden="true">add</span>
-                          Agregar
-                        </button>
+                        </div>
                       </div>
 
-                      {/* Group rows */}
+                      {/* Group grid */}
                       {openGroups.has(group.id) && (
-                        <div className="border-t border-outline-variant/10">
-                          <table className="w-full" aria-label={`Productos de ${group.name}`}>
-                            <thead>
-                              <tr className="border-b border-outline-variant/5">
-                                {['', 'Nombre', 'Categoría', 'Precio', 'Stock', ''].map((h, i) => (
-                                  <th key={i} scope="col"
-                                    className="px-5 py-2.5 text-left text-[8px] uppercase tracking-[0.3em] text-neutral-600 font-bold">
-                                    {h}
-                                  </th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {group.products.map((p, idx) => {
-                                const catId = (p as any).category_id ?? p.categoryId
-                                return (
-                                  <tr key={p.id}
-                                    className={`border-b border-outline-variant/5 hover:bg-surface-container transition-colors ${idx % 2 !== 0 ? 'bg-surface-container-lowest/20' : ''}`}>
-                                    <td className="px-5 py-3 w-12">
-                                      <div className="w-9 h-11 bg-neutral-900 border border-neutral-800 overflow-hidden flex items-center justify-center flex-shrink-0">
-                                        {p.images?.[0]
-                                          ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
-                                          : <span className="material-symbols-outlined text-neutral-700 text-xs" aria-hidden="true">diamond</span>
-                                        }
-                                      </div>
-                                    </td>
-                                    <td className="px-5 py-3 min-w-[160px]">
-                                      <p className="font-headline text-sm text-white leading-tight">{p.name}</p>
-                                      {p.material && <p className="text-[9px] text-neutral-500 mt-0.5 uppercase tracking-wider">{p.material}</p>}
-                                    </td>
-                                    <td className="px-5 py-3">
-                                      <span className="text-xs text-neutral-500">{getCategoryName(catId, categories)}</span>
-                                    </td>
-                                    <td className="px-5 py-3">
-                                      <span className="text-sm text-white tabular-nums whitespace-nowrap">{formatPrice(p.price)}</span>
-                                      {p.originalPrice && (
-                                        <p className="text-[9px] text-neutral-600 line-through">{formatPrice(p.originalPrice)}</p>
+                        <div className="p-5 border-t border-neutral-800 bg-black/40">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {group.products.map((p) => {
+                              const isDragging = draggedId === p.id
+                              return (
+                                <div 
+                                  key={p.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, p.id)}
+                                  onDragOver={handleDragOver}
+                                  onDrop={(e) => handleDrop(e, p.id)}
+                                  className={`relative flex p-3 rounded-xl border transition-all ${isDragging ? 'opacity-50 border-white bg-neutral-800' : 'border-neutral-800 bg-neutral-900/60 hover:bg-neutral-800/80 hover:border-neutral-700'}`}
+                                >
+                                  {/* Left: Handle + Image */}
+                                  <div className="flex flex-col gap-2 items-center mr-4">
+                                    <span className="material-symbols-outlined text-neutral-600 cursor-grab active:cursor-grabbing text-sm hover:text-white" title="Mover">drag_indicator</span>
+                                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-black flex items-center justify-center border border-neutral-800">
+                                      {p.images?.[0] ? (
+                                        <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
+                                      ) : (
+                                        <span className="material-symbols-outlined text-neutral-700 text-lg">diamond</span>
                                       )}
-                                    </td>
-                                    <td className="px-5 py-3">
-                                      <StockBadge stock={p.stock ?? 0} />
-                                    </td>
-                                    <td className="px-5 py-3">
-                                      <div className="flex items-center gap-1">
-                                        <button onClick={() => openEdit(p)} aria-label={`Editar ${p.name}`}
-                                          className="p-2 text-neutral-500 hover:text-white hover:bg-neutral-800 transition-all">
-                                          <span className="material-symbols-outlined text-sm" aria-hidden="true">edit</span>
+                                    </div>
+                                  </div>
+
+                                  {/* Right: Details */}
+                                  <div className="flex flex-col flex-1 overflow-hidden">
+                                    <div className="flex justify-between items-start gap-2">
+                                      <h4 className="text-white font-bold text-xs leading-tight truncate flex-1">{p.name}</h4>
+                                      <span className="text-[9px] bg-neutral-800 border border-neutral-700 px-2 py-0.5 rounded text-white font-bold tracking-wider whitespace-nowrap">
+                                        {formatPrice(p.price)}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 mt-2">
+                                      <span className="text-[8px] font-bold text-blue-500 tracking-wider">ADMIN</span>
+                                      <span className="text-[8px] font-bold text-emerald-500 tracking-wider">ACTIVE</span>
+                                    </div>
+
+                                    <p className="text-[9px] text-neutral-500 mt-2 font-mono truncate">ID: {p.id.split('-')[0].toUpperCase()}</p>
+
+                                    <div className="mt-auto pt-3 flex items-center justify-between">
+                                      <span className="bg-neutral-800 border border-neutral-700 px-2 py-1 text-[9px] font-bold text-white rounded">
+                                        Total {p.stock ?? 0}
+                                      </span>
+
+                                      {/* Actions */}
+                                      <div className="flex gap-2">
+                                        <button onClick={() => openEdit(p)} title="Editar"
+                                          className="w-7 h-7 rounded-full bg-blue-600/90 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition-colors">
+                                          <span className="material-symbols-outlined text-[13px]">edit</span>
                                         </button>
-                                        <button onClick={() => setDeleteId(p.id)} aria-label={`Eliminar ${p.name}`}
-                                          className="p-2 text-neutral-500 hover:text-error hover:bg-error/10 transition-all">
-                                          <span className="material-symbols-outlined text-sm" aria-hidden="true">delete</span>
+                                        <button onClick={() => setDeleteId(p.id)} title="Eliminar"
+                                          className="w-7 h-7 rounded-full bg-red-900/30 hover:bg-red-800/80 text-red-500 hover:text-white border border-red-900/50 flex items-center justify-center transition-colors">
+                                          <span className="material-symbols-outlined text-[13px]">delete</span>
                                         </button>
                                       </div>
-                                    </td>
-                                  </tr>
-                                )
-                              })}
-                            </tbody>
-                          </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -516,6 +597,19 @@ export default function AdminPage() {
                       <input id="f-mat" name="material" value={formData.material} onChange={handleInput} autoComplete="off"
                         placeholder="Oro 18k, Diamante..."
                         className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                    </div>
+                    <div className="md:col-span-2 flex items-center gap-3 mt-2">
+                      <input
+                        type="checkbox"
+                        id="f-featured"
+                        name="featured"
+                        checked={formData.featured}
+                        onChange={handleInput}
+                        className="w-4 h-4 accent-white bg-neutral-900 border-neutral-800"
+                      />
+                      <label htmlFor="f-featured" className="text-[10px] uppercase tracking-widest text-white font-bold cursor-pointer">
+                        Destacar en Inicio
+                      </label>
                     </div>
                   </div>
                 </div>

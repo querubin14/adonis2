@@ -42,7 +42,24 @@ export default async function HomePage() {
   }]
 
   const rootCategories = categories.filter(c => !c.parent_id && !c.parentId)
-  const featuredProducts = products.slice(0, 10)
+  
+  const DESIRED_ORDER = ['pulseras', 'cadenas', 'billeteras']
+  const orderedCategories = [...rootCategories].sort((a, b) => {
+    const aName = a.name.toLowerCase()
+    const bName = b.name.toLowerCase()
+    const aIdx = DESIRED_ORDER.indexOf(aName)
+    const bIdx = DESIRED_ORDER.indexOf(bName)
+    if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx
+    if (aIdx !== -1) return -1
+    if (bIdx !== -1) return 1
+    return (a.sort_order || 0) - (b.sort_order || 0)
+  })
+
+  let featuredProducts = products.filter(p => p.featured)
+  // Fallback si no hay destacados, mostrar los 10 primeros
+  if (featuredProducts.length === 0) {
+    featuredProducts = products.slice(0, 10)
+  }
 
   return (
     <>
@@ -110,7 +127,7 @@ export default async function HomePage() {
         )}
 
         {/* ── Dynamic Category Sections ─────────────────────────── */}
-        {rootCategories.map((category) => {
+        {orderedCategories.map((category) => {
           const categoryProducts = products.filter(p => {
             const pid = (p as any).category_id ?? p.categoryId
             if (pid === category.id) return true
@@ -149,16 +166,13 @@ export default async function HomePage() {
           )
         })}
 
-        {/* ── Reviews ───────────────────────────────────────────── */}
-        <ReviewsCarousel reviews={reviews} />
-
-
-
-
         {/* ── Bento Grid — Explorar Categorías (from admin) ─────── */}
         {bentoItems.length > 0 && (
           <BentoGrid items={bentoItems} />
         )}
+
+        {/* ── Reviews ───────────────────────────────────────────── */}
+        <ReviewsCarousel reviews={reviews} />
 
       </main>
       <Footer />

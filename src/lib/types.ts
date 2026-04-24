@@ -32,6 +32,8 @@ export interface Product {
   featured?: boolean
   tags?: string[]
   variants?: ProductVariant[]
+  length?: string
+  thickness?: string
   createdAt?: string
 }
 
