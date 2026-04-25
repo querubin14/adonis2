@@ -89,30 +89,26 @@ export default function CartSidebar() {
         aria-label="Carrito de compras"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-800">
+        <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-800/50">
           {step === 'cart' && (
-            <div>
-              <h2 className="font-headline text-sm uppercase tracking-[0.25em] text-white">Carrito</h2>
-              <p className="text-[9px] text-neutral-500 uppercase tracking-widest mt-0.5">{count} pieza{count !== 1 ? 's' : ''}</p>
-            </div>
+            <h2 className="font-headline text-[15px] uppercase tracking-wide text-white font-black">
+              CARRITO ({count})
+            </h2>
           )}
           {step === 'checkout' && (
             <div className="flex items-center gap-3">
               <button onClick={() => setStep('cart')} className="text-neutral-400 hover:text-white transition-colors">
-                <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+                <span className="material-symbols-outlined text-xl" aria-hidden="true">arrow_back</span>
               </button>
-              <div>
-                <h2 className="font-headline text-sm uppercase tracking-[0.25em] text-white">Finalizar Pedido</h2>
-                <p className="text-[9px] text-neutral-500 uppercase tracking-widest mt-0.5">Tus datos de entrega</p>
-              </div>
+              <h2 className="font-headline text-[15px] uppercase tracking-wide text-white font-black">DATOS DE ENVÍO</h2>
             </div>
           )}
           {step === 'success' && (
-            <h2 className="font-headline text-sm uppercase tracking-[0.25em] text-white">Pedido Recibido</h2>
+            <h2 className="font-headline text-[15px] uppercase tracking-wide text-white font-black">PEDIDO RECIBIDO</h2>
           )}
           <button onClick={close} aria-label="Cerrar carrito"
-            className="p-1.5 text-neutral-400 hover:text-white transition-colors">
-            <span className="material-symbols-outlined text-base" aria-hidden="true">close</span>
+            className="p-1 text-neutral-400 hover:text-white transition-colors">
+            <span className="material-symbols-outlined text-xl" aria-hidden="true">close</span>
           </button>
         </div>
 
@@ -133,43 +129,58 @@ export default function CartSidebar() {
                   </button>
                 </div>
               ) : (
-                <ul className="divide-y divide-neutral-800">
+                <ul className="p-4 space-y-4">
                   {items.map(({ product: p, quantity }) => (
-                    <li key={p.id} className="flex gap-4 px-6 py-5">
+                    <li key={p.id} className="relative flex gap-4 p-4 rounded-xl border border-neutral-800/80 bg-[#171717]/80">
                       {/* Image */}
-                      <div className="w-16 h-20 bg-neutral-900 border border-neutral-800 flex-shrink-0 overflow-hidden">
+                      <div className="w-[72px] h-[72px] rounded-lg bg-neutral-900 border border-neutral-800 flex-shrink-0 overflow-hidden">
                         {p.images?.[0]
                           ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           : <span className="w-full h-full flex items-center justify-center material-symbols-outlined text-neutral-700 text-xl">diamond</span>
                         }
                       </div>
+                      
+                      {/* Delete button (top right) */}
+                      <button
+                        onClick={() => {
+                          remove(p.id)
+                          toast(`${p.name} eliminado del carrito`, {
+                            position: 'top-center',
+                            autoClose: 3000,
+                            hideProgressBar: true,
+                            closeButton: false,
+                            theme: 'dark',
+                          })
+                        }}
+                        aria-label="Eliminar"
+                        className="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
+                        <span className="material-symbols-outlined text-[18px]" aria-hidden="true">delete</span>
+                      </button>
+
                       {/* Info */}
-                      <div className="flex-grow min-w-0">
-                        <p className="font-headline text-xs text-white uppercase tracking-wide leading-tight truncate">{p.name}</p>
-                        {p.material && <p className="text-[9px] text-neutral-500 mt-0.5 uppercase tracking-wider">{p.material}</p>}
-                        <p className="text-xs text-white mt-1.5 tabular-nums">{formatPrice(p.price * quantity)}</p>
-                        {/* Qty controls */}
-                        <div className="flex items-center gap-2 mt-2">
-                          <button onClick={() => update(p.id, quantity - 1)}
-                            className="w-6 h-6 border border-neutral-700 text-neutral-400 hover:text-white hover:border-white transition-all flex items-center justify-center text-sm">−</button>
-                          <span className="text-xs text-white tabular-nums w-4 text-center">{quantity}</span>
-                          <button onClick={() => update(p.id, quantity + 1)}
-                            className="w-6 h-6 border border-neutral-700 text-neutral-400 hover:text-white hover:border-white transition-all flex items-center justify-center text-sm">+</button>
-                          <button
-                            onClick={() => {
-                              remove(p.id)
-                              toast(`${p.name} eliminado del carrito`, {
-                                position: 'top-center',
-                                autoClose: 3000,
-                                hideProgressBar: true,
-                                closeButton: false,
-                                theme: 'dark',
-                              })
-                            }}
-                            aria-label="Eliminar"
-                            className="ml-auto text-neutral-600 hover:text-error transition-colors">
-                            <span className="material-symbols-outlined text-sm" aria-hidden="true">delete</span>
-                          </button>
+                      <div className="flex-grow flex flex-col pt-0.5 pr-6">
+                        <p className="font-headline text-[13px] text-white font-black leading-tight pr-2">{p.name}</p>
+                        <p className="text-[9px] text-neutral-500 mt-1 uppercase tracking-wider font-bold">
+                          {typeof p.category === 'string' ? p.category : p.category || 'PRODUCTOS'}
+                        </p>
+                        
+                        {/* Variant Select / Mock Select */}
+                        <div className="mt-3 flex items-center justify-between border border-neutral-800 rounded px-3 py-1.5 bg-[#1a1a1a]">
+                          <span className="text-[11px] text-white">Único</span>
+                          <span className="material-symbols-outlined text-[14px] text-neutral-500">expand_more</span>
+                        </div>
+
+                        <div className="flex items-center justify-between mt-4">
+                          <p className="text-[13px] text-white font-bold tabular-nums tracking-wide">{formatPrice(p.price)}</p>
+                          
+                          {/* Qty controls */}
+                          <div className="flex items-center border border-neutral-800 rounded-md bg-[#131313]">
+                            <button onClick={() => update(p.id, Math.max(1, quantity - 1))}
+                              className="w-7 h-7 text-neutral-500 hover:text-white transition-all flex items-center justify-center text-sm font-bold pb-0.5">−</button>
+                            <span className="text-[11px] text-white tabular-nums w-4 text-center font-bold">{quantity}</span>
+                            <button onClick={() => update(p.id, quantity + 1)}
+                              className="w-7 h-7 text-neutral-500 hover:text-white transition-all flex items-center justify-center text-sm font-bold pb-0.5">+</button>
+                          </div>
                         </div>
                       </div>
                     </li>
@@ -179,25 +190,26 @@ export default function CartSidebar() {
             </div>
 
             {items.length > 0 && (
-              <div className="border-t border-neutral-800 p-6 space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-[9px] uppercase tracking-widest text-neutral-400 font-bold">Subtotal</span>
-                  <span className="text-sm text-white font-bold tabular-nums">{formatPrice(total)}</span>
+              <div className="border-t border-neutral-800/50 p-6 pt-5 bg-[#0a0a0a]">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-[13px] uppercase tracking-widest text-white font-black">SUBTOTAL</span>
+                  <span className="text-lg text-white font-bold tabular-nums">{formatPrice(total)}</span>
                 </div>
-                <p className="text-[8px] text-neutral-600 leading-relaxed">Envío y costo final se coordinan tras confirmar el pedido.</p>
-                <button
-                  onClick={() => setStep('checkout')}
-                  className="w-full bg-white text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all"
-                >
-                  Finalizar Compra
-                </button>
-                <button
-                  onClick={close}
-                  className="w-full flex items-center justify-center gap-2 border border-neutral-700 text-neutral-400 py-3.5 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all"
-                >
-                  <span className="material-symbols-outlined text-sm" aria-hidden="true">arrow_back</span>
-                  Seguir Comprando
-                </button>
+                
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => setStep('checkout')}
+                    className="w-full bg-white text-black py-4 text-[12px] font-black uppercase tracking-widest hover:bg-neutral-200 transition-all rounded-sm"
+                  >
+                    CONTINUAR COMPRA
+                  </button>
+                  <button
+                    onClick={close}
+                    className="w-full bg-[#131313] border border-neutral-800 text-neutral-300 py-3.5 text-[11px] font-bold uppercase tracking-widest hover:text-white hover:bg-[#1a1a1a] transition-all rounded-sm"
+                  >
+                    SEGUIR COMPRANDO
+                  </button>
+                </div>
               </div>
             )}
           </>
@@ -206,54 +218,70 @@ export default function CartSidebar() {
         {/* ── CHECKOUT STEP ── */}
         {step === 'checkout' && (
           <form onSubmit={handleSubmit} className="flex-grow flex flex-col overflow-y-auto">
-            <div className="flex-grow p-6 space-y-5">
-              {/* Name fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
-                    Nombre <span className="text-red-500">*</span>
-                  </label>
-                  <input name="nombre" value={form.nombre} onChange={handleInput} required placeholder="Tu nombre"
-                    className="w-full bg-transparent border-b border-neutral-700 text-white text-sm py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+            <div className="flex-grow p-6 space-y-8">
+              
+              {/* Client Data */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="material-symbols-outlined text-neutral-400 text-[18px]">person</span>
+                  <h3 className="text-[11px] font-black tracking-[0.1em] text-neutral-400 uppercase">Datos del cliente</h3>
                 </div>
-                <div>
-                  <label className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
-                    Apellido <span className="text-red-500">*</span>
-                  </label>
-                  <input name="apellido" value={form.apellido} onChange={handleInput} required placeholder="Tu apellido"
-                    className="w-full bg-transparent border-b border-neutral-700 text-white text-sm py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] tracking-wide text-neutral-300 font-bold mb-2 uppercase">
+                      Nombre *
+                    </label>
+                    <input name="nombre" value={form.nombre} onChange={handleInput} required placeholder="Tu nombre"
+                      className="w-full bg-[#0a0a0a] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-white transition-colors placeholder:text-neutral-600" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] tracking-wide text-neutral-300 font-bold mb-2 uppercase">
+                      Apellido *
+                    </label>
+                    <input name="apellido" value={form.apellido} onChange={handleInput} required placeholder="Tu apellido"
+                      className="w-full bg-[#0a0a0a] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-white transition-colors placeholder:text-neutral-600" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] tracking-wide text-neutral-300 font-bold mb-2 uppercase">
+                      Teléfono
+                    </label>
+                    <input name="telefono" value={form.telefono} onChange={handleInput} placeholder="+595 9xx xxx xxx" type="tel"
+                      className="w-full bg-[#0a0a0a] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-white transition-colors placeholder:text-neutral-600" />
+                  </div>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Teléfono</label>
-                <input name="telefono" value={form.telefono} onChange={handleInput} placeholder="+595 9xx xxx xxx" type="tel"
-                  className="w-full bg-transparent border-b border-neutral-700 text-white text-sm py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
               </div>
 
               {/* Location */}
-              <div>
-                <label className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
-                  Ubicación de entrega <span className="text-red-500">*</span>
-                </label>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="material-symbols-outlined text-neutral-400 text-[18px]">location_on</span>
+                  <h3 className="text-[11px] font-black tracking-[0.1em] text-neutral-400 uppercase">Ubicación de envío</h3>
+                </div>
 
                 {!location ? (
                   <div className="space-y-3">
                     <button type="button" onClick={getLocation} disabled={locLoading}
-                      className="w-full border border-neutral-700 hover:border-white text-neutral-400 hover:text-white py-3 text-[9px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-                      {locLoading ? (
-                        <span className="w-3.5 h-3.5 border-2 border-neutral-600 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <span className="material-symbols-outlined text-sm" aria-hidden="true">my_location</span>
-                      )}
-                      {locLoading ? 'Obteniendo ubicación...' : 'Marcar mi ubicación en mapa'}
+                      className="w-full border border-dashed border-neutral-700 bg-[#0f0f0f] hover:border-neutral-500 rounded-xl py-6 flex flex-col items-center justify-center gap-3 transition-all disabled:opacity-50">
+                      <div className="w-12 h-12 rounded-full border border-neutral-700 flex items-center justify-center bg-black">
+                        {locLoading ? (
+                          <span className="w-5 h-5 border-2 border-neutral-600 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <span className="material-symbols-outlined text-white text-xl" aria-hidden="true">map</span>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <span className="block text-[11px] font-black text-neutral-300 uppercase tracking-widest mb-1">
+                          {locLoading ? 'Obteniendo ubicación...' : 'Marcar en el mapa'}
+                        </span>
+                        <span className="block text-[9px] text-neutral-500">Requerido para calcular envío</span>
+                      </div>
                     </button>
-                    {locError && <p className="text-[9px] text-red-400">{locError}</p>}
+                    {locError && <p className="text-[10px] text-red-400 text-center">{locError}</p>}
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    {/* Map embed */}
-                    <div className="relative overflow-hidden border border-neutral-800" style={{ height: 180 }}>
+                  <div className="space-y-3 border border-neutral-800 rounded-xl overflow-hidden">
+                    <div className="relative" style={{ height: 160 }}>
                       <iframe
                         title="Mapa de entrega"
                         src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=15&output=embed`}
@@ -261,41 +289,40 @@ export default function CartSidebar() {
                         loading="lazy"
                       />
                     </div>
-                    {/* Address */}
-                    <p className="text-[9px] text-neutral-300 leading-relaxed">{location.address}</p>
-                    <button type="button" onClick={() => setLocation(null)}
-                      className="text-[9px] text-neutral-500 hover:text-white underline underline-offset-2 transition-colors uppercase tracking-wider font-bold">
-                      Cambiar ubicación
-                    </button>
+                    <div className="p-4 bg-[#0a0a0a]">
+                      <p className="text-[11px] text-neutral-300 leading-relaxed line-clamp-2">{location.address}</p>
+                      <button type="button" onClick={() => setLocation(null)}
+                        className="mt-3 text-[9px] text-neutral-400 hover:text-white underline underline-offset-2 transition-colors uppercase tracking-widest font-bold">
+                        Cambiar ubicación
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Order summary */}
-              <div className="bg-neutral-900 border border-neutral-800 p-4 space-y-2">
-                <p className="text-[8px] uppercase tracking-widest text-neutral-500 font-bold mb-3">Resumen</p>
-                {items.map(({ product: p, quantity }) => (
-                  <div key={p.id} className="flex justify-between text-[9px]">
-                    <span className="text-neutral-400 truncate max-w-[60%]">{quantity}× {p.name}</span>
-                    <span className="text-neutral-300 tabular-nums">{formatPrice(p.price * quantity)}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between text-[10px] font-bold pt-2 border-t border-neutral-800 mt-2">
-                  <span className="text-neutral-400 uppercase tracking-wider">Total</span>
+              <div className="bg-[#121212] border border-neutral-800 rounded-xl p-5 space-y-4">
+                <p className="text-[11px] font-black tracking-[0.1em] text-neutral-400 uppercase mb-4">Resumen del pedido</p>
+                <div className="flex justify-between text-[13px] text-neutral-400 pb-4 border-b border-neutral-800/50">
+                  <span>Productos ({count})</span>
+                  <span className="tabular-nums font-bold text-white">{formatPrice(total)}</span>
+                </div>
+                <div className="flex justify-between text-[14px] font-black pt-1">
+                  <span className="text-white uppercase tracking-wider">Total</span>
                   <span className="text-white tabular-nums">{formatPrice(total)}</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 border-t border-neutral-800">
+            <div className="p-6 border-t border-neutral-800/50 bg-[#0a0a0a]">
               <button type="submit" disabled={submitting || !location}
-                className="w-full bg-white text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                className="w-full bg-white text-black py-4 text-[12px] font-black uppercase tracking-widest hover:bg-neutral-200 transition-all rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                 {submitting && <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />}
-                {submitting ? 'Enviando pedido...' : 'Confirmar Pedido'}
+                {submitting ? 'Enviando...' : 'Confirmar Pedido'}
               </button>
-              {!location && (
-                <p className="text-[8px] text-neutral-600 text-center mt-2">Debes marcar tu ubicación antes de confirmar</p>
-              )}
+              <p className="text-[9px] text-neutral-500 text-center mt-4 px-2 leading-relaxed">
+                El pedido se enviará a través de WhatsApp para confirmar detalles con un asesor.
+              </p>
             </div>
           </form>
         )}

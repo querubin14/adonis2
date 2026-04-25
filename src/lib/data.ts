@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import { Product, Category, HeroSettings, Review, BentoItem, NavLink } from './types'
+import { Product, Category, HeroSettings, Review, BentoItem, NavLink, StoreSettings } from './types'
 
 // ── Mock fallbacks (dev without DB) ────────────────────────────────
 export const MOCK_CATEGORIES: Category[] = [
@@ -403,3 +403,36 @@ export const formatPrice = (price: number) =>
   })
     .format(price)
     .replace('PYG', 'Gs.')
+
+// ── SETTINGS ─────────────────────────────────────────────────────────────
+
+export async function getSettings(): Promise<StoreSettings | null> {
+  const { data, error } = await supabase
+    .from('store_settings')
+    .select('*')
+    .eq('id', '00000000-0000-0000-0000-000000000001')
+    .single()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching settings:', error)
+    return null
+  }
+  
+  return data as StoreSettings | null
+}
+
+export async function updateSettings(updates: Partial<StoreSettings>) {
+  const { data, error } = await supabase
+    .from('store_settings')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', '00000000-0000-0000-0000-000000000001')
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error updating settings:', error)
+    throw error
+  }
+  
+  return data as StoreSettings
+}

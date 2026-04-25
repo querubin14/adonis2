@@ -17,11 +17,20 @@ export default function ProductClientActions({ product }: { product: Product }) 
     for (let i = 0; i < qty; i++) {
       addToCart(product)
     }
-    toast.success(`${product.name} añadido a su selección`, {
-      position: 'top-center',
-      theme: 'light',
-      icon: false,
-    })
+    toast(
+      <div className="flex items-center gap-3 py-1">
+        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+          <span className="material-symbols-outlined text-black text-[16px] font-bold">check</span>
+        </div>
+        <span className="text-white text-[14px] font-semibold tracking-wide">Producto añadido correctamente</span>
+      </div>,
+      {
+        position: 'top-center',
+        closeButton: true,
+        icon: false,
+        theme: 'dark'
+      }
+    )
     openCart()
   }
 

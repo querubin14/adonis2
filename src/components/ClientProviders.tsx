@@ -24,14 +24,12 @@ export default function ClientProviders({ children }: { children: React.ReactNod
           theme="dark"
           style={{ top: '1rem' }}
           toastStyle={{
-            background: '#1c1b1b',
-            color: '#e5e2e1',
-            border: '1px solid #2a2a2a',
-            borderRadius: '0px',
-            fontSize: '11px',
-            fontWeight: '600',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
+            background: '#18181b',
+            color: '#ffffff',
+            border: '1px solid #27272a',
+            borderRadius: '12px',
+            fontSize: '13px',
+            fontWeight: '500',
             boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
             minHeight: '44px',
           }}

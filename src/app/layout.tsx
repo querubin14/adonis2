@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Montserrat, Antonio } from 'next/font/google'
 import './globals.css'
 import ClientProviders from '@/components/ClientProviders'
+import WhatsAppButton from '@/components/WhatsAppButton'
+import { getSettings } from '@/lib/data'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -23,11 +25,14 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const settings = await getSettings()
+  const whatsapp = settings?.whatsapp_number || null
+
   return (
     <html lang="es" className="dark">
       <head>
@@ -39,6 +44,7 @@ export default function RootLayout({
       <body className={`${montserrat.variable} ${antonio.variable} antialiased`}>
         <ClientProviders>
           {children}
+          <WhatsAppButton number={whatsapp} />
         </ClientProviders>
       </body>
     </html>

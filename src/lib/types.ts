@@ -151,3 +151,20 @@ export interface AdminStats {
   revenueChange: number
   ordersChange: number
 }
+
+export interface StoreSettings {
+  id: string
+  favicon_url: string | null
+  instagram_url: string | null
+  tiktok_url: string | null
+  whatsapp_number: string | null
+  address_footer: string | null
+  top_bar_text: string | null
+  blog_visible: boolean
+  blog_title: string | null
+  blog_subtitle: string | null
+  blog_button_text: string | null
+  blog_button_link: string | null
+  shipping_text: string | null
+  returns_text: string | null
+}
