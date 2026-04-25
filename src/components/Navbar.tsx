@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import SearchModal from '@/components/SearchModal'
-import { getNavLinks } from '@/lib/data'
-import { NavLink } from '@/lib/types'
+import { getNavLinks, getSettings } from '@/lib/data'
+import { NavLink, StoreSettings } from '@/lib/types'
 
 const FALLBACK_LINKS: NavLink[] = [
   { id: '1', label: 'Colecciones', url: '/products', sort_order: 0, is_active: true },
@@ -40,6 +40,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [expandedIds, setExpandedIds] = useState<string[]>([])
   const [navLinks, setNavLinks] = useState<NavLink[]>(buildNavTree(FALLBACK_LINKS))
+  const [settings, setSettings] = useState<StoreSettings | null>(null)
 
   // Heart animation on favorites increase
   const prevFavCount = useRef(favCount)
@@ -76,6 +77,10 @@ export default function Navbar() {
         if (links.length > 0) setNavLinks(buildNavTree(links))
       })
       .catch(() => {/* keep fallback */})
+
+    getSettings()
+      .then(s => setSettings(s))
+      .catch(() => {})
   }, [])
 
   function toggleExpand(id: string) {
@@ -86,7 +91,12 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3">
+      {settings?.top_bar_text && (
+        <div className="bg-white text-black py-2 text-center text-[10px] font-black uppercase tracking-[0.3em] fixed top-0 w-full z-[60]">
+          {settings.top_bar_text}
+        </div>
+      )}
+      <nav className={`fixed ${settings?.top_bar_text ? 'top-8' : 'top-0'} w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3 transition-all duration-300`}>
         <Link href="/" className="flex items-center justify-center w-16 md:w-20 h-10 md:h-12">
           <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2.2] md:scale-[2.6] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] pointer-events-none" />
         </Link>

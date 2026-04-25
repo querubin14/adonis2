@@ -10,6 +10,7 @@ const NAV = [
   { label: 'Diseños',      icon: 'design_services', href: '/admin/designs' },
   { label: 'Reseñas',      icon: 'reviews',         href: '/admin/reviews' },
   { label: 'Navegación',   icon: 'link',            href: '/admin/navigation' },
+  { label: 'Configuración', icon: 'settings',        href: '/admin/settings' },
 ]
 
 export default function AdminSidebar() {

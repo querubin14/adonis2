@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { getProducts, getCategories, getHeroes, getReviews, getBentoItems } from '@/lib/data'
+import { getProducts, getCategories, getHeroes, getReviews, getBentoItems, getSettings } from '@/lib/data'
 import HeroSlider from '@/components/HeroSlider'
 import ProductGrid from '@/components/ProductGrid'
 import ReviewsCarousel from '@/components/ReviewsCarousel'
@@ -28,8 +28,8 @@ const VALUES_ITEMS = [
 ]
 
 export default async function HomePage() {
-  const [products, categories, heroes, reviews, bentoItems] = await Promise.all([
-    getProducts(), getCategories(), getHeroes(), getReviews(), getBentoItems(),
+  const [products, categories, heroes, reviews, bentoItems, settings] = await Promise.all([
+    getProducts(), getCategories(), getHeroes(), getReviews(), getBentoItems(), getSettings()
   ])
 
   const heroesWithFallback = heroes.length > 0 ? heroes : [{
@@ -173,6 +173,31 @@ export default async function HomePage() {
 
         {/* ── Reviews ───────────────────────────────────────────── */}
         <ReviewsCarousel reviews={reviews} />
+
+        {/* ── Lifestyle / Blog Section ──────────────────────────── */}
+        {settings?.blog_visible && (
+          <section className="py-24 px-6 md:px-12 bg-neutral-900/30 border-t border-neutral-800/50 overflow-hidden">
+            <div className="max-w-5xl mx-auto text-center relative">
+              <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+              
+              <div className="relative z-10">
+                <p className="text-[10px] uppercase tracking-[0.5em] text-neutral-500 font-bold mb-4">
+                  {settings.blog_subtitle || 'DESCUBRE MÁS'}
+                </p>
+                <h2 className="font-headline text-4xl md:text-5xl text-white uppercase tracking-tight mb-8">
+                  {settings.blog_title || 'LIFESTYLE ADONIS'}
+                </h2>
+                <Link
+                  href={settings.blog_button_link || '/blog'}
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-white text-black text-[11px] font-black uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all rounded-sm"
+                >
+                  {settings.blog_button_text || 'EXPLORAR BLOG'}
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
       </main>
       <Footer />

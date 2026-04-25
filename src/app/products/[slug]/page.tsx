@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { getProductBySlug, getProducts, formatPrice } from '@/lib/data'
+import { getProductBySlug, getProducts, formatPrice, getSettings } from '@/lib/data'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -34,10 +34,11 @@ export default async function ProductDetailPage({ params }: Props) {
   const allProducts = await getProducts()
   
   // Get some recommendations (excluding current product)
-  const recommendations = allProducts
-    .filter(p => p.id !== product?.id)
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 3)
+  const [recommendationsData, settings] = await Promise.all([
+    getProducts().then(all => all.filter(p => p.id !== product?.id).sort(() => 0.5 - Math.random()).slice(0, 3)),
+    getSettings()
+  ])
+  const recommendations = recommendationsData
 
   if (!product) notFound()
 
@@ -134,18 +135,22 @@ export default async function ProductDetailPage({ params }: Props) {
 
           {/* Trust Section */}
           <div className="mt-16 space-y-3 pt-8 border-t border-white/5">
-            <div className="flex items-center gap-2 text-[11px] text-neutral-400">
-              <div className="w-4 h-4 rounded-full bg-green-500/10 flex items-center justify-center">
-                <span className="material-symbols-outlined text-green-500 text-[12px] font-bold">check</span>
+            {settings?.shipping_text && (
+              <div className="flex items-center gap-2 text-[11px] text-neutral-400">
+                <div className="w-4 h-4 rounded-full bg-green-500/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-green-500 text-[12px] font-bold">check</span>
+                </div>
+                <span>{settings.shipping_text}</span>
               </div>
-              <span>Envío gratis en compras mayores a 500.000 Gs</span>
-            </div>
-            <div className="flex items-center gap-2 text-[11px] text-neutral-400">
-              <div className="w-4 h-4 rounded-full bg-green-500/10 flex items-center justify-center">
-                <span className="material-symbols-outlined text-green-500 text-[12px] font-bold">check</span>
+            )}
+            {settings?.returns_text && (
+              <div className="flex items-center gap-2 text-[11px] text-neutral-400">
+                <div className="w-4 h-4 rounded-full bg-green-500/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-green-500 text-[12px] font-bold">check</span>
+                </div>
+                <span>{settings.returns_text}</span>
               </div>
-              <span>Devoluciones gratis hasta 30 días</span>
-            </div>
+            )}
           </div>
         </div>
       </main>
