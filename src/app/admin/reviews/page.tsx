@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
+import Link from 'next/link'
 import { CldUploadWidget } from 'next-cloudinary'
 import { getAllReviews, insertReview, updateReview, deleteReview } from '@/lib/data'
 import { Review } from '@/lib/types'
@@ -104,9 +105,18 @@ export default function AdminReviewsPage() {
       <AdminSidebar />
 
       <main className="ml-56 flex-1 p-8 max-w-5xl">
-        <header className="mb-10">
-          <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-2">Panel Admin</p>
-          <h1 className="font-headline text-3xl text-white uppercase tracking-tight">Reseñas</h1>
+        <header className="mb-10 flex flex-col">
+          <Link 
+            href="/admin" 
+            className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-neutral-500 hover:text-white mb-4 transition-colors group"
+          >
+            <span className="material-symbols-outlined text-xs group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+            Volver al Panel
+          </Link>
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-2">Panel Admin</p>
+            <h1 className="font-headline text-3xl text-white uppercase tracking-tight">Reseñas</h1>
+          </div>
         </header>
 
         {/* SQL hint banner */}

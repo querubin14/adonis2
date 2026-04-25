@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import AdminSidebar from '@/components/AdminSidebar'
+import Link from 'next/link'
 import { getAllNavLinks, insertNavLink, updateNavLink, deleteNavLink } from '@/lib/data'
 import { NavLink } from '@/lib/types'
 
@@ -190,10 +191,19 @@ export default function NavigationAdminPage() {
       <AdminSidebar />
 
       <main className="ml-56 flex-grow p-8 max-w-3xl">
-        <div className="mb-8">
-          <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-1">Admin</p>
-          <h1 className="font-headline text-2xl uppercase tracking-tight text-white">Navegación</h1>
-          <p className="text-xs text-neutral-500 mt-1">Gestiona los enlaces del menú principal. Los hijos aparecen como submenú.</p>
+        <div className="mb-8 flex flex-col">
+          <Link 
+            href="/admin" 
+            className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-neutral-500 hover:text-white mb-4 transition-colors group"
+          >
+            <span className="material-symbols-outlined text-xs group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+            Volver al Panel
+          </Link>
+          <div className="flex flex-col">
+            <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-1">Admin</p>
+            <h1 className="font-headline text-2xl uppercase tracking-tight text-white">Navegación</h1>
+            <p className="text-xs text-neutral-500 mt-1">Gestiona los enlaces del menú principal. Los hijos aparecen como submenú.</p>
+          </div>
         </div>
 
         {/* SQL hint */}

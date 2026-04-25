@@ -11,6 +11,7 @@ import {
   flattenTree,
 } from '@/lib/data'
 import { Category } from '@/lib/types'
+import Link from 'next/link'
 
 // ── Types ────────────────────────────────────────────────────────
 interface Toast { message: string; type: 'success' | 'error' }
@@ -322,7 +323,14 @@ export default function CategoriesAdminPage() {
 
         {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-outline-variant/10 px-10 py-5 flex items-center justify-between">
-          <div>
+          <div className="flex flex-col">
+            <Link 
+              href="/admin" 
+              className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-neutral-500 hover:text-white mb-2 transition-colors group"
+            >
+              <span className="material-symbols-outlined text-xs group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+              Volver al Panel
+            </Link>
             <h2 className="font-headline text-base text-white uppercase tracking-[0.2em]">
               Categorías
             </h2>

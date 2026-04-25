@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { getSettings, updateSettings } from '@/lib/data'
 import { StoreSettings } from '@/lib/types'
 import { toast } from 'react-toastify'
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<StoreSettings | null>(null)
@@ -38,6 +40,34 @@ export default function SettingsPage() {
     }
     load()
   }, [])
+
+  const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !settings) return
+
+    setSaving(true)
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `favicon-${Date.now()}.${fileExt}`
+      const { data, error } = await supabase.storage
+        .from('assets')
+        .upload(fileName, file)
+
+      if (error) throw error
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('assets')
+        .getPublicUrl(fileName)
+
+      setSettings({ ...settings, favicon_url: publicUrl })
+      toast.info('Imagen subida. No olvides guardar los cambios.', { theme: 'dark' })
+    } catch (error) {
+      console.error(error)
+      toast.error('Error al subir la imagen', { theme: 'dark' })
+    } finally {
+      setSaving(false)
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -74,9 +104,18 @@ export default function SettingsPage() {
 
   return (
     <div className="p-8 max-w-4xl font-sans">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2 font-headline">Configuración General</h1>
-        <p className="text-sm text-neutral-400">Redes sociales y datos de contacto.</p>
+      <div className="mb-8 flex justify-between items-start">
+        <div>
+          <Link 
+            href="/admin" 
+            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-white mb-4 transition-colors group"
+          >
+            <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Volver al Panel
+          </Link>
+          <h1 className="text-2xl font-bold text-white mb-2 font-headline uppercase tracking-tight">Configuración General</h1>
+          <p className="text-sm text-neutral-400">Redes sociales y datos de contacto.</p>
+        </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-8">
@@ -89,15 +128,29 @@ export default function SettingsPage() {
               <label className="block text-[10px] font-bold tracking-widest text-neutral-500 uppercase mb-2">
                 FAVICON / ICONO DE NAVEGADOR
               </label>
-              <div className="flex gap-4">
-                <input 
-                  type="text" 
-                  name="favicon_url"
-                  value={settings.favicon_url || ''} 
-                  onChange={handleChange}
-                  placeholder="URL del Favicon..."
-                  className="flex-grow bg-[#000000] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-neutral-500 transition-colors placeholder:text-neutral-700" 
-                />
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-grow">
+                  <input 
+                    type="text" 
+                    name="favicon_url"
+                    value={settings.favicon_url || ''} 
+                    onChange={handleChange}
+                    placeholder="URL del Favicon..."
+                    className="w-full bg-[#000000] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-neutral-500 transition-colors placeholder:text-neutral-700" 
+                  />
+                </div>
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleFaviconUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <button type="button" className="bg-neutral-800 hover:bg-neutral-700 text-white text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-md transition-colors flex items-center gap-2 whitespace-nowrap">
+                    <span className="material-symbols-outlined text-sm">upload</span>
+                    Subir desde PC
+                  </button>
+                </div>
               </div>
               <p className="text-[9px] text-neutral-600 mt-2">Recomendado: PNG o ICO con fondo transparente.</p>
             </div>
