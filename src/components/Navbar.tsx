@@ -97,9 +97,20 @@ export default function Navbar() {
         </div>
       )}
       <nav className={`fixed ${settings?.top_bar_text ? 'top-8' : 'top-0'} w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3 transition-all duration-300`}>
-        <Link href="/" className="flex items-center justify-center w-16 md:w-20 h-10 md:h-12">
-          <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2.2] md:scale-[2.6] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] pointer-events-none" />
-        </Link>
+        <div className="flex items-center gap-4">
+          {/* Hamburger — mobile only, moved to left */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            aria-label="Abrir menú"
+            className="md:hidden text-white hover:text-neutral-300 transition-colors"
+          >
+            <span className="material-symbols-outlined text-2xl" aria-hidden="true">menu</span>
+          </button>
+          
+          <Link href="/" className="flex items-center justify-center w-16 md:w-20 h-10 md:h-12">
+            <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2.2] md:scale-[2.6] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] pointer-events-none" />
+          </Link>
+        </div>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-10 items-center">
@@ -152,8 +163,8 @@ export default function Navbar() {
             <span className="material-symbols-outlined text-2xl" aria-hidden="true">search</span>
           </button>
 
-          {/* Favorites */}
-          <Link href="/favorites" aria-label={`Favoritos (${favCount})`} className="relative text-white hover:text-neutral-300 transition-colors">
+          {/* Favorites - Desktop only */}
+          <Link href="/favorites" aria-label={`Favoritos (${favCount})`} className="hidden md:block relative text-white hover:text-neutral-300 transition-colors">
             <span
               className={`material-symbols-outlined text-2xl ${favPop ? 'heart-pop' : ''}`}
               aria-hidden="true"
@@ -168,11 +179,11 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* Cart */}
+          {/* Cart - Desktop only */}
           <button
             onClick={openCart}
             aria-label={`Carrito (${count} piezas)`}
-            className="relative text-white hover:text-neutral-300 transition-colors"
+            className="hidden md:block relative text-white hover:text-neutral-300 transition-colors"
           >
             <span className="material-symbols-outlined text-2xl" aria-hidden="true">shopping_bag</span>
             {count > 0 && (
@@ -182,14 +193,7 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Hamburger — mobile only */}
-          <button
-            onClick={() => setMobileOpen(true)}
-            aria-label="Abrir menú"
-            className="md:hidden text-white hover:text-neutral-300 transition-colors"
-          >
-            <span className="material-symbols-outlined text-2xl" aria-hidden="true">menu</span>
-          </button>
+
         </div>
       </nav>
 
@@ -203,7 +207,9 @@ export default function Navbar() {
             aria-hidden="true"
           />
           {/* Drawer */}
-          <div className="fixed left-0 top-0 h-full w-72 z-50 bg-[#0d0d0d] border-r border-neutral-800 flex flex-col md:hidden">
+          <div 
+            className={`fixed left-0 top-0 h-full w-72 z-50 bg-[#0d0d0d] border-r border-neutral-800 flex flex-col md:hidden transition-transform duration-500 ease-out ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          >
             <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-800">
               <div className="w-16 h-8 flex items-center justify-center">
                 <img src="/logo.png" alt="ADONIS STORE" className="h-full w-full object-contain scale-[2.2] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />

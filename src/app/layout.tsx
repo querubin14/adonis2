@@ -3,6 +3,7 @@ import { Montserrat, Antonio } from 'next/font/google'
 import './globals.css'
 import ClientProviders from '@/components/ClientProviders'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import FloatingCartButton from '@/components/FloatingCartButton'
 import { getSettings } from '@/lib/data'
 
 const montserrat = Montserrat({
@@ -51,6 +52,7 @@ export default async function RootLayout({
         <ClientProviders>
           {children}
           <WhatsAppButton number={whatsapp} />
+          <FloatingCartButton />
         </ClientProviders>
       </body>
     </html>
