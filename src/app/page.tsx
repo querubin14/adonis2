@@ -9,8 +9,8 @@ import ReviewsCarousel from '@/components/ReviewsCarousel'
 import { BentoItem } from '@/lib/types'
 
 export const metadata: Metadata = {
-  title: 'ADONIS GALLERY | Alta Joyería',
-  description: 'Exposición Otoño 2024 — Precisión Etérea',
+  title: 'ADONIS STORE',
+  description: 'Piezas exclusivas de Adonis Jewelry',
 }
 
 export const revalidate = 60

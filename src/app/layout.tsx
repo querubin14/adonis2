@@ -17,11 +17,17 @@ const antonio = Antonio({
   variable: '--font-antonio',
 })
 
-export const metadata: Metadata = {
-  title: 'ADONIS STORE',
-  description: 'Exquisite jewelry for the modern era',
-  icons: {
-    icon: '/logo.png'
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  return {
+    title: {
+      default: 'ADONIS STORE',
+      template: '%s | ADONIS STORE',
+    },
+    description: 'Exquisite jewelry for the modern era',
+    icons: {
+      icon: settings?.favicon_url || '/logo.png',
+    },
   }
 }
 
