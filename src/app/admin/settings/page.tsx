@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { getSettings, updateSettings } from '@/lib/data'
 import { StoreSettings } from '@/lib/types'
 import { toast } from 'react-toastify'
-import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import { CldUploadWidget } from 'next-cloudinary'
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<StoreSettings | null>(null)
@@ -41,32 +41,10 @@ export default function SettingsPage() {
     load()
   }, [])
 
-  const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file || !settings) return
-
-    setSaving(true)
-    try {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `favicon-${Date.now()}.${fileExt}`
-      const { data, error } = await supabase.storage
-        .from('assets')
-        .upload(fileName, file)
-
-      if (error) throw error
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('assets')
-        .getPublicUrl(fileName)
-
-      setSettings({ ...settings, favicon_url: publicUrl })
-      toast.info('Imagen subida. No olvides guardar los cambios.', { theme: 'dark' })
-    } catch (error) {
-      console.error(error)
-      toast.error('Error al subir la imagen', { theme: 'dark' })
-    } finally {
-      setSaving(false)
-    }
+  const handleFaviconSuccess = (url: string) => {
+    if (!settings) return
+    setSettings({ ...settings, favicon_url: url })
+    toast.info('Imagen cargada. No olvides guardar los cambios.', { theme: 'dark' })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,16 +118,21 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="relative">
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleFaviconUpload}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <button type="button" className="bg-neutral-800 hover:bg-neutral-700 text-white text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-md transition-colors flex items-center gap-2 whitespace-nowrap">
-                    <span className="material-symbols-outlined text-sm">upload</span>
-                    Subir desde PC
-                  </button>
+                  <CldUploadWidget
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                    onSuccess={(r: any) => { if (r.info?.secure_url) handleFaviconSuccess(r.info.secure_url) }}
+                  >
+                    {({ open }) => (
+                      <button 
+                        type="button" 
+                        onClick={() => open()}
+                        className="bg-neutral-800 hover:bg-neutral-700 text-white text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-md transition-colors flex items-center gap-2 whitespace-nowrap"
+                      >
+                        <span className="material-symbols-outlined text-sm">upload</span>
+                        Subir desde PC
+                      </button>
+                    )}
+                  </CldUploadWidget>
                 </div>
               </div>
               <p className="text-[9px] text-neutral-600 mt-2">Recomendado: PNG o ICO con fondo transparente.</p>
