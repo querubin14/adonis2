@@ -48,8 +48,17 @@ export default function CartSidebar() {
         setLocation({ lat, lng, address })
         setLocLoading(false)
       },
-      () => { setLocError('No se pudo obtener tu ubicación. Verifica los permisos.'); setLocLoading(false) }
+      () => { 
+        setLocError('No se pudo obtener tu ubicación automáticamente. Por favor, ingresa tu dirección manualmente.'); 
+        setLocLoading(false);
+      }
     )
+  }
+
+  function setManualAddress(address: string) {
+    if (!address) return
+    // Default to a central point if we don't have coords, or just show the address
+    setLocation({ lat: -25.2865, lng: -57.6470, address }) 
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -277,7 +286,24 @@ export default function CartSidebar() {
                         <span className="block text-[9px] text-neutral-500">Requerido para calcular envío</span>
                       </div>
                     </button>
-                    {locError && <p className="text-[10px] text-red-400 text-center">{locError}</p>}
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-neutral-800"></div>
+                      </div>
+                      <div className="relative flex justify-center text-[9px] font-black uppercase tracking-[0.2em] text-neutral-600">
+                        <span className="bg-[#131313] px-3">O ingresa manualmente</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <input 
+                        type="text" 
+                        placeholder="Escribe tu dirección (Ciudad, Calle, Referencia)..."
+                        onBlur={(e) => setManualAddress(e.target.value)}
+                        className="w-full bg-[#0a0a0a] border border-neutral-800 rounded-md text-white text-xs py-3 px-4 outline-none focus:border-neutral-500 transition-colors placeholder:text-neutral-700" 
+                      />
+                    </div>
+                    {locError && <p className="text-[10px] text-red-400 text-center leading-relaxed px-4">{locError}</p>}
                   </div>
                 ) : (
                   <div className="space-y-3 border border-neutral-800 rounded-xl overflow-hidden">

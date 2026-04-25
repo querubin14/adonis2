@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-neutral-800/30 bg-neutral-950 flex flex-col items-center py-20 px-8 gap-8">
-      <div className="text-white font-serif tracking-widest text-2xl uppercase">ADONIS GALLERY</div>
+    <footer className="w-full border-t border-neutral-800/30 bg-neutral-950 flex flex-col items-center py-12 px-8 gap-8">
+      <div className="text-white font-headline tracking-widest text-2xl uppercase">ADONIS STORE</div>
       <div className="flex flex-wrap justify-center gap-12">
         <Link 
           href="/sustainability" 
@@ -36,7 +36,7 @@ export default function Footer() {
         <span className="material-symbols-outlined text-neutral-500 hover:text-white cursor-pointer">location_on</span>
       </div>
       <div className="font-sans text-[10px] tracking-[0.1em] uppercase text-neutral-400 mt-8">
-        © {new Date().getFullYear()} ADONIS GALLERY. TODOS LOS DERECHOS RESERVADOS.
+        © {new Date().getFullYear()} ADONIS STORE. TODOS LOS DERECHOS RESERVADOS.
       </div>
     </footer>
   )

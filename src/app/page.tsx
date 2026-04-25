@@ -92,13 +92,13 @@ export default async function HomePage() {
 
         {/* ── Featured Products ─────────────────────────────────── */}
         {featuredProducts.length > 0 && (
-          <section className="py-24 px-6 md:px-12">
+          <section className="py-12 px-6 md:px-12">
             <div className="max-w-7xl mx-auto">
-              <div className="flex items-end justify-between mb-14">
+              <div className="flex items-end justify-between mb-10">
                 <div>
-                  <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Selección Destacada</p>
+                  <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Colección</p>
                   <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">
-                    Nuevas Adquisiciones
+                    Productos Destacados
                   </h2>
                 </div>
                 <Link
@@ -112,7 +112,7 @@ export default async function HomePage() {
                 </Link>
               </div>
 
-              <ProductGrid products={featuredProducts} />
+              <ProductGrid products={featuredProducts.slice(0, 5)} />
 
               <div className="mt-12 flex justify-center md:hidden">
                 <Link
@@ -141,10 +141,10 @@ export default async function HomePage() {
           return (
             <section
               key={category.id}
-              className="py-20 px-6 md:px-12 border-t border-outline-variant/10"
+              className="py-8 px-6 md:px-12 border-t border-outline-variant/10"
             >
               <div className="max-w-7xl mx-auto">
-                <div className="flex items-end justify-between mb-12">
+                <div className="flex items-end justify-between mb-8">
                   <div>
                     <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Categoría</p>
                     <h2 className="font-headline text-2xl md:text-3xl text-white uppercase tracking-tight">{category.name}</h2>
@@ -176,7 +176,7 @@ export default async function HomePage() {
 
         {/* ── Lifestyle / Blog Section ──────────────────────────── */}
         {settings?.blog_visible && (
-          <section className="py-24 px-6 md:px-12 bg-neutral-900/30 border-t border-neutral-800/50 overflow-hidden">
+          <section className="py-12 px-6 md:px-12 bg-neutral-900/30 border-t border-neutral-800/50 overflow-hidden">
             <div className="max-w-5xl mx-auto text-center relative">
               <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
               <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
