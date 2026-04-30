@@ -127,7 +127,20 @@ body {
   animation: marquee 28s linear infinite;
 }
 
-.marquee-track:hover {
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-track-reverse {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: max-content;
+  animation: marquee-reverse 28s linear infinite;
+}
+
+.marquee-track:hover, .marquee-track-reverse:hover {
   animation-play-state: paused;
 }
 

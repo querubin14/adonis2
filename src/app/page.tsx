@@ -5,12 +5,20 @@ import Link from 'next/link'
 import { getProducts, getCategories, getHeroes, getReviews, getBentoItems, getSettings } from '@/lib/data'
 import HeroSlider from '@/components/HeroSlider'
 import ProductGrid from '@/components/ProductGrid'
+import ProductMarquee from '@/components/ProductMarquee'
 import ReviewsCarousel from '@/components/ReviewsCarousel'
 import { BentoItem } from '@/lib/types'
 
 export const metadata: Metadata = {
   title: 'ADONIS STORE',
-  description: 'Piezas exclusivas de Adonis Jewelry',
+  description: 'Exquisite jewelry for the modern era',
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: '/favicon.png',
+  },
 }
 
 export const revalidate = 60
@@ -67,7 +75,7 @@ export default async function HomePage() {
       <main className="bg-background text-on-background font-body">
 
         {/* Spacer for fixed navbar */}
-        <div className="h-12 md:h-20" />
+        <div className="h-20 md:h-24" />
         {/* ── Hero Slider ─────────────────────────────────────── */}
         <HeroSlider heroes={heroesWithFallback} />
 
@@ -114,7 +122,9 @@ export default async function HomePage() {
                 </Link>
               </div>
 
-              <ProductGrid products={featuredProducts.slice(0, 5)} />
+              <div className="-mx-6 md:-mx-12">
+                <ProductMarquee products={featuredProducts.slice(0, 5)} reverse={true} />
+              </div>
 
               <div className="mt-12 flex justify-center md:hidden">
                 <Link
@@ -162,7 +172,9 @@ export default async function HomePage() {
                   </Link>
                 </div>
 
-                <ProductGrid products={categoryProducts} />
+                <div className="-mx-6 md:-mx-12">
+                  <ProductMarquee products={categoryProducts} reverse={true} />
+                </div>
               </div>
             </section>
           )

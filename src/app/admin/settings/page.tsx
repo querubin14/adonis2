@@ -324,6 +324,89 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Tiempos de Entrega */}
+        <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-8">
+          <h2 className="text-lg font-bold text-white mb-6 font-headline">Tiempos de Entrega</h2>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-[10px] font-bold tracking-widest text-neutral-500 uppercase mb-2">Asunción y alrededores</label>
+              <input 
+                type="text" 
+                name="shipping_asuncion_text"
+                value={settings.shipping_asuncion_text || ''} 
+                onChange={handleChange}
+                placeholder="Menos de 24 hrs."
+                className="w-full bg-[#000000] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-neutral-500 transition-colors" 
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold tracking-widest text-neutral-500 uppercase mb-2">Envíos al Interior</label>
+              <input 
+                type="text" 
+                name="shipping_interior_text"
+                value={settings.shipping_interior_text || ''} 
+                onChange={handleChange}
+                placeholder="24 a 48 hrs."
+                className="w-full bg-[#000000] border border-neutral-800 rounded-md text-white text-sm py-3 px-4 outline-none focus:border-neutral-500 transition-colors" 
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Enlaces de Ayuda */}
+        <section className="bg-[#0a0a0a] border border-neutral-800 rounded-xl p-8">
+          <h2 className="text-lg font-bold text-white mb-6 font-headline">Enlaces del Footer (Ayuda)</h2>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[9px] font-bold tracking-widest text-neutral-600 uppercase mb-2">Etiqueta</label>
+                <input id="help-label" placeholder="Ej: Contacto" className="w-full bg-black border border-neutral-800 rounded-md text-white text-sm py-2 px-3 outline-none" />
+              </div>
+              <div>
+                <label className="block text-[9px] font-bold tracking-widest text-neutral-600 uppercase mb-2">URL / Ruta</label>
+                <div className="flex gap-2">
+                  <input id="help-url" placeholder="Ej: /contact" className="flex-grow bg-black border border-neutral-800 rounded-md text-white text-sm py-2 px-3 outline-none" />
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const l = (document.getElementById('help-label') as HTMLInputElement).value
+                      const u = (document.getElementById('help-url') as HTMLInputElement).value
+                      if (l && u) {
+                        const newLinks = [...(settings.footer_help_links || []), { label: l, url: u }]
+                        setSettings({ ...settings, footer_help_links: newLinks })
+                        ;(document.getElementById('help-label') as HTMLInputElement).value = ''
+                        ;(document.getElementById('help-url') as HTMLInputElement).value = ''
+                      }
+                    }}
+                    className="bg-white text-black px-4 font-bold rounded-md"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 pt-4">
+              {(settings.footer_help_links || []).map((link, i) => (
+                <div key={i} className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-md group">
+                  <span className="text-[11px] text-white font-bold">{link.label}</span>
+                  <span className="text-[9px] text-neutral-600 font-mono">{link.url}</span>
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const newLinks = (settings.footer_help_links || []).filter((_, j) => j !== i)
+                      setSettings({ ...settings, footer_help_links: newLinks })
+                    }}
+                    className="text-neutral-500 hover:text-red-500"
+                  >
+                    <span className="material-symbols-outlined text-sm">close</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <button 
           type="submit" 
           disabled={saving}

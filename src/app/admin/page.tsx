@@ -18,6 +18,7 @@ interface Toast { message: string; type: 'success' | 'error' }
 const EMPTY_FORM = {
   name: '', price: '', category_id: '', material: '',
   description: '', stock: '', slug: '', original_price: '', featured: false,
+  rating: '5.0', reviews_count: '0', is_trending: false
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -64,6 +65,7 @@ export default function AdminPage() {
   const [draggedId, setDraggedId]     = useState<string | null>(null)
   const [hasUnsavedOrder, setHasUnsavedOrder] = useState(false)
   const [savingOrder, setSavingOrder] = useState(false)
+  const [variants, setVariants] = useState<ProductVariant[]>([])
 
 
   // ── Products grouped by root category ─────────────────────────
@@ -148,6 +150,7 @@ export default function AdminPage() {
   function openNew(prefillCategoryId?: string) {
     setEditing(null)
     setFormData({ ...EMPTY_FORM, category_id: prefillCategoryId ?? '' })
+    setVariants([])
     setImages([])
     setUrlInput('')
     setView('form')
@@ -165,7 +168,11 @@ export default function AdminPage() {
       slug: p.slug,
       original_price: p.originalPrice ? String(p.originalPrice) : '',
       featured: p.featured ?? false,
+      rating: String(p.rating || '5.0'),
+      reviews_count: String(p.reviewsCount || '0'),
+      is_trending: (p as any).is_trending || p.isTrending || false,
     })
+    setVariants(p.variants ?? [])
     setImages(p.images ?? [])
     setUrlInput('')
     setView('form')
@@ -174,6 +181,7 @@ export default function AdminPage() {
   function cancelForm() {
     setEditing(null)
     setFormData(EMPTY_FORM)
+    setVariants([])
     setImages([])
     setView('inventory')
   }
@@ -211,6 +219,10 @@ export default function AdminPage() {
         stock: parseInt(formData.stock),
         featured: formData.featured,
         images,
+        rating: parseFloat(formData.rating),
+        reviews_count: parseInt(formData.reviews_count),
+        is_trending: formData.is_trending,
+        variants,
         ...(formData.original_price ? { original_price: parseInt(formData.original_price) } : {}),
       }
       if (editing) {
@@ -598,7 +610,7 @@ export default function AdminPage() {
                         placeholder="Oro 18k, Diamante..."
                         className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
                     </div>
-                    <div className="md:col-span-2 flex items-center gap-3 mt-2">
+                    <div className="md:col-span-1 flex items-center gap-3 mt-2">
                       <input
                         type="checkbox"
                         id="f-featured"
@@ -608,8 +620,61 @@ export default function AdminPage() {
                         className="w-4 h-4 accent-white bg-neutral-900 border-neutral-800"
                       />
                       <label htmlFor="f-featured" className="text-[10px] uppercase tracking-widest text-white font-bold cursor-pointer">
-                        Destacar en Inicio
+                        Destacar Inicio
                       </label>
+                    </div>
+                    <div className="md:col-span-1 flex items-center gap-3 mt-2">
+                      <input
+                        type="checkbox"
+                        id="f-trending"
+                        name="is_trending"
+                        checked={formData.is_trending}
+                        onChange={handleInput}
+                        className="w-4 h-4 accent-white bg-neutral-900 border-neutral-800"
+                      />
+                      <label htmlFor="f-trending" className="text-[10px] uppercase tracking-widest text-white font-bold cursor-pointer">
+                        Tendencia 🔥
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card: Variantes */}
+                <div className="bg-surface-container-low border border-outline-variant/10 p-6">
+                  <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
+                    <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">V</span>
+                    Variaciones (Tallas)
+                  </h3>
+                  <div className="space-y-5">
+                    <div className="flex gap-2">
+                      <input 
+                        id="new-size-input"
+                        placeholder="Ej: 18cm, ajustable..."
+                        className="flex-grow bg-transparent border-b border-neutral-800 text-white text-xs py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700"
+                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const v = (e.target as any).value; if (v) { setVariants([...variants, { id: Math.random().toString(), productId: editing?.id || '', size: v, stock: 10 }]); (e.target as any).value = '' } } }}
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => { const inp = document.getElementById('new-size-input') as HTMLInputElement; if (inp.value) { setVariants([...variants, { id: Math.random().toString(), productId: editing?.id || '', size: inp.value, stock: 10 }]); inp.value = '' } }}
+                        className="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
+                      >
+                        Añadir
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {variants.map((v, i) => (
+                        <div key={i} className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-md group">
+                          <span className="text-[11px] text-white font-bold">{v.size}</span>
+                          <button 
+                            type="button"
+                            onClick={() => setVariants(variants.filter((_, j) => j !== i))}
+                            className="text-neutral-600 hover:text-red-500 transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">close</span>
+                          </button>
+                        </div>
+                      ))}
+                      {variants.length === 0 && <p className="text-[9px] text-neutral-600 uppercase font-bold">Sin variaciones registradas.</p>}
                     </div>
                   </div>
                 </div>
@@ -644,6 +709,20 @@ export default function AdminPage() {
                       <input id="f-stock" name="stock" type="number" min="0" value={formData.stock} onChange={handleInput} required
                         placeholder="0"
                         className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                    </div>
+                    <div>
+                      <label htmlFor="f-rating" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
+                        Rating (1-5)
+                      </label>
+                      <input id="f-rating" name="rating" type="number" step="0.1" min="0" max="5" value={formData.rating} onChange={handleInput}
+                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors" />
+                    </div>
+                    <div>
+                      <label htmlFor="f-rev" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
+                        Reseñas
+                      </label>
+                      <input id="f-rev" name="reviews_count" type="number" min="0" value={formData.reviews_count} onChange={handleInput}
+                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors" />
                     </div>
                   </div>
                 </div>

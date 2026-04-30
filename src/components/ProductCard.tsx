@@ -123,12 +123,16 @@ export default function ProductCard({ product: p }: { product: Product }) {
 
       {/* Info — separate Link for text */}
       <Link href={`/products/${p.slug}`} className="space-y-1 group/info">
-        {p.material && (
-          <p className="text-[8px] uppercase tracking-[0.3em] text-neutral-500 font-bold truncate">{p.material}</p>
-        )}
-        <h3 className="text-[10px] text-neutral-400 group-hover/info:text-neutral-200 transition-colors uppercase tracking-wide leading-tight line-clamp-2 font-medium">
-          {p.name}
-        </h3>
+        <div className="min-h-[12px]">
+          {p.material && (
+            <p className="text-[8px] uppercase tracking-[0.3em] text-neutral-500 font-bold truncate">{p.material}</p>
+          )}
+        </div>
+        <div className="min-h-[28px]">
+          <h3 className="text-[10px] text-neutral-400 group-hover/info:text-neutral-200 transition-colors uppercase tracking-wide leading-tight line-clamp-2 font-medium">
+            {p.name}
+          </h3>
+        </div>
         <div className="flex items-baseline gap-2 pt-1">
           <p className="text-sm font-bold text-white tabular-nums">
             {formatPrice(p.price)}

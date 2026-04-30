@@ -92,8 +92,20 @@ export default function Navbar() {
   return (
     <>
       {settings?.top_bar_text && (
-        <div className="bg-white text-black py-2 text-center text-[10px] font-black uppercase tracking-[0.3em] fixed top-0 w-full z-[60]">
-          {settings.top_bar_text}
+        <div className="bg-white text-black py-1.5 flex justify-center items-center gap-4 fixed top-0 w-full z-[60] px-6">
+          <div className="flex items-center gap-4 absolute left-6 md:left-12">
+            <Link href={settings.instagram_url || 'https://instagram.com'} target="_blank" className="hover:scale-110 transition-transform">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="IG" className="h-3 w-3 brightness-0" />
+            </Link>
+            <Link href={settings.tiktok_url || 'https://tiktok.com'} target="_blank" className="hover:scale-110 transition-transform">
+              <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
+                <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.06-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.03 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-3.4 2.97-6.28 6.37-6.51.29-.02.59-.03.89-.03v4.17c-1.32.07-2.61.93-3.05 2.13-.46 1.15-.19 2.48.59 3.4.63.77 1.64 1.22 2.65 1.21.72-.01 1.43-.22 2.03-.62.83-.56 1.34-1.53 1.35-2.51.02-3.23.01-6.46.01-9.69-.01-2.33.01-4.66 0-7z"/>
+              </svg>
+            </Link>
+          </div>
+          <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-center w-full">
+            {settings.top_bar_text}
+          </span>
         </div>
       )}
       <nav className={`fixed ${settings?.top_bar_text ? 'top-8' : 'top-0'} w-full z-50 bg-neutral-950/60 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3 transition-all duration-300`}>

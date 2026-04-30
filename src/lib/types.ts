@@ -30,6 +30,9 @@ export interface Product {
   images: string[]
   stock: number
   featured?: boolean
+  isTrending?: boolean
+  rating?: number
+  reviewsCount?: number
   tags?: string[]
   variants?: ProductVariant[]
   length?: string
@@ -40,9 +43,10 @@ export interface Product {
 export interface ProductVariant {
   id: string
   productId: string
-  color: string
-  colorHex: string
-  image: string
+  color?: string
+  colorHex?: string
+  size?: string
+  image?: string
   stock: number
   priceOverride?: number
 }
@@ -167,4 +171,9 @@ export interface StoreSettings {
   blog_button_link: string | null
   shipping_text: string | null
   returns_text: string | null
+  // New delivery fields
+  shipping_asuncion_text: string | null
+  shipping_interior_text: string | null
+  // Footer Link configuration (stored as JSON)
+  footer_help_links: { label: string, url: string }[] | null
 }

@@ -27,7 +27,12 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: 'Exquisite jewelry for the modern era',
     icons: {
-      icon: settings?.favicon_url || '/logo.png',
+      icon: [
+        { url: settings?.favicon_url || '/favicon.png', sizes: 'any' },
+        { url: settings?.favicon_url || '/favicon.png', sizes: '192x192', type: 'image/png' },
+        { url: settings?.favicon_url || '/favicon.png', sizes: '512x512', type: 'image/png' },
+      ],
+      apple: settings?.favicon_url || '/favicon.png',
     },
   }
 }
