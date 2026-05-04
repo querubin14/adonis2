@@ -217,14 +217,16 @@ export default function AdminPage() {
         material: formData.material || null,
         description: formData.description || null,
         stock: parseInt(formData.stock),
-        featured: formData.featured,
         images,
-        rating: parseFloat(formData.rating),
-        reviews_count: parseInt(formData.reviews_count),
-        is_trending: formData.is_trending,
-        variants,
+        // The following columns don't exist in the DB yet:
+        // featured: formData.featured,
+        // rating: parseFloat(formData.rating),
+        // reviews_count: parseInt(formData.reviews_count),
+        // is_trending: formData.is_trending,
+        // variants,
         ...(formData.original_price ? { original_price: parseInt(formData.original_price) } : {}),
       }
+
       if (editing) {
         await updateProduct(editing.id, payload)
         msg('Producto actualizado.', 'success')
@@ -290,9 +292,11 @@ export default function AdminPage() {
   }
 
   async function saveOrder() {
+    msg('Funcionalidad de orden desactivada (falta columna sort_order)', 'error')
+    setHasUnsavedOrder(false)
+    /*
     setSavingOrder(true)
     try {
-      // Guardar de a uno por ahora (en producción sería mejor un endpoint bulk)
       await Promise.all(products.map(async (p, i) => {
         if ((p as any).sort_order !== i) {
           await updateProduct(p.id, { sort_order: i } as any)
@@ -306,7 +310,9 @@ export default function AdminPage() {
     } finally {
       setSavingOrder(false)
     }
+    */
   }
+
 
   // ── RENDER ─────────────────────────────────────────────────────
   return (
