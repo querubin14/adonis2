@@ -336,8 +336,8 @@ export default function AdminPage() {
       {deleteId && (
         <div className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4"
           role="dialog" aria-modal="true">
-          <div className="bg-surface-container border border-outline-variant/20 p-10 max-w-sm w-full">
-            <h3 className="font-headline text-white text-base uppercase tracking-widest mb-3">Confirmar Eliminación</h3>
+          <div className="bg-white border border-neutral-200 p-10 max-w-sm w-full">
+            <h3 className="font-headline text-black text-base uppercase tracking-widest mb-3">Confirmar Eliminación</h3>
             <p className="text-neutral-400 text-sm mb-8">Esta acción es permanente e irreversible.</p>
             <div className="flex gap-3">
               <button onClick={handleDelete}
@@ -345,7 +345,7 @@ export default function AdminPage() {
                 Eliminar
               </button>
               <button onClick={() => setDeleteId(null)}
-                className="flex-1 border border-outline-variant/30 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">
+                className="flex-1 border border-neutral-200 text-neutral-400 py-3 text-[10px] font-bold uppercase tracking-widest hover:text-black hover:border-black transition-all">
                 Cancelar
               </button>
             </div>
@@ -359,7 +359,7 @@ export default function AdminPage() {
         {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-outline-variant/10 px-8 py-4 flex items-center justify-between gap-4">
           <div>
-            <h2 className="font-headline text-base text-white uppercase tracking-[0.2em]">
+            <h2 className="font-headline text-base text-black uppercase tracking-[0.2em]">
               {view === 'form' ? (editing ? 'Editar Producto' : 'Nuevo Producto') : 'Panel de Inventario'}
             </h2>
             <p className="text-[9px] text-neutral-500 uppercase tracking-widest mt-0.5">
@@ -374,7 +374,7 @@ export default function AdminPage() {
                   <input
                     value={search} onChange={e => setSearch(e.target.value)}
                     placeholder="Buscar producto..."
-                    className="bg-surface-container-low border border-outline-variant/10 text-white text-xs pl-9 pr-4 py-2 outline-none focus:border-white transition-colors w-48 placeholder:text-neutral-600"
+                    className="bg-neutral-50 border border-neutral-200 text-black text-xs pl-9 pr-4 py-2 outline-none focus:border-black transition-colors w-48 placeholder:text-neutral-400"
                   />
                 </div>
                 {hasUnsavedOrder && (
@@ -393,7 +393,7 @@ export default function AdminPage() {
             )}
             {view === 'form' && (
               <button onClick={cancelForm}
-                className="flex items-center gap-2 border border-outline-variant/30 text-neutral-400 px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">
+                className="flex items-center gap-2 border border-neutral-200 text-neutral-400 px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:text-black hover:border-black transition-all">
                 <span className="material-symbols-outlined text-sm" aria-hidden="true">arrow_back</span>
                 Volver
               </button>
@@ -411,12 +411,12 @@ export default function AdminPage() {
               { label: 'Stock Bajo',   value: stats.lowStock, icon: 'warning',       color: stats.lowStock > 0 },
               { label: 'Sin Stock',    value: stats.noStock,  icon: 'cancel',        color: stats.noStock > 0 },
             ].map(s => (
-              <div key={s.label} className="bg-surface-container-low border border-outline-variant/10 p-4 flex flex-col gap-3">
+              <div key={s.label} className="bg-neutral-50 border border-neutral-100 p-4 flex flex-col gap-3">
                 <div className="flex items-start justify-between">
-                  <span className="text-[8px] uppercase tracking-[0.35em] text-neutral-500 font-bold leading-tight">{s.label}</span>
-                  <span className={`material-symbols-outlined text-sm ${s.color ? 'text-yellow-500' : 'text-neutral-700'}`} aria-hidden="true">{s.icon}</span>
+                  <span className="text-[8px] uppercase tracking-[0.35em] text-neutral-400 font-bold leading-tight">{s.label}</span>
+                  <span className={`material-symbols-outlined text-sm ${s.color ? 'text-yellow-500' : 'text-neutral-200'}`} aria-hidden="true">{s.icon}</span>
                 </div>
-                <p className={`font-headline text-3xl leading-none ${s.color ? 'text-yellow-400' : 'text-white'}`}>{s.value}</p>
+                <p className={`font-headline text-3xl leading-none ${s.color ? 'text-yellow-500' : 'text-black'}`}>{s.value}</p>
               </div>
             ))}
           </div>
@@ -429,14 +429,14 @@ export default function AdminPage() {
                 <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
                   <button onClick={() => setActiveGroup('all')}
                     className={`flex-shrink-0 px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest transition-all ${
-                      activeGroup === 'all' ? 'bg-white text-black' : 'border border-outline-variant/20 text-neutral-400 hover:text-white hover:border-white'
+                      activeGroup === 'all' ? 'bg-black text-white' : 'border border-neutral-200 text-neutral-400 hover:text-black hover:border-black'
                     }`}>
                     Todos ({products.length})
                   </button>
                   {groups.map(g => (
                     <button key={g.id} onClick={() => setActiveGroup(g.id)}
                       className={`flex-shrink-0 px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest transition-all ${
-                        activeGroup === g.id ? 'bg-white text-black' : 'border border-outline-variant/20 text-neutral-400 hover:text-white hover:border-white'
+                        activeGroup === g.id ? 'bg-black text-white' : 'border border-neutral-200 text-neutral-400 hover:text-black hover:border-black'
                       }`}>
                       {g.name} ({g.products.length})
                     </button>
@@ -449,19 +449,19 @@ export default function AdminPage() {
                   <div className="w-6 h-6 border-2 border-neutral-700 border-t-white rounded-full animate-spin" />
                 </div>
               ) : displayGroups.length === 0 ? (
-                <div className="py-24 flex flex-col items-center gap-4 bg-surface-container-low border border-outline-variant/10">
-                  <span className="material-symbols-outlined text-5xl text-neutral-800" aria-hidden="true">inventory_2</span>
-                  <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">Sin productos</p>
-                  <button onClick={() => openNew()} className="mt-2 text-[10px] text-white underline underline-offset-4 font-bold uppercase tracking-widest">
+                <div className="py-24 flex flex-col items-center gap-4 bg-neutral-50 border border-neutral-100">
+                  <span className="material-symbols-outlined text-5xl text-neutral-200" aria-hidden="true">inventory_2</span>
+                  <p className="text-[10px] text-neutral-400 uppercase tracking-widest font-bold">Sin productos</p>
+                  <button onClick={() => openNew()} className="mt-2 text-[10px] text-black underline underline-offset-4 font-bold uppercase tracking-widest">
                     Agregar primer producto
                   </button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {displayGroups.map(group => (
-                    <div key={group.id} className={`bg-neutral-900 border rounded-xl overflow-hidden mb-4 ${group.borderColor || 'border-neutral-800'}`}>
+                    <div key={group.id} className={`bg-white border rounded-xl overflow-hidden mb-4 ${group.borderColor || 'border-neutral-100'}`}>
                       {/* Group header */}
-                      <div className="flex items-center justify-between px-6 py-4 hover:bg-neutral-800 transition-colors cursor-pointer" onClick={() => toggleGroup(group.id)}>
+                      <div className="flex items-center justify-between px-6 py-4 hover:bg-neutral-50 transition-colors cursor-pointer" onClick={() => toggleGroup(group.id)}>
                         <div className="flex items-center gap-3">
                           <span className="material-symbols-outlined text-neutral-400 transition-transform text-lg"
                             style={{ transform: openGroups.has(group.id) ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -469,9 +469,9 @@ export default function AdminPage() {
                             expand_more
                           </span>
                           {group.icon && (
-                            <span className={`material-symbols-outlined text-xl ${group.color || 'text-white'}`} aria-hidden="true">{group.icon}</span>
+                            <span className={`material-symbols-outlined text-xl ${group.color || 'text-black'}`} aria-hidden="true">{group.icon}</span>
                           )}
-                          <span className={`text-sm font-bold uppercase tracking-[0.1em] ${group.color || 'text-white'}`}>{group.name}</span>
+                          <span className={`text-sm font-bold uppercase tracking-[0.1em] ${group.color || 'text-black'}`}>{group.name}</span>
                           <span className="text-[10px] text-neutral-400 font-bold bg-neutral-800 border border-neutral-700 rounded-full px-3 py-1">
                             {group.products.length} items
                           </span>
@@ -480,7 +480,7 @@ export default function AdminPage() {
 
                       {/* Group grid */}
                       {openGroups.has(group.id) && (
-                        <div className="p-5 border-t border-neutral-800 bg-black/40">
+                        <div className="p-5 border-t border-neutral-100 bg-neutral-50/30">
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {group.products.map((p) => {
                               const isDragging = draggedId === p.id
@@ -491,16 +491,16 @@ export default function AdminPage() {
                                   onDragStart={(e) => handleDragStart(e, p.id)}
                                   onDragOver={handleDragOver}
                                   onDrop={(e) => handleDrop(e, p.id)}
-                                  className={`relative flex p-3 rounded-xl border transition-all ${isDragging ? 'opacity-50 border-white bg-neutral-800' : 'border-neutral-800 bg-neutral-900/60 hover:bg-neutral-800/80 hover:border-neutral-700'}`}
+                                  className={`relative flex p-3 rounded-xl border transition-all ${isDragging ? 'opacity-50 border-black bg-neutral-50' : 'border-neutral-100 bg-white hover:bg-neutral-50 hover:border-neutral-200'}`}
                                 >
                                   {/* Left: Handle + Image */}
                                   <div className="flex flex-col gap-2 items-center mr-4">
                                     <span className="material-symbols-outlined text-neutral-600 cursor-grab active:cursor-grabbing text-sm hover:text-white" title="Mover">drag_indicator</span>
-                                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-black flex items-center justify-center border border-neutral-800">
+                                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-50 flex items-center justify-center border border-neutral-100">
                                       {p.images?.[0] ? (
                                         <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                                       ) : (
-                                        <span className="material-symbols-outlined text-neutral-700 text-lg">diamond</span>
+                                        <span className="material-symbols-outlined text-neutral-300 text-lg">diamond</span>
                                       )}
                                     </div>
                                   </div>
@@ -508,8 +508,8 @@ export default function AdminPage() {
                                   {/* Right: Details */}
                                   <div className="flex flex-col flex-1 overflow-hidden">
                                     <div className="flex justify-between items-start gap-2">
-                                      <h4 className="text-white font-bold text-xs leading-tight truncate flex-1">{p.name}</h4>
-                                      <span className="text-[9px] bg-neutral-800 border border-neutral-700 px-2 py-0.5 rounded text-white font-bold tracking-wider whitespace-nowrap">
+                                      <h4 className="text-black font-bold text-xs leading-tight truncate flex-1">{p.name}</h4>
+                                      <span className="text-[9px] bg-neutral-50 border border-neutral-100 px-2 py-0.5 rounded text-black font-bold tracking-wider whitespace-nowrap">
                                         {formatPrice(p.price)}
                                       </span>
                                     </div>
@@ -522,7 +522,7 @@ export default function AdminPage() {
                                     <p className="text-[9px] text-neutral-500 mt-2 font-mono truncate">ID: {p.id.split('-')[0].toUpperCase()}</p>
 
                                     <div className="mt-auto pt-3 flex items-center justify-between">
-                                      <span className="bg-neutral-800 border border-neutral-700 px-2 py-1 text-[9px] font-bold text-white rounded">
+                                      <span className="bg-neutral-50 border border-neutral-100 px-2 py-1 text-[9px] font-bold text-black rounded">
                                         Total {p.stock ?? 0}
                                       </span>
 
@@ -560,7 +560,7 @@ export default function AdminPage() {
               <div className="col-span-12 lg:col-span-7 space-y-4">
 
                 {/* Card 1: Básico */}
-                <div className="bg-surface-container-low border border-outline-variant/10 p-6">
+                <div className="bg-white border border-neutral-100 p-6">
                   <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
                     <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">1</span>
                     Información Básica
@@ -572,7 +572,7 @@ export default function AdminPage() {
                       </label>
                       <input id="f-name" name="name" value={formData.name} onChange={handleInput} required autoComplete="off"
                         placeholder="Ej: Anillo Celestial Orbit"
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div>
                       <label htmlFor="f-slug" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
@@ -580,7 +580,7 @@ export default function AdminPage() {
                       </label>
                       <input id="f-slug" name="slug" value={formData.slug} onChange={handleInput} autoComplete="off"
                         placeholder="anillo-celestial-orbit"
-                        className="w-full bg-transparent border-b border-neutral-800 text-neutral-400 text-xs py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-neutral-500 text-xs py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div>
                       <label htmlFor="f-desc" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
@@ -588,13 +588,13 @@ export default function AdminPage() {
                       </label>
                       <textarea id="f-desc" name="description" value={formData.description} onChange={handleInput}
                         rows={3} placeholder="Describe la pieza..."
-                        className="w-full bg-transparent border border-neutral-800 text-white text-sm font-light p-3 outline-none focus:border-white transition-colors resize-none placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border border-neutral-200 text-black text-sm font-light p-3 outline-none focus:border-black transition-colors resize-none placeholder:text-neutral-300" />
                     </div>
                   </div>
                 </div>
 
                 {/* Card 2: Clasificación */}
-                <div className="bg-surface-container-low border border-outline-variant/10 p-6">
+                <div className="bg-white border border-neutral-100 p-6">
                   <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
                     <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">2</span>
                     Clasificación
@@ -614,7 +614,7 @@ export default function AdminPage() {
                       <label htmlFor="f-mat" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">Material</label>
                       <input id="f-mat" name="material" value={formData.material} onChange={handleInput} autoComplete="off"
                         placeholder="Oro 18k, Diamante..."
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div className="md:col-span-1 flex items-center gap-3 mt-2">
                       <input
@@ -623,9 +623,9 @@ export default function AdminPage() {
                         name="featured"
                         checked={formData.featured}
                         onChange={handleInput}
-                        className="w-4 h-4 accent-white bg-neutral-900 border-neutral-800"
+                        className="w-4 h-4 accent-black bg-neutral-100 border-neutral-200"
                       />
-                      <label htmlFor="f-featured" className="text-[10px] uppercase tracking-widest text-white font-bold cursor-pointer">
+                      <label htmlFor="f-featured" className="text-[10px] uppercase tracking-widest text-black font-bold cursor-pointer">
                         Destacar Inicio
                       </label>
                     </div>
@@ -636,9 +636,9 @@ export default function AdminPage() {
                         name="is_trending"
                         checked={formData.is_trending}
                         onChange={handleInput}
-                        className="w-4 h-4 accent-white bg-neutral-900 border-neutral-800"
+                        className="w-4 h-4 accent-black bg-neutral-100 border-neutral-200"
                       />
-                      <label htmlFor="f-trending" className="text-[10px] uppercase tracking-widest text-white font-bold cursor-pointer">
+                      <label htmlFor="f-trending" className="text-[10px] uppercase tracking-widest text-black font-bold cursor-pointer">
                         Tendencia 🔥
                       </label>
                     </div>
@@ -646,7 +646,7 @@ export default function AdminPage() {
                 </div>
 
                 {/* Card: Variantes */}
-                <div className="bg-surface-container-low border border-outline-variant/10 p-6">
+                <div className="bg-white border border-neutral-100 p-6">
                   <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
                     <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">V</span>
                     Variaciones (Tallas)
@@ -656,21 +656,21 @@ export default function AdminPage() {
                       <input 
                         id="new-size-input"
                         placeholder="Ej: 18cm, ajustable..."
-                        className="flex-grow bg-transparent border-b border-neutral-800 text-white text-xs py-2 outline-none focus:border-white transition-colors placeholder:text-neutral-700"
+                        className="flex-grow bg-transparent border-b border-neutral-200 text-black text-xs py-2 outline-none focus:border-black transition-colors placeholder:text-neutral-300"
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const v = (e.target as any).value; if (v) { setVariants([...variants, { id: Math.random().toString(), productId: editing?.id || '', size: v, stock: 10 }]); (e.target as any).value = '' } } }}
                       />
                       <button 
                         type="button"
                         onClick={() => { const inp = document.getElementById('new-size-input') as HTMLInputElement; if (inp.value) { setVariants([...variants, { id: Math.random().toString(), productId: editing?.id || '', size: inp.value, stock: 10 }]); inp.value = '' } }}
-                        className="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
+                        className="bg-black hover:bg-neutral-800 text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
                       >
                         Añadir
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {variants.map((v, i) => (
-                        <div key={i} className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-md group">
-                          <span className="text-[11px] text-white font-bold">{v.size}</span>
+                        <div key={i} className="flex items-center gap-2 bg-neutral-50 border border-neutral-100 px-3 py-1.5 rounded-md group">
+                          <span className="text-[11px] text-black font-bold">{v.size}</span>
                           <button 
                             type="button"
                             onClick={() => setVariants(variants.filter((_, j) => j !== i))}
@@ -686,7 +686,7 @@ export default function AdminPage() {
                 </div>
 
                 {/* Card 3: Precio & Stock */}
-                <div className="bg-surface-container-low border border-outline-variant/10 p-6">
+                <div className="bg-white border border-neutral-100 p-6">
                   <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
                     <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">3</span>
                     Precio e Inventario
@@ -698,7 +698,7 @@ export default function AdminPage() {
                       </label>
                       <input id="f-price" name="price" type="number" min="0" value={formData.price} onChange={handleInput} required
                         placeholder="0"
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div>
                       <label htmlFor="f-oprice" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
@@ -706,7 +706,7 @@ export default function AdminPage() {
                       </label>
                       <input id="f-oprice" name="original_price" type="number" min="0" value={formData.original_price} onChange={handleInput}
                         placeholder="0"
-                        className="w-full bg-transparent border-b border-neutral-800 text-neutral-400 text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-neutral-500 text-sm py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div>
                       <label htmlFor="f-stock" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
@@ -714,21 +714,21 @@ export default function AdminPage() {
                       </label>
                       <input id="f-stock" name="stock" type="number" min="0" value={formData.stock} onChange={handleInput} required
                         placeholder="0"
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                     </div>
                     <div>
                       <label htmlFor="f-rating" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
                         Rating (1-5)
                       </label>
                       <input id="f-rating" name="rating" type="number" step="0.1" min="0" max="5" value={formData.rating} onChange={handleInput}
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors" />
                     </div>
                     <div>
                       <label htmlFor="f-rev" className="block text-[9px] tracking-[0.2em] text-neutral-500 uppercase mb-2 font-bold">
                         Reseñas
                       </label>
                       <input id="f-rev" name="reviews_count" type="number" min="0" value={formData.reviews_count} onChange={handleInput}
-                        className="w-full bg-transparent border-b border-neutral-800 text-white text-sm py-2.5 outline-none focus:border-white transition-colors" />
+                        className="w-full bg-transparent border-b border-neutral-200 text-black text-sm py-2.5 outline-none focus:border-black transition-colors" />
                     </div>
                   </div>
                 </div>
@@ -736,7 +736,7 @@ export default function AdminPage() {
 
               {/* RIGHT: Images */}
               <div className="col-span-12 lg:col-span-5">
-                <div className="bg-surface-container-low border border-outline-variant/10 p-6 sticky top-24">
+                <div className="bg-white border border-neutral-100 p-6 sticky top-24">
                   <h3 className="text-[9px] uppercase tracking-[0.35em] text-neutral-400 font-bold mb-5 flex items-center gap-2">
                     <span className="w-5 h-5 bg-white text-black text-[8px] font-black flex items-center justify-center">4</span>
                     Imágenes
@@ -749,10 +749,10 @@ export default function AdminPage() {
                   >
                     {({ open }) => (
                       <button type="button" onClick={() => open()}
-                        className="w-full border-2 border-dashed border-neutral-700 hover:border-white py-8 flex flex-col items-center gap-2.5 group transition-all mb-4">
-                        <span className="material-symbols-outlined text-3xl text-neutral-600 group-hover:text-white transition-colors" aria-hidden="true">cloud_upload</span>
-                        <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">Subir desde PC</p>
-                        <p className="text-[8px] text-neutral-700 group-hover:text-neutral-400 transition-colors">JPG, PNG, WEBP</p>
+                        className="w-full border-2 border-dashed border-neutral-200 hover:border-black py-8 flex flex-col items-center gap-2.5 group transition-all mb-4">
+                        <span className="material-symbols-outlined text-3xl text-neutral-300 group-hover:text-black transition-colors" aria-hidden="true">cloud_upload</span>
+                        <p className="text-[9px] uppercase tracking-widest text-neutral-400 group-hover:text-black transition-colors font-bold">Subir desde PC</p>
+                        <p className="text-[8px] text-neutral-200 group-hover:text-neutral-400 transition-colors">JPG, PNG, WEBP</p>
                       </button>
                     )}
                   </CldUploadWidget>
@@ -764,9 +764,9 @@ export default function AdminPage() {
                       <input type="url" value={urlInput} onChange={e => setUrlInput(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addUrl() } }}
                         placeholder="https://..."
-                        className="flex-grow bg-transparent border-b border-neutral-800 text-white text-xs py-2.5 outline-none focus:border-white transition-colors placeholder:text-neutral-700" />
+                        className="flex-grow bg-transparent border-b border-neutral-200 text-black text-xs py-2.5 outline-none focus:border-black transition-colors placeholder:text-neutral-300" />
                       <button type="button" onClick={addUrl} aria-label="Agregar URL"
-                        className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-bold transition-colors">+</button>
+                        className="px-4 py-2 bg-black hover:bg-neutral-800 text-white text-sm font-bold transition-colors">+</button>
                     </div>
                   </div>
 
@@ -778,7 +778,7 @@ export default function AdminPage() {
                       </p>
                       <div className="grid grid-cols-3 gap-2">
                         {images.map((url, i) => (
-                          <div key={i} className="aspect-square bg-neutral-900 border border-neutral-800 relative group overflow-hidden">
+                          <div key={i} className="aspect-square bg-neutral-50 border border-neutral-100 relative group overflow-hidden">
                             <img src={url} alt="" className="w-full h-full object-cover" />
                             {i === 0 && (
                               <span className="absolute top-1 left-1 bg-white text-black text-[7px] font-black px-1 py-0.5 uppercase">Principal</span>
@@ -799,13 +799,13 @@ export default function AdminPage() {
                   <div className="pt-5 border-t border-outline-variant/10 flex gap-3">
                     {editing && (
                       <button type="button" onClick={cancelForm}
-                        className="flex-1 border border-outline-variant/30 text-neutral-400 py-3.5 text-[10px] font-bold uppercase tracking-widest hover:text-white hover:border-white transition-all">
+                        className="flex-1 border border-neutral-200 text-neutral-400 py-3.5 text-[10px] font-bold uppercase tracking-widest hover:text-black hover:border-black transition-all">
                         Cancelar
                       </button>
                     )}
                     <button type="submit" disabled={submitting}
-                      className="flex-1 bg-white text-black py-3.5 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-                      {submitting && <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />}
+                      className="flex-1 bg-black text-white py-3.5 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                      {submitting && <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
                       {submitting ? 'Guardando...' : editing ? 'Actualizar Pieza' : 'Registrar Pieza'}
                     </button>
                   </div>

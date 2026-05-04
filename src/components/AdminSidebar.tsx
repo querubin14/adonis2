@@ -22,7 +22,7 @@ export default function AdminSidebar() {
         <p className="text-[8px] tracking-[0.45em] text-neutral-500 uppercase font-bold mb-1.5">
           Panel de Control
         </p>
-        <h1 className="font-headline text-lg tracking-[0.25em] text-white uppercase">ADONIS</h1>
+        <h1 className="font-headline text-lg tracking-[0.25em] text-black uppercase">ADONIS</h1>
       </div>
 
       <nav className="flex flex-col gap-0.5 p-3 flex-grow" aria-label="Navegación del panel">
@@ -35,8 +35,8 @@ export default function AdminSidebar() {
               aria-current={active ? 'page' : undefined}
               className={`flex items-center gap-3 px-4 py-3 transition-all text-[10px] font-bold uppercase tracking-wider ${
                 active
-                  ? 'bg-white text-black'
-                  : 'text-neutral-400 hover:text-white hover:bg-neutral-800/40'
+                  ? 'bg-black text-white'
+                  : 'text-neutral-500 hover:text-black hover:bg-neutral-100'
               }`}
             >
               <span className="material-symbols-outlined text-base" aria-hidden="true">
@@ -51,7 +51,7 @@ export default function AdminSidebar() {
       <div className="p-3 border-t border-outline-variant/10">
         <Link
           href="/"
-          className="flex items-center gap-3 px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-neutral-500 hover:text-white transition-colors"
+          className="flex items-center gap-3 px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-neutral-500 hover:text-black transition-colors"
         >
           <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
           Volver al Sitio
