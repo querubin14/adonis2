@@ -57,14 +57,14 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center h-full text-center">
         <div className="flex flex-col items-center py-10 w-full">
           <h1 className="font-antonio text-[60px] md:text-[90px] lg:text-[120px] font-bold leading-none tracking-normal uppercase flex flex-row flex-wrap justify-center items-center gap-x-3 md:gap-x-4 select-none transition-all duration-1000 animate-in fade-in zoom-in-95 mb-4">
-            <span className="text-white drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
+            <span className="text-black drop-shadow-2xl">{hero.title.split(' ')[0]}</span>
             <span className="text-outline opacity-90 drop-shadow-2xl">
               {hero.title.split(' ').slice(1).join(' ')}
             </span>
           </h1>
 
           {hero.subtitle && (
-            <span className="font-label uppercase tracking-[0.4em] text-[10px] md:text-[11px] text-white/70 mb-10 block transition-all duration-700 animate-in fade-in slide-in-from-bottom-4">
+            <span className="font-label uppercase tracking-[0.4em] text-[10px] md:text-[11px] text-black/70 mb-10 block transition-all duration-700 animate-in fade-in slide-in-from-bottom-4">
               {hero.subtitle}
             </span>
           )}
@@ -73,7 +73,7 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
             <div className="transition-all duration-1000 delay-300 animate-in fade-in slide-in-from-bottom-8">
               <Link
                 href={hero.cta_url}
-                className="px-10 py-4 bg-white text-black font-label uppercase text-[10px] md:text-[11px] tracking-[0.3em] font-bold hover:bg-neutral-200 transition-all inline-block shadow-2xl"
+                className="px-10 py-4 bg-black text-white font-label uppercase text-[10px] md:text-[11px] tracking-[0.3em] font-bold hover:bg-neutral-800 transition-all inline-block shadow-2xl"
               >
                 {hero.cta_text}
               </Link>
@@ -88,14 +88,14 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
           <button
             onClick={prev}
             aria-label="Anterior"
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 text-white/50 hover:text-white transition-colors"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 text-black/50 hover:text-black transition-colors"
           >
             <span className="material-symbols-outlined text-3xl" aria-hidden="true">chevron_left</span>
           </button>
           <button
             onClick={next}
             aria-label="Siguiente"
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 text-white/50 hover:text-white transition-colors"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 text-black/50 hover:text-black transition-colors"
           >
             <span className="material-symbols-outlined text-3xl" aria-hidden="true">chevron_right</span>
           </button>
@@ -112,8 +112,9 @@ export default function HeroSlider({ heroes }: { heroes: HeroSettings[] }) {
               aria-selected={i === current}
               aria-label={`Ir a diapositiva ${i + 1}`}
               onClick={() => goTo(i)}
-              className={`transition-all ${i === current ? 'w-6 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'}`}
+              className={`transition-all ${i === current ? 'w-6 h-1.5 bg-black' : 'w-1.5 h-1.5 bg-black/30 hover:bg-black/60'}`}
             />
+
           ))}
         </div>
       )}

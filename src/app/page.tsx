@@ -80,17 +80,17 @@ export default async function HomePage() {
         <HeroSlider heroes={heroesWithFallback} />
 
         {/* ── Animated Values Marquee ─────────────────────────── */}
-        <div className="border-b border-outline-variant/10 py-5 overflow-hidden bg-surface-container-lowest/50" aria-hidden="true">
+        <div className="border-b border-neutral-200 py-5 overflow-hidden bg-neutral-50" aria-hidden="true">
           <div className="marquee-track flex" style={{ animationDuration: '40s' }}>
             {[0, 1].map(copy => (
               <div key={copy} className="flex gap-16 md:gap-24 px-8 items-center flex-shrink-0">
                 {VALUES_ITEMS.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4 min-w-[280px]">
-                    <div className="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center flex-shrink-0">
-                      <span className="material-symbols-outlined text-[18px] text-neutral-400">{item.icon}</span>
+                    <div className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center flex-shrink-0">
+                      <span className="material-symbols-outlined text-[18px] text-neutral-600">{item.icon}</span>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <p className="text-[9px] uppercase tracking-[0.2em] text-white font-bold">{item.label}</p>
+                      <p className="text-[9px] uppercase tracking-[0.2em] text-black font-bold">{item.label}</p>
                       <p className="text-[10px] text-neutral-500 font-light">{item.desc}</p>
                     </div>
                   </div>
@@ -100,17 +100,19 @@ export default async function HomePage() {
           </div>
         </div>
 
+
         {/* ── Featured Products ─────────────────────────────────── */}
         {featuredProducts.length > 0 && (
           <section className="py-12 px-6 md:px-12">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-end justify-between mb-10">
                 <div>
-                  <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Colección</p>
-                  <h2 className="font-headline text-3xl md:text-4xl text-white uppercase tracking-tight">
+                  <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-3">Colección</p>
+                  <h2 className="font-headline text-3xl md:text-4xl text-black uppercase tracking-tight">
                     Productos Destacados
                   </h2>
                 </div>
+
                 <Link
                   href="/products"
                   className="hidden md:flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-neutral-500 hover:text-white transition-colors font-bold group"
@@ -158,9 +160,10 @@ export default async function HomePage() {
               <div className="max-w-7xl mx-auto">
                 <div className="flex items-end justify-between mb-8">
                   <div>
-                    <p className="text-[9px] uppercase tracking-[0.45em] text-secondary font-bold mb-3">Categoría</p>
-                    <h2 className="font-headline text-2xl md:text-3xl text-white uppercase tracking-tight">{category.name}</h2>
+                    <p className="text-[9px] uppercase tracking-[0.45em] text-neutral-500 font-bold mb-3">Categoría</p>
+                    <h2 className="font-headline text-2xl md:text-3xl text-black uppercase tracking-tight">{category.name}</h2>
                   </div>
+
                   <Link
                     href={`/products?category=${category.slug}`}
                     className="hidden md:flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-neutral-500 hover:text-white transition-colors font-bold group"
@@ -199,11 +202,12 @@ export default async function HomePage() {
 /* ── Categories Grid (Formerly Bento) ───────────────────────── */
 function BentoGrid({ items }: { items: BentoItem[] }) {
   return (
-    <section className="py-16 pt-8 px-6 md:px-12 bg-neutral-950">
+    <section className="py-16 pt-8 px-6 md:px-12 bg-white">
       <div className="max-w-[1400px] mx-auto">
         <div className="mb-6">
-          <h2 className="font-headline text-2xl md:text-3xl text-white tracking-wide font-bold uppercase">Categorías</h2>
+          <h2 className="font-headline text-2xl md:text-3xl text-black tracking-wide font-bold uppercase">Categorías</h2>
         </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
           {items.map((item) => {
@@ -211,7 +215,7 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
               <Link
                 key={item.id}
                 href={item.link_url ?? '/products'}
-                className="group relative overflow-hidden rounded-md border border-neutral-800/80 hover:border-neutral-500 transition-all duration-500"
+                className="group relative overflow-hidden rounded-md border border-neutral-200 hover:border-black transition-all duration-500"
               >
                 {item.image_url ? (
                   <img
@@ -221,22 +225,23 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-950 group-hover:from-neutral-800 transition-all duration-500" />
+                  <div className="absolute inset-0 bg-neutral-100 group-hover:bg-neutral-200 transition-all duration-500" />
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-transparent" />
 
                 <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6 pb-6">
                   <div className="flex flex-col gap-1.5">
-                    <h3 className="font-headline uppercase tracking-tight text-white leading-tight text-xl md:text-2xl font-bold">
+                    <h3 className="font-headline uppercase tracking-tight text-black leading-tight text-xl md:text-2xl font-bold">
                       {item.title}
                     </h3>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-white font-bold group-hover:text-neutral-300 transition-colors">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-black font-bold group-hover:text-neutral-600 transition-colors">
                       {item.subtitle || 'VER COLECCIÓN'}
                     </p>
                   </div>
                 </div>
               </Link>
+
             )
           })}
         </div>

@@ -45,7 +45,8 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background text-white pt-28 pb-20 px-6 md:px-12 font-sans">
+      <main className="min-h-screen bg-background text-on-background pt-28 pb-20 px-6 md:px-12 font-sans">
+
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-10 md:gap-16 items-start">
             {/* Gallery (Client Component) */}
@@ -55,13 +56,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
             {/* Details */}
             <div className="w-full lg:w-[58%] flex flex-col pt-0 pl-0 lg:pl-6">
-              <h1 className="text-2xl md:text-3xl text-white leading-tight mb-2 tracking-tight font-bold uppercase">
+              <h1 className="text-2xl md:text-3xl text-black dark:text-white leading-tight mb-2 tracking-tight font-bold uppercase">
                 {product.name}
               </h1>
               
-              <p className="text-lg text-white mb-2 font-medium">
+              <p className="text-lg text-black dark:text-white mb-2 font-medium">
                 {formatPrice(product.price)}
               </p>
+
               <p className="text-[10px] text-neutral-500 mb-4">
                 Los <span className="underline cursor-help">gastos de envío</span> se calculan en la pantalla de pago.
               </p>
@@ -77,28 +79,30 @@ export default async function ProductDetailPage({ params }: Props) {
               {/* Client Component for Interactive Actions (Qty, Buttons, Variations) */}
               <ProductClientActions product={product} whatsappNumber={settings?.whatsapp_number} />
 
-              <div className="mt-8 space-y-4 text-[12px] text-neutral-300 leading-relaxed border-t border-white/5 pt-8">
+              <div className="mt-8 space-y-4 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed border-t border-neutral-100 dark:border-white/5 pt-8">
                 {product.description ? (
-                  <div className="whitespace-pre-line text-neutral-400 text-xs">
+                  <div className="whitespace-pre-line text-neutral-500 dark:text-neutral-400 text-xs">
                     {product.description}
                   </div>
                 ) : (
                   <p className="text-xs">
-                    <strong className="text-white">• Material:</strong> {product.material || 'Acero Inoxidable'}. Duradero, resistente y de fácil mantenimiento. Hipoalergénico, apto para pieles sensibles.
+                    <strong className="text-black dark:text-white">• Material:</strong> {product.material || 'Acero Inoxidable'}. Duradero, resistente y de fácil mantenimiento. Hipoalergénico, apto para pieles sensibles.
                   </p>
                 )}
+
                 
                 <div className="flex flex-col gap-1 mt-2 text-xs">
                   {product.length && (
                     <p>
-                      <strong className="text-white">• Longitud:</strong> {product.length}
+                      <strong className="text-black dark:text-white">• Longitud:</strong> {product.length}
                     </p>
                   )}
                   {product.thickness && (
                     <p>
-                      <strong className="text-white">• Grosor:</strong> {product.thickness}
+                      <strong className="text-black dark:text-white">• Grosor:</strong> {product.thickness}
                     </p>
                   )}
+
                 </div>
               </div>
 
@@ -114,7 +118,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   <div className="grid grid-cols-2 gap-2">
                     {recommendations.slice(0, 2).map((item) => (
                       <Link key={item.id} href={`/products/${item.slug}`} className="group block">
-                        <div className="aspect-square relative overflow-hidden bg-neutral-900 border border-white/5 mb-1.5">
+                        <div className="aspect-square relative overflow-hidden bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-white/5 mb-1.5">
                           <Image 
                             src={item.images?.[0] || '/placeholder.png'} 
                             alt={item.name}
@@ -122,10 +126,11 @@ export default async function ProductDetailPage({ params }: Props) {
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>
-                        <h3 className="text-[7px] uppercase tracking-wider text-white font-bold mb-0.5 truncate">
+                        <h3 className="text-[7px] uppercase tracking-wider text-black dark:text-white font-bold mb-0.5 truncate">
                           {item.name}
                         </h3>
                       </Link>
+
                     ))}
                   </div>
                   <Link href="/products" className="mt-3 block text-[8px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors font-bold border border-white/10 py-1 text-center">
@@ -135,18 +140,19 @@ export default async function ProductDetailPage({ params }: Props) {
 
                 {/* Delivery Info */}
                 <div>
-                  <h3 className="text-[9px] uppercase tracking-[0.25em] text-white font-bold mb-5">ENTREGA ESTIMADA</h3>
+                  <h3 className="text-[9px] uppercase tracking-[0.25em] text-black dark:text-white font-bold mb-5">ENTREGA ESTIMADA</h3>
                   <div className="space-y-4">
                     <div>
-                      <p className="text-[11px] text-white font-bold mb-0.5">Asunción y alrededores</p>
+                      <p className="text-[11px] text-black dark:text-white font-bold mb-0.5">Asunción y alrededores</p>
                       <p className="text-[10px] text-neutral-500 leading-tight">{settings?.shipping_asuncion_text || 'Menos de 24 hrs.'}</p>
                     </div>
                     <div>
-                      <p className="text-[11px] text-white font-bold mb-0.5">Envíos al interior</p>
+                      <p className="text-[11px] text-black dark:text-white font-bold mb-0.5">Envíos al interior</p>
                       <p className="text-[10px] text-neutral-500 leading-tight">{settings?.shipping_interior_text || '24 a 48 hrs.'}</p>
                     </div>
                   </div>
                 </div>
+
               </div>
 
               <button className="mt-8 flex items-center gap-2 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors w-fit font-bold group">

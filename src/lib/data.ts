@@ -77,7 +77,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('slug', slug)
+    .or(`slug.eq.${slug},id.eq.${slug}`)
     .single()
 
   if (error) {

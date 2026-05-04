@@ -54,13 +54,15 @@ export default function ProductCard({ product: p }: { product: Product }) {
   }
 
   return (
-    <div className="group flex flex-col">
+    <div className="group flex flex-col p-4 border border-black bg-white transition-all duration-500 rounded-none hover:shadow-xl hover:shadow-black/5">
 
       {/* Image container — Link covers only the image area */}
-      <div className="bg-surface-container-low aspect-[3/4] relative overflow-hidden mb-3 border border-outline-variant/5 group-hover:border-outline-variant/30 transition-colors">
+      <div className="bg-neutral-50 aspect-[3/4] relative overflow-hidden mb-4 border border-black group-hover:border-black transition-all duration-500">
+
+
 
         {/* Image link */}
-        <Link href={`/products/${p.slug}`} className="block w-full h-full" tabIndex={-1} aria-hidden="true">
+        <Link href={`/products/${p.slug || p.id}`} className="block w-full h-full" tabIndex={-1} aria-hidden="true">
           {p.images?.[0] ? (
             <img
               src={p.images[0]}
@@ -122,27 +124,28 @@ export default function ProductCard({ product: p }: { product: Product }) {
       </div>
 
       {/* Info — separate Link for text */}
-      <Link href={`/products/${p.slug}`} className="space-y-1 group/info">
+      <Link href={`/products/${p.slug || p.id}`} className="space-y-1 group/info">
         <div className="min-h-[12px]">
           {p.material && (
             <p className="text-[8px] uppercase tracking-[0.3em] text-neutral-500 font-bold truncate">{p.material}</p>
           )}
         </div>
         <div className="min-h-[28px]">
-          <h3 className="text-[10px] text-neutral-400 group-hover/info:text-neutral-200 transition-colors uppercase tracking-wide leading-tight line-clamp-2 font-medium">
+          <h3 className="text-[10px] text-neutral-600 group-hover/info:text-black transition-colors uppercase tracking-wide leading-tight line-clamp-2 font-medium">
             {p.name}
           </h3>
         </div>
         <div className="flex items-baseline gap-2 pt-1">
-          <p className="text-sm font-bold text-white tabular-nums">
+          <p className="text-sm font-bold text-black tabular-nums">
             {formatPrice(p.price)}
           </p>
           {(p as any).original_price && (
-            <p className="text-[9px] text-neutral-600 line-through tabular-nums">
+            <p className="text-[9px] text-neutral-400 line-through tabular-nums">
               {formatPrice((p as any).original_price)}
             </p>
           )}
         </div>
+
       </Link>
 
     </div>

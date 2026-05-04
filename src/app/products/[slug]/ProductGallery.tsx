@@ -10,15 +10,41 @@ interface ProductGalleryProps {
 
 export default function ProductGallery({ images, name }: ProductGalleryProps) {
   const [current, setCurrent] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  // the required distance between touchStart and touchEnd to be detected as a swipe
+  const minSwipeDistance = 50 
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX)
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+    if (isLeftSwipe) {
+      next()
+    }
+    if (isRightSwipe) {
+      prev()
+    }
+  }
 
   if (!images || images.length === 0) {
     return (
-      <div className="bg-neutral-900 aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-white/5">
+      <div className="bg-neutral-50 dark:bg-neutral-900 aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-neutral-100 dark:border-white/5">
         <div className="text-center p-12">
-          <span className="material-symbols-outlined text-6xl text-neutral-800 mb-4 block">image</span>
-          <p className="font-sans text-neutral-600 text-[10px] uppercase tracking-widest font-bold">Sin imagen</p>
+          <span className="material-symbols-outlined text-6xl text-neutral-300 dark:text-neutral-800 mb-4 block">image</span>
+          <p className="font-sans text-neutral-400 dark:text-neutral-600 text-[10px] uppercase tracking-widest font-bold">Sin imagen</p>
         </div>
       </div>
+
     )
   }
 
@@ -28,7 +54,13 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="group bg-neutral-900 aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-white/5">
+      <div 
+        className="group bg-neutral-50 dark:bg-neutral-900 aspect-square md:aspect-[4/5] flex items-center justify-center relative overflow-hidden border border-neutral-100 dark:border-white/5"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+
         <Image 
           src={images[current]} 
           alt={name} 
@@ -66,8 +98,9 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               key={i} 
               onClick={() => setCurrent(i)}
               className={`flex-shrink-0 w-24 aspect-square overflow-hidden relative transition-all ${
-                current === i ? 'border border-white p-0.5' : 'border border-white/5 opacity-50 hover:opacity-100'
+                current === i ? 'border border-black dark:border-white p-0.5' : 'border border-neutral-100 dark:border-white/5 opacity-50 hover:opacity-100'
               }`}
+
             >
               <div className="w-full h-full relative">
                 <Image 

@@ -1,53 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  --color-on-background: #e5e2e1;
-  --color-surface-dim: #131313;
-  --color-primary-container: #d4d4d4;
-  --color-surface-container-low: #1c1b1b;
-  --color-on-tertiary-fixed: #ffffff;
-  --color-inverse-surface: #e5e2e1;
-  --color-on-primary: #1a1c1c;
-  --color-surface-container: #201f1f;
-  --color-tertiary-fixed-dim: #464747;
-  --color-surface-variant: #353534;
-  --color-on-surface: #e5e2e1;
-  --color-on-primary-fixed-variant: #e2e2e2;
-  --color-error: #ffb4ab;
-  --color-surface: #131313;
-  --color-secondary-fixed-dim: #ababab;
-  --color-secondary: #c6c6c6;
-  --color-secondary-fixed: #c6c6c6;
-  --color-on-secondary: #1a1c1c;
-  --color-primary-fixed-dim: #454747;
-  --color-on-tertiary-fixed-variant: #e3e2e2;
-  --color-primary-fixed: #5d5f5f;
-  --color-on-primary-fixed: #ffffff;
-  --color-background: #131313;
-  --color-surface-tint: #c6c6c7;
-  --color-inverse-on-surface: #313030;
-  --color-primary: #ffffff;
-  --color-on-secondary-container: #e2e2e2;
-  --color-outline-variant: #474747;
-  --color-on-tertiary: #1b1c1c;
-  --color-on-error: #690005;
-  --color-outline: #919191;
-  --color-surface-container-high: #2a2a2a;
-  --color-tertiary-fixed: #5e5e5e;
-  --color-on-error-container: #ffdad6;
-  --color-on-surface-variant: #c6c6c6;
-  --color-on-tertiary-container: #000000;
-  --color-secondary-container: #454747;
-  --color-on-primary-container: #000000;
-  --color-surface-bright: #393939;
-  --color-inverse-primary: #5d5f5f;
-  --color-tertiary: #e3e2e2;
-  --color-tertiary-container: #919191;
-  --color-on-secondary-fixed-variant: #3a3c3c;
-  --color-surface-container-lowest: #0e0e0e;
-  --color-error-container: #93000a;
-  --color-surface-container-highest: #353534;
-  --color-on-secondary-fixed: #1a1c1c;
+  --color-on-background: #1a1c1c;
+  --color-surface-dim: #f5f5f5;
+  --color-primary-container: #1a1c1c;
+  --color-surface-container-low: #ffffff;
+  --color-on-tertiary-fixed: #000000;
+  --color-inverse-surface: #1a1c1c;
+  --color-on-primary: #ffffff;
+  --color-surface-container: #f0f0f0;
+  --color-tertiary-fixed-dim: #c6c6c6;
+  --color-surface-variant: #e2e2e2;
+  --color-on-surface: #1a1c1c;
+  --color-on-primary-fixed-variant: #1a1c1c;
+  --color-error: #ba1a1a;
+  --color-surface: #ffffff;
+  --color-secondary-fixed-dim: #454747;
+  --color-secondary: #5d5f5f;
+  --color-secondary-fixed: #5d5f5f;
+  --color-on-secondary: #ffffff;
+  --color-primary-fixed-dim: #c6c6c6;
+  --color-on-tertiary-fixed-variant: #1a1c1c;
+  --color-primary-fixed: #ababab;
+  --color-on-primary-fixed: #000000;
+  --color-background: #ffffff;
+  --color-surface-tint: #1a1c1c;
+  --color-inverse-on-surface: #ffffff;
+  --color-primary: #000000;
+  --color-on-secondary-container: #1a1c1c;
+  --color-outline-variant: #d4d4d4;
+  --color-on-tertiary: #ffffff;
+  --color-on-error: #ffffff;
+  --color-outline: #757575;
+  --color-surface-container-high: #e2e2e2;
+  --color-tertiary-fixed: #ababab;
+  --color-on-error-container: #410002;
+  --color-on-surface-variant: #474747;
+  --color-on-tertiary-container: #ffffff;
+  --color-secondary-container: #e2e2e2;
+  --color-on-primary-container: #ffffff;
+  --color-surface-bright: #ffffff;
+  --color-inverse-primary: #ababab;
+  --color-tertiary: #1a1c1c;
+  --color-tertiary-container: #474747;
+  --color-on-secondary-fixed-variant: #e2e2e2;
+  --color-surface-container-lowest: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-surface-container-highest: #d4d4d4;
+  --color-on-secondary-fixed: #ffffff;
 
   --font-headline: var(--font-montserrat);
   --font-body: var(--font-montserrat);
@@ -59,8 +59,9 @@
   --radius-xl: 0px;
 }
 
+
 .text-outline {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.9);
   color: transparent;
 }
 
@@ -69,9 +70,10 @@
 }
 
 :root {
-  --background: #131313;
-  --foreground: #e5e2e1;
+  --background: #ffffff;
+  --foreground: #131313;
 }
+
 
 body {
   color: var(--foreground);
@@ -140,9 +142,8 @@ body {
   animation: marquee-reverse 28s linear infinite;
 }
 
-.marquee-track:hover, .marquee-track-reverse:hover {
-  animation-play-state: paused;
-}
+/* Continuous movement without pause on interaction */
+
 
 .marquee-item {
   display: inline-flex;
