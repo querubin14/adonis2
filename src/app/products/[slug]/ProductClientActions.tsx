@@ -61,8 +61,8 @@ export default function ProductClientActions({ product, whatsappNumber }: { prod
                 onClick={() => setSelectedSize(size)}
                 className={`min-w-[50px] h-10 px-4 flex items-center justify-center rounded-full border text-[12px] font-bold transition-all ${
                   selectedSize === size
-                    ? 'bg-white text-black border-white'
-                    : 'bg-transparent text-white border-neutral-700 hover:border-white'
+                    ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                    : 'bg-transparent text-neutral-800 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:border-black dark:hover:border-white'
                 }`}
               >
                 {size}
@@ -75,17 +75,17 @@ export default function ProductClientActions({ product, whatsappNumber }: { prod
       {/* Quantity Selector */}
       <div className="space-y-3">
         <p className="text-[11px] text-neutral-400 uppercase tracking-widest font-bold">Cantidad</p>
-        <div className="flex items-center border border-neutral-700 w-fit h-12 rounded-sm overflow-hidden">
+        <div className="flex items-center border border-neutral-200 dark:border-neutral-700 w-fit h-12 rounded-sm overflow-hidden">
           <button 
             onClick={() => setQty(Math.max(1, qty - 1))}
-            className="w-12 h-full flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
+            className="w-12 h-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
           >
             <span className="material-symbols-outlined text-[18px]">remove</span>
           </button>
-          <span className="w-10 text-center text-sm font-bold text-white tabular-nums">{qty}</span>
+          <span className="w-10 text-center text-sm font-bold text-black tabular-nums">{qty}</span>
           <button 
             onClick={() => setQty(qty + 1)}
-            className="w-12 h-full flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
+            className="w-12 h-full flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
           </button>
@@ -106,7 +106,7 @@ export default function ProductClientActions({ product, whatsappNumber }: { prod
 
         <button 
           onClick={handleAdd}
-          className="w-full border border-neutral-700 text-white py-4 rounded-lg text-[13px] uppercase tracking-[0.1em] font-bold hover:bg-white hover:text-black hover:border-white transition-all mt-1"
+          className="w-full border border-neutral-800 dark:border-neutral-700 text-black py-4 rounded-lg text-[13px] uppercase tracking-[0.1em] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all mt-1"
         >
           Agregar al carrito
         </button>

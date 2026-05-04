@@ -56,11 +56,11 @@ export default async function ProductDetailPage({ params }: Props) {
 
             {/* Details */}
             <div className="w-full lg:w-[58%] flex flex-col pt-0 pl-0 lg:pl-6">
-              <h1 className="text-2xl md:text-3xl text-black dark:text-white leading-tight mb-2 tracking-tight font-bold uppercase">
+              <h1 className="text-2xl md:text-3xl text-black leading-tight mb-2 tracking-tight font-bold uppercase">
                 {product.name}
               </h1>
               
-              <p className="text-lg text-black dark:text-white mb-2 font-medium">
+              <p className="text-lg text-black mb-2 font-medium">
                 {formatPrice(product.price)}
               </p>
 
@@ -81,12 +81,12 @@ export default async function ProductDetailPage({ params }: Props) {
 
               <div className="mt-8 space-y-4 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed border-t border-neutral-100 dark:border-white/5 pt-8">
                 {product.description ? (
-                  <div className="whitespace-pre-line text-neutral-500 dark:text-neutral-400 text-xs">
+                  <div className="whitespace-pre-line text-neutral-500 text-xs">
                     {product.description}
                   </div>
                 ) : (
                   <p className="text-xs">
-                    <strong className="text-black dark:text-white">• Material:</strong> {product.material || 'Acero Inoxidable'}. Duradero, resistente y de fácil mantenimiento. Hipoalergénico, apto para pieles sensibles.
+                    <strong className="text-black">• Material:</strong> {product.material || 'Acero Inoxidable'}. Duradero, resistente y de fácil mantenimiento. Hipoalergénico, apto para pieles sensibles.
                   </p>
                 )}
 
@@ -94,12 +94,12 @@ export default async function ProductDetailPage({ params }: Props) {
                 <div className="flex flex-col gap-1 mt-2 text-xs">
                   {product.length && (
                     <p>
-                      <strong className="text-black dark:text-white">• Longitud:</strong> {product.length}
+                      <strong className="text-black">• Longitud:</strong> {product.length}
                     </p>
                   )}
                   {product.thickness && (
                     <p>
-                      <strong className="text-black dark:text-white">• Grosor:</strong> {product.thickness}
+                      <strong className="text-black">• Grosor:</strong> {product.thickness}
                     </p>
                   )}
 
@@ -109,11 +109,12 @@ export default async function ProductDetailPage({ params }: Props) {
               {/* Recommendations & Delivery Grid */}
               <div className="mt-8 border-t border-white/5 pt-8 grid grid-cols-2 gap-8">
                 {/* Recommendations */}
-                <div className="border-r border-white/5 pr-8">
+                <div className="border-r border-neutral-100 pr-8">
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="material-symbols-outlined text-white text-[12px]">grade</span>
-                    <h2 className="text-[9px] uppercase tracking-[0.2em] text-white font-bold">Recomendaciones</h2>
+                    <span className="material-symbols-outlined text-yellow-500 text-[12px]">grade</span>
+                    <h2 className="text-[9px] uppercase tracking-[0.2em] text-black font-bold">Recomendaciones</h2>
                   </div>
+
 
                   <div className="grid grid-cols-2 gap-2">
                     {recommendations.slice(0, 2).map((item) => (
@@ -126,28 +127,28 @@ export default async function ProductDetailPage({ params }: Props) {
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         </div>
-                        <h3 className="text-[7px] uppercase tracking-wider text-black dark:text-white font-bold mb-0.5 truncate">
+                        <h3 className="text-[7px] uppercase tracking-wider text-black font-bold mb-0.5 truncate">
                           {item.name}
                         </h3>
                       </Link>
 
                     ))}
                   </div>
-                  <Link href="/products" className="mt-3 block text-[8px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors font-bold border border-white/10 py-1 text-center">
+                  <Link href="/products" className="mt-3 block text-[8px] uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors font-bold border border-neutral-100 dark:border-white/10 py-1 text-center">
                     Ver más
                   </Link>
                 </div>
 
                 {/* Delivery Info */}
                 <div>
-                  <h3 className="text-[9px] uppercase tracking-[0.25em] text-black dark:text-white font-bold mb-5">ENTREGA ESTIMADA</h3>
+                  <h3 className="text-[9px] uppercase tracking-[0.25em] text-black font-bold mb-5">ENTREGA ESTIMADA</h3>
                   <div className="space-y-4">
                     <div>
-                      <p className="text-[11px] text-black dark:text-white font-bold mb-0.5">Asunción y alrededores</p>
+                      <p className="text-[11px] text-black font-bold mb-0.5">Asunción y alrededores</p>
                       <p className="text-[10px] text-neutral-500 leading-tight">{settings?.shipping_asuncion_text || 'Menos de 24 hrs.'}</p>
                     </div>
                     <div>
-                      <p className="text-[11px] text-black dark:text-white font-bold mb-0.5">Envíos al interior</p>
+                      <p className="text-[11px] text-black font-bold mb-0.5">Envíos al interior</p>
                       <p className="text-[10px] text-neutral-500 leading-tight">{settings?.shipping_interior_text || '24 a 48 hrs.'}</p>
                     </div>
                   </div>
@@ -155,7 +156,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
               </div>
 
-              <button className="mt-8 flex items-center gap-2 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors w-fit font-bold group">
+              <button className="mt-8 flex items-center gap-2 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors w-fit font-bold group">
                 <span className="material-symbols-outlined text-[14px] group-hover:scale-110 transition-transform">share</span>
                 Compartir pieza
               </button>
@@ -164,7 +165,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
 
           {/* Trust Section */}
-          <div className="mt-12 pt-6 border-t border-white/5 flex flex-row flex-wrap gap-x-8 gap-y-3">
+          <div className="mt-12 pt-6 border-t border-neutral-100 dark:border-white/5 flex flex-row flex-wrap gap-x-8 gap-y-3">
             {settings?.shipping_text && (
               <div className="flex items-center gap-2 text-[10px] text-neutral-500 font-medium">
                 <span className="material-symbols-outlined text-green-500 text-[14px]">check_circle</span>
