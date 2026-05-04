@@ -93,8 +93,8 @@ function ProductsContent() {
       <main className="min-h-screen bg-background text-on-background pt-32 pb-20 px-4 md:px-12">
 
         {/* Header */}
-        <header className="mb-10 border-b border-outline-variant/20 pb-10">
-          <h1 className="font-headline text-4xl md:text-6xl mb-6 text-white uppercase tracking-tight">La Colección</h1>
+        <header className="mb-10 border-b border-neutral-100 pb-10">
+          <h1 className="font-headline text-4xl md:text-6xl mb-6 text-black uppercase tracking-tight">La Colección</h1>
 
           {/* Category filter chips */}
           <div className="flex flex-wrap gap-2 text-[10px] font-label uppercase tracking-[0.3em]">
@@ -102,8 +102,8 @@ function ProductsContent() {
               onClick={() => setActiveCat('all')}
               className={`px-4 py-1.5 font-bold transition-all ${
                 activeCat === 'all'
-                  ? 'bg-white text-black'
-                  : 'border border-neutral-700 text-neutral-400 hover:text-white hover:border-white'
+                  ? 'bg-black text-white'
+                  : 'border border-neutral-300 text-neutral-500 hover:text-black hover:border-black'
               }`}
             >
               Todos ({products.length})
@@ -114,8 +114,8 @@ function ProductsContent() {
                 onClick={() => setActiveCat(cat.id)}
                 className={`px-4 py-1.5 font-bold transition-all ${
                   activeCat === cat.id
-                    ? 'bg-white text-black'
-                    : 'border border-neutral-700 text-neutral-400 hover:text-white hover:border-white'
+                    ? 'bg-black text-white'
+                    : 'border border-neutral-300 text-neutral-500 hover:text-black hover:border-black'
                 }`}
               >
                 {cat.name}
@@ -130,10 +130,10 @@ function ProductsContent() {
                   const parentCat = categories.find(c => c.id === subCats[0].parent_id || c.id === subCats[0].parentId);
                   if (parentCat) setActiveCat(parentCat.id);
                 }}
-                className={`px-3 py-1 font-bold transition-all border-b-2 ${
+                className={`px-4 py-1.5 font-bold transition-all ${
                   rootCats.some(c => c.id === activeCat)
-                    ? 'border-white text-white'
-                    : 'border-transparent text-neutral-500 hover:text-white'
+                    ? 'bg-white text-black border border-black'
+                    : 'border border-neutral-200 text-neutral-500 hover:text-black hover:border-black'
                 }`}
               >
                 Todos
@@ -142,10 +142,10 @@ function ProductsContent() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCat(cat.id)}
-                  className={`px-3 py-1 font-bold transition-all border-b-2 ${
+                  className={`px-4 py-1.5 font-bold transition-all ${
                     activeCat === cat.id
-                      ? 'border-white text-white'
-                      : 'border-transparent text-neutral-500 hover:text-white'
+                      ? 'bg-white text-black border border-black'
+                      : 'border border-neutral-200 text-neutral-500 hover:text-black hover:border-black'
                   }`}
                 >
                   {cat.name}
@@ -160,7 +160,7 @@ function ProductsContent() {
               <span className="text-neutral-500">Filtrar:</span>
               <div className="flex items-center gap-6">
                 <div className="relative group">
-                  <button className="flex items-center gap-1 hover:text-white transition-colors">
+                  <button className="flex items-center gap-1 hover:text-black transition-colors">
                     Disponibilidad <span className="material-symbols-outlined text-[14px]">expand_more</span>
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-neutral-900 border border-neutral-800 p-4 min-w-[150px] z-50 hidden group-hover:block shadow-2xl">
@@ -187,7 +187,7 @@ function ProductsContent() {
                   </div>
                 </div>
                 <div className="relative group">
-                  <button className="flex items-center gap-1 hover:text-white transition-colors">
+                  <button className="flex items-center gap-1 hover:text-black transition-colors">
                     Precio <span className="material-symbols-outlined text-[14px]">expand_more</span>
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-neutral-900 border border-neutral-800 p-4 min-w-[200px] z-50 hidden group-hover:block shadow-2xl">
@@ -216,7 +216,7 @@ function ProductsContent() {
                 <select 
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value as any)}
-                  className="bg-transparent text-white border-none outline-none cursor-pointer focus:ring-0 py-0 pr-8"
+                  className="bg-transparent text-black border-none outline-none cursor-pointer focus:ring-0 py-0 pr-8"
                 >
                   <option value="best-selling" className="bg-neutral-900">Más vendidos</option>
                   <option value="newest" className="bg-neutral-900">Más nuevos</option>

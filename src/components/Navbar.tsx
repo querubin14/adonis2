@@ -149,46 +149,42 @@ export default function Navbar() {
 
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-10 items-center">
-          {navLinks.map(link =>
-            link.children && link.children.length > 0 ? (
-              <div key={link.id} className="relative group">
-                <Link
-                  href={link.url}
-                  className="font-headline tracking-[0.2em] uppercase text-xs text-neutral-500 hover:text-black transition-colors duration-300 font-bold flex items-center gap-0.5"
-                >
-                  {link.label}
+        <div className="hidden md:flex gap-10 items-center h-full">
+          {navLinks.map(link => (
+            <div 
+              key={link.id} 
+              className="relative group h-full flex items-center"
+            >
+              <Link
+                href={link.url}
+                className="font-headline tracking-[0.2em] uppercase text-xs text-neutral-500 hover:text-black transition-colors duration-300 font-bold flex items-center gap-0.5 h-full"
+              >
+                {link.label}
+                {link.children && link.children.length > 0 && (
                   <span className="material-symbols-outlined text-sm leading-none" aria-hidden="true">
                     expand_more
                   </span>
-                </Link>
-                {/* Dropdown panel */}
-                <div className="absolute top-full left-0 pt-3 min-w-[200px] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 translate-y-1 group-hover:translate-y-0">
-                  <div className="bg-white border border-neutral-200 shadow-xl py-2">
+                )}
+              </Link>
+              
+              {/* Slide-down bar for subcategories */}
+              {link.children && link.children.length > 0 && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-0 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 translate-y-[-10px] group-hover:translate-y-0 z-[100]">
+                  <div className="bg-white border border-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.1)] py-5 px-8 flex gap-8 items-center justify-center min-w-max">
                     {link.children.map(child => (
                       <Link
                         key={child.id}
                         href={child.url}
-                        className="block px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-neutral-600 hover:text-black hover:bg-neutral-50 transition-all"
+                        className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 hover:text-black transition-all whitespace-nowrap"
                       >
                         {child.label}
                       </Link>
                     ))}
                   </div>
                 </div>
-              </div>
-            ) : (
-              <Link
-                key={link.id}
-                href={link.url}
-                className="font-headline tracking-[0.2em] uppercase text-xs text-neutral-500 hover:text-black transition-colors duration-300 font-bold"
-              >
-                {link.label}
-              </Link>
-
-
-            )
-          )}
+              )}
+            </div>
+          ))}
         </div>
 
 
