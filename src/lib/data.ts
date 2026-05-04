@@ -74,16 +74,25 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from('products')
     .select('*')
-    .or(`slug.eq.${slug},id.eq.${slug}`)
+    .eq('slug', slug)
     .single()
+
+  if (error && error.code === 'PGRST116') {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+    if (isUuid) {
+      const res = await supabase.from('products').select('*').eq('id', slug).single();
+      data = res.data;
+      error = res.error;
+    }
+  }
 
   if (error) {
     if (error.code === 'PGRST116') return null // Not found
     console.error('[getProductBySlug]', error.message, error.code)
-    return MOCK_PRODUCTS.find(p => p.slug === slug) || null
+    return MOCK_PRODUCTS.find(p => p.slug === slug || p.id === slug) || null
   }
   return data as Product
 }
